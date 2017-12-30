@@ -1,0 +1,15 @@
+extends layout
+
+block content
+    .mx-auto.col-md-4.col-sm-9
+        form(method='POST', action='/2fa')
+            legend 2-Factor Authentication check
+            .form-group
+                input(type='hidden', name='id', value=user.id)
+                label(for='password') Username
+                ouput.form-control(name='username')=user.username
+            .form-group
+                label(for='confirm') Code
+                input.form-control(name='token', autofocus, required)
+            .form-group
+                button.btn.btn-success(type='submit') Confirm

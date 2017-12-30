@@ -1,0 +1,32 @@
+extends main
+
+block data
+    h1 Contact us
+    form(method='POST')
+        .form-group
+            .input-group
+                span.input-group-addon
+                    i.fa.fa-user
+                input.form-control(type='text', name='name', placeholder='Name', autofocus='', value=name, required)
+        .form-group
+            .input-group
+                span.input-group-addon
+                    i.fa.fa-envelope
+                input.form-control(type='email', name='email', placeholder='Email', value=email, required)
+
+        .form-group
+            .input-group
+                span.input-group-addon
+                    i.fa.fa-font
+                input.form-control(type='text', name='subject', placeholder='Subject', value=subject, required)
+            .input-group
+                span.input-group-addon
+                    i.fa.fa-comment
+                textarea.form-control(name='message', rows='6', required)=message
+        div
+            button.btn.btn-info.float-right(type='submit')
+                span.fa.fa-send
+                |  Send
+            button.btn(type='reset', value='Reset', name='reset')
+                span.fa.fa-refresh
+                |  Reset

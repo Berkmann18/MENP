@@ -1,0 +1,106 @@
+extends main
+
+block data
+    link(href='https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css', rel='stylesheet')
+    .mx-auto.col-md-5.col-sm-9
+        h1 Register form
+        form#regForm(method='POST')
+            .form-group
+                .input-group
+                    span.input-group-addon
+                        i.fa.fa-user
+                    select#title.form-control-xs.bg-light(name='title', required='', title='Please select your title')
+                        option(value='Master') Master
+                        option(value='Mr', selected='') Mr
+                        option(value='Miss') Miss
+                        option(value='Mrs') Mrs
+                        option(value='Ms') Ms
+                        option(value='Mx') Mx
+                        option(value='Sir') Sir
+                        option(value='Madam') Madam
+                        option(value='Dr') Dr
+                        option(value='Prof') Prof
+                    input#fname.form-control(name='fname', required='', title='Please enter you first name', placeholder='First name', value=fname)
+                    input#lname.form-control(name='lname', required='', title='Please enter you last name', placeholder='Last name', value=lname)
+                //span.form-text
+            .form-group
+                .input-group
+                    span.input-group-addon
+                        i.fa.fa-user
+                    input#username.form-control(name='username', required='', title='Please enter you username', placeholder='Username', value=username)
+                span.form-text
+            .form-group
+                .input-group
+                    span.input-group-addon
+                        i.fa.fa-envelope
+                    input#email.form-control(type='email', name='email', required='', title='Please enter you email address', placeholder='example@gmail.com', value=email)
+                span#emailchk.form-text
+            .form-group
+                .input-group
+                    span.input-group-addon
+                        i.fa.fa-asterisk
+                    input#password.form-control(type='password', name='password', required='', title='Please enter your password', placeholder='password', onchange='$("#pwstrength").html(checkPassword(this.value)[1])')
+                    input#cpw.form-control(type='password', name='cpw', required='', title='Please re-enter your password', placeholder='password confirmation')
+                span#pwstrength.form-text
+            input(type='hidden', name='cct', value=captcha)
+            .form-group
+                .input-group
+                    span.input-group-addon
+                        i.fa.fa-lock
+                    input.check(value='With 2-Factor Authentication', readonly, style='width: 28ex', title='Using your phone for additional security')
+                    span.input-group-addon
+                        input#twoFA(type='checkbox', name='twoFA', title='Select if you want to activate 2FA', data-toggle='toggle', data-on='Enabled', data-off='Disabled', data-onstyle='success', data-offstyle='danger', onchange='showFABox()', checked=twoFA)
+            #FABox.form-group.card
+                .card-body
+                    label(for='twoFaMethod') Method
+                    select#twoFaMethod.form-control.bg-light(name='twoFaMethod', title='Please select the 2FA method you wish to use', onchange='showFAField()', value=twoFaMethod)
+                        option(value='sms') SMS
+                        option(value='email') Email
+                        option(value='ga', disabled='', aria-disabled='not available') Google Authentication
+                    span#phonechk.form-text
+                    #phonebox
+                        label(for='phone') International number
+                        .input-group
+                            span.input-group-addon
+                                i.fa.fa-phone
+                            input#phone.form-control(type='tel', name='phone', placeholder='+447 123 456 789', value=phone)
+            .form-group
+                .input-group
+                    img(src='/img/ct.gif', alt='ct')
+                    input#captcha.form-control(name='captcha', required='', title='Please complete the captcha', placeholder='captcha')
+            small By clicking 'Register' you agree with our&nbsp;
+                a(href='/tac') terms and conditions
+            button.btn.btn-success.btn-block(type='submit')
+                span.fa.fa-log-in
+                |  Register
+            button.btn.btn-block(type='reset', value='Reset', name='reset')
+                span.fa.fa-refresh
+                |  Reset
+            a.btn.btn-link(href='/login')
+                span.fa.fa-sign-in
+                |  Login if you already registered
+
+        style(type='text/css').
+            #fname, #password {
+                border-radius: 0 4px 0 0;
+            }
+
+            #lname, #cpw {
+                border-radius: 0 0 4px 0;
+            }
+block foots
+    script(type='application/ecmascript', src='/js/utils.js')
+    script(src='https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js')
+    script(type='text/ecmascript').
+        window.onload = () => {
+            if (!$('input[name="twoFA"]').prop('checked')) $('#FABox').hide();
+            //Fixes the toggle styling not showing up properly
+            setTimeout(() => $('.toggle-handle.btn').addClass('bg-light'), 0);
+        }
+        const showFABox = () => {
+            let $fab = $('#FABox');
+            $('input[name="twoFA"]').prop('checked') ? $fab.show() : $fab.hide();
+        }, showFAField = () => {
+            let $pb = $('#phonebox');
+            $('#twoFaMethod').val() === 'sms' ? $pb.show() : $pb.hide();
+        }

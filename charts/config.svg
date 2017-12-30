@@ -1,0 +1,313 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                width="507" height="751">
+                
+                <g>
+                   <rect x="50" y="65"
+            width="232.79999999999998" height="30"
+            rx="3" ry="3"
+            style="fill:#90caf9; stroke:#444; stroke-width:1" />
+                   <title>let path = require(&apos;path&apos;)</title>
+            <text x="65" y="85"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="65" y="85">let path = require(&apos;path&apos;)</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="50" y="113.5"
+            width="310.8" height="30"
+            rx="3" ry="3"
+            style="fill:#90caf9; stroke:#444; stroke-width:1" />
+                   <title>let extend = require(&apos;util&apos;)._extend</title>
+            <text x="65" y="133.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="65" y="133.5">let extend = require(&apos;util&apos;)._extend</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="50" y="162"
+            width="388.8" height="30"
+            rx="3" ry="3"
+            style="fill:#90caf9; stroke:#444; stroke-width:1" />
+                   <title>let development = require(&apos;./env/development&apos;)</title>
+            <text x="65" y="182"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="65" y="182">let development = require(&apos;./env/development&apos;)</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="50" y="210.5"
+            width="373.2" height="30"
+            rx="3" ry="3"
+            style="fill:#90caf9; stroke:#444; stroke-width:1" />
+                   <title>let production = require(&apos;./env/production&apos;)</title>
+            <text x="65" y="230.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="65" y="230.5">let production = require(&apos;./env/production&apos;)</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="50" y="259"
+            width="170.4" height="30"
+            rx="3" ry="3"
+            style="fill:#90caf9; stroke:#444; stroke-width:1" />
+                   <title>let defaults = {*}</title>
+            <text x="65" y="279"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="65" y="279">let defaults = {*}</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="87" y="307.5"
+            width="334.2" height="30"
+            rx="2" ry="2"
+            style="fill:#90caf9; stroke:#444; stroke-width:1" />
+                   <title>root: path.normalize(`${__dirname}/..`)</title>
+            <text x="102" y="327.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="102" y="327.5">root: path.normalize(`${__dirname}/..`)</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="124" y="356"
+            width="100.2" height="30"
+            rx="3" ry="3"
+            style="fill:#90caf9; stroke:#444; stroke-width:1" />
+                   <title>__dirname</title>
+            <text x="139" y="376"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="139" y="376">__dirname</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="50" y="404.5"
+            width="427.8" height="30"
+            rx="3" ry="3"
+            style="fill:#90caf9; stroke:#444; stroke-width:1" />
+                   <title>module.exports = {
+  name: &apos;MENP&apos;,
+  development: extend(development, defaults),
+  production: extend(production, defaults)
+}[process.env.NODE_ENV || &apos;development&apos;]</title>
+            <text x="65" y="424.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="65" y="424.5">module.exports = {
+  name: &apos;MENP&apos;,
+  development: ...</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="87" y="453"
+            width="53.4" height="30"
+            rx="3" ry="3"
+            style="fill:#90caf9; stroke:#444; stroke-width:1" />
+                   <title>{*}</title>
+            <text x="102" y="473"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="102" y="473">{*}</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="124" y="501.5"
+            width="123.6" height="30"
+            rx="2" ry="2"
+            style="fill:#90caf9; stroke:#444; stroke-width:1" />
+                   <title>name: &apos;MENP&apos;</title>
+            <text x="139" y="521.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="139" y="521.5">name: &apos;MENP&apos;</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="124" y="550"
+            width="357.59999999999997" height="30"
+            rx="2" ry="2"
+            style="fill:#90caf9; stroke:#444; stroke-width:1" />
+                   <title>development: extend(development, defaults)</title>
+            <text x="139" y="570"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="139" y="570">development: extend(development, defaults)</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="161" y="598.5"
+            width="256.2" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>extend(development, defaults)</title>
+            <text x="176" y="618.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="176" y="618.5">extend(development, defaults)</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="124" y="647"
+            width="342" height="30"
+            rx="2" ry="2"
+            style="fill:#90caf9; stroke:#444; stroke-width:1" />
+                   <title>production: extend(production, defaults)</title>
+            <text x="139" y="667"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="139" y="667">production: extend(production, defaults)</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="161" y="695.5"
+            width="248.4" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>extend(production, defaults)</title>
+            <text x="176" y="715.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="176" y="715.5">extend(production, defaults)</tspan>
+            </text>
+                   
+                   
+                </g>
+            <g>
+               <rect x="25" y="13.75"
+            width="216.6" height="24"
+            style="fill:#fff59d; stroke:#444; stroke-width:1" />
+               <circle cx="25" cy="25" r="15"
+        style="fill:#fff59d; stroke:#444; stroke-width:1" />
+               <title>Program: source module</title>
+            <text x="55" y="30"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="55" y="30">Program: source module</tspan>
+            </text>
+            </g>
+            <g>
+               <path d="M25, 40 L25 76 Q25 80
+                29 80
+                L42 80 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M42, 77 L50, 80 L42, 83 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M25, 40 L25 124.5 Q25 128.5
+                29 128.5
+                L42 128.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M42, 125.5 L50, 128.5 L42, 131.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M25, 40 L25 173 Q25 177
+                29 177
+                L42 177 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M42, 174 L50, 177 L42, 180 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M25, 40 L25 221.5 Q25 225.5
+                29 225.5
+                L42 225.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M42, 222.5 L50, 225.5 L42, 228.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M25, 40 L25 270 Q25 274
+                29 274
+                L42 274 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M42, 271 L50, 274 L42, 277 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M68.5, 289 L68.5 318.5 Q68.5 322.5
+                72.5 322.5
+                L87 322.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               false
+            </g>
+            <g>
+               <path d="M105.5, 337.5 L105.5 367 Q105.5 371
+                109.5 371
+                L116 371 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M116, 368 L124, 371 L116, 374 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M25, 40 L25 415.5 Q25 419.5
+                29 419.5
+                L42 419.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M42, 416.5 L50, 419.5 L42, 422.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M68.5, 434.5 L68.5 464 Q68.5 468
+                72.5 468
+                L79 468 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M79, 465 L87, 468 L79, 471 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M105.5, 483 L105.5 512.5 Q105.5 516.5
+                109.5 516.5
+                L124 516.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               false
+            </g>
+            <g>
+               <path d="M105.5, 483 L105.5 561 Q105.5 565
+                109.5 565
+                L124 565 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               false
+            </g>
+            <g>
+               <path d="M142.5, 580 L142.5 609.5 Q142.5 613.5
+                146.5 613.5
+                L153 613.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M153, 610.5 L161, 613.5 L153, 616.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M105.5, 483 L105.5 658 Q105.5 662
+                109.5 662
+                L124 662 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               false
+            </g>
+            <g>
+               <path d="M142.5, 677 L142.5 706.5 Q142.5 710.5
+                146.5 710.5
+                L153 710.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M153, 707.5 L161, 710.5 L153, 713.5 Z" 
+        fill="#333" />
+            </g>
+            </svg>

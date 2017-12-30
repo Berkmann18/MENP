@@ -1,0 +1,100 @@
+doctype html
+html(lang='en')
+    head
+        title MENP
+        meta(charset='UTF-8')
+        meta(name='author', content='Maximilian Berkmann')
+        meta(name='description', content='MENP web app')
+        meta(name='keywords', content='index, NodeJS, ExpressJS, DHTML, ES6, MongoDB, Pug, Bootstrap, jQuery')
+        meta(name='copyrights', content='Copyright (c) 2017 Maximilian Berkmann')
+        meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+        link(rel='stylesheet', type='text/css', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css', integrity='sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb', crossorigin='anonymous')
+        link(rel='stylesheet', type='text/css', href='/css/style.css')
+        link(rel='stylesheet', type='text/css', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+        block heads
+    body
+        nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.justify-content-between
+            .container-fluid
+                .navbar-header
+                    a.navbar-brand(href='/')
+                        | MENP
+                    button.navbar-toggler(type='button', data-toggle='collapse', data-target='#menu', aria-controls='menu', aria-expanded='false', aria-label='Toggle navigation')
+                        span.navbar-toggler-icon
+                #menu.collapse.navbar-collapse
+                    ul(class='nav navbar-nav ' + page)
+                        li#home.nav-item
+                            a.nav-link(href='/')
+                                span.fa.fa-home.icons
+                                |  Home
+                        li#about.nav-item
+                            a.nav-link(href='/about')
+                                span.fa.fa-info.icons
+                                |  About us
+                        li#contact.nav-item
+                            a.nav-link(href='/contact')
+                                span.fa.fa-envelope.icons
+                                |  Contact us
+                        li#sitemap.nav-item
+                            a.nav-link(href='/sitemap')
+                                span.fa.fa-sitemap.icons
+                                |  Sitemap
+                        if user
+                            li#users.nav-item
+                                a.nav-link(href='/users')
+                                    span.fa.fa-users.icons
+                                    |  Users
+                span(class=page)
+                    if user
+                        li.nav-item.dropdown(style='display: inline-block').dropleft
+                            a.nav-text#userDropdown.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                                span.fa.fa-user.icons
+                                span.text-light=` ${user.username}`
+                            .dropdown-menu(aria-labelledby='userDropdown').bg-dark
+                                a.dropdown-item(href=`/usr/${user.id}`)
+                                    span#profile.fa.fa-address-card.icons
+                                    |  Profile
+                                a.dropdown-item(href=`/usr/${user.id}/edit`)
+                                    span#edit
+                                        span.fa.fa-pencil.icons
+                                    |  Edit profile
+                                a.dropdown-item(href=`/logout`)
+                                    span#logout
+                                        span.fa.fa-sign-out.icons
+                                    |  Logout
+                        li.empty-item.nav-item
+                            a.nav-text
+                                | &nbsp; &nbsp;
+                    else
+                        span#login.navbar-text
+                            a.nav-link(href='/login')
+                                span.fa.fa-sign-in.icons
+                                |  Login
+                        span#register.navbar-text
+                            a.nav-link(href='/register')
+                                span.fa.fa-user-plus.icons
+                                |  Register
+        .container-fluid.text-center.content
+            if messages.error
+                .alert.alert-danger
+                    div= messages.error
+            if messages.warning
+                .alert.alert-warning
+                    div= messages.warning
+            if messages.info
+                .alert.alert-info
+                    div= messages.info
+            if messages.success
+                .alert.alert-success
+                    div= messages.success
+            block content
+            br
+        footer.container-fluid.text-center
+            p ©&nbsp;
+                span#copyear=2018
+                |  Maximilian Berkmann
+        script(type='text/javascript', src='https://code.jquery.com/jquery-3.2.1.slim.min.js', integrity='sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN', crossorigin='anonymous')
+        script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js', integrity='sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh', crossorigin='anonymous')
+        script(type='text/javascript', src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js', integrity='sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ', crossorigin='anonymous')
+        script(type='text/javascript').
+            window.onpageshow = () => $('#copyear').text((new Date()).getFullYear());
+        block foots

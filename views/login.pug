@@ -1,0 +1,28 @@
+extends main
+
+block data
+    .mx-auto.col-md-4.col-sm-9
+        h1 Login form
+        form#loginForm(method='POST')
+            .form-group
+                .input-group
+                    span.input-group-addon
+                        i.fa.fa-user
+                    input#username.form-control(type='username', name='username', required='', title='Please enter you username', placeholder='username')
+                span.help-block
+            .form-group
+                .input-group
+                    span.input-group-addon
+                        i.fa.fa-asterisk
+                    input#password.form-control(type='password', name='password', required='', title='Please enter your password', placeholder='password')
+                span.help-block
+
+            button.btn.btn-success.btn-block(type='submit')
+                span.fa.fa-log-in
+                |  Login
+            a.btn.btn-link(href='/forgot')
+                span.fa.fa-question
+                |  I forgot my password
+            a.btn.btn-link(href='/register')
+                span.fa.fa-user-plus
+                |  Register if you haven't already

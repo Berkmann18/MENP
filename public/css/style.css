@@ -1,0 +1,71 @@
+.navbar {
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  margin-bottom: 0;
+}
+
+footer {
+  background-color: #555;
+  bottom: 0;
+  color: white;
+  display: block;
+  padding: 15px;
+  position: relative;
+  width: 100vw;
+  min-height: 5vh;
+}
+
+.content {
+  min-height: 80vh;
+}
+
+.icons, #userDropdown {
+  color: #fff;
+}
+
+.centered {
+  float: none;
+  margin: 0 auto;
+}
+
+ul.home li#home, ul.about li#about, ul.contact li#contact, ul.sitemap li#sitemap, span.login span#login, span.register span#register {
+  /* .active from Bootstrap */
+  -moz-border-radius: .25rem;
+  -webkit-border-radius: .25rem;
+  -o-border-radius: .25rem;
+  -ms-border-radius: .25rem;
+  background: #080808 linear-gradient(to bottom, #080808 0, #0f0f0f 100%) repeat-x;
+  box-shadow: inset 0 3px 9px rgba(0, 0, 0, .25);
+  border-radius: .25rem;
+  color: #fff;
+}
+
+.tools {
+  height: 52px;
+  width: 52px;
+}
+
+.tools-wide {
+  height: 52px;
+  width: 104px;
+}
+
+/* Read-only checkboxes */
+.check {
+  background: rgba(255, 255, 255, 0);
+  border: 1px solid #ced4da;
+  padding: 6px 12px;
+}
+
+.dropdown-menu[aria-labelledby="userDropdown"] a.dropdown-item {
+  color: #fff;
+}
+
+.dropdown-menu[aria-labelledby="userDropdown"] a.dropdown-item:hover, .dropdown-menu[aria-labelledby="userDropdown"] a.dropdown-item:hover span.fa {
+  color: #000;
+}
+
+.empty-item {
+  display: inline-block;
+}

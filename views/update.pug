@@ -1,0 +1,111 @@
+extends layout
+
+block content
+    link(href='https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css', rel='stylesheet')
+    //.col-sm-4.offset-sm-4.align-items-center.justify-content-center
+    form(method='POST').mx-auto.col-md-4.col-sm-9
+        legend= 'Profile - ' + user.username + ' [' + user.type + ']'
+        .form-group
+            label(for='title') Title
+                select.form-control(name='title', required='')
+                    if user.title === 'Master'
+                        option(value='Master', selected='') Master
+                    else
+                        option(value='Master') Master
+                    if user.title === 'Mr'
+                        option(value='Mr', selected='') Mr
+                    else
+                        option(value='Mr') Mr
+                    if user.title === 'Miss'
+                        option(value='Miss', selected='') Miss
+                    else
+                        option(value='Miss') Miss
+                    if user.title === 'Mrs'
+                        option(value='Mrs', selected='') Mrs
+                    else
+                        option(value='Mrs') Mrs
+                    if user.title === 'Ms'
+                        option(value='Ms', selected='') Ms
+                    else
+                        option(value='Ms') Ms
+                    if user.title === 'Mx'
+                        option(value='Mx', selected='') Mx
+                    else
+                        option(value='Mx') Mx
+                    if user.title === 'Sir'
+                        option(value='Sir', selected='') Sir
+                    else
+                        option(value='Sir') Sir
+                    if user.title === 'Madam'
+                        option(value='Madam', selected='') Madam
+                    else
+                        option(value='Madam') Madam
+                    if user.title === 'Dr'
+                        option(value='Dr', selected='') Dr
+                    else
+                        option(value='Dr') Dr
+                    if user.title === 'Prof'
+                        option(value='Dr', selected='') Dr
+                    else
+                        option(value='Prof') Prof
+            label(for='fname') First name
+                input.form-control(name='fname', value=user.fname, required)
+            label(for='lname') Last name
+                input.form-control(name='lname', value=user.lname, required)
+            label(for='username') Username
+            input.form-control(name='username', value=user.username, autofocus, required)
+        .form-group
+            label(for='email') Email
+            input.form-control(name='email', value=user.email, required)
+        .form-group
+            label(for='password') Password
+            input.form-control(type='password', name='password', required)
+        .form-group
+            label(for='confirm') Confirm Password
+            input.form-control(type='password', name='confirm', required)
+        .form-group
+            label(for='twoFA') 2-Factor Authentication
+            br
+            input(type='checkbox', name='twoFA', checked=user.twoFA, data-toggle='toggle', data-on='Enabled', data-off='Disabled', data-onstyle='success', data-offstyle='danger', onchange='showFABox()')
+        #FABox.form-group.card
+            .card-body
+                label(for='twoFaMethod') Method
+                select#twoFaMethod.form-control.bg-light(name='twoFaMethod', title='Please select the 2FA method you wish to use', onchange='showFAField()', value=user.twoFaMethod)
+                    option(value='sms') SMS
+                    option(value='email') Email
+                    option(value='ga', disabled='', aria-disabled='not available') Google Authentication
+                .form-text
+                #phonebox
+                    label(for='phone') International number
+                    .input-group
+                        span.input-group-addon
+                            i.fa.fa-phone
+                        input#phone.form-control(type='tel', name='phone', value=user.phone)
+        .btn-group.mr-4(role='group')
+            button.btn.btn-primary(type='submit') update
+        .btn-group.mr-4(role='group')
+            button.btn.btn-info(type='button', onclick=`location.href = '/usr/${user.id}'`) See profile
+        a.btn.float-right.btn-danger(href=`/delete/${user.id}`) delete this account
+        hr
+        h4.text-center Activity summary
+        .form-group
+            label(for='registerDate') You registered the&nbsp;
+            output.mark(name='registerDate')=user.registerDate
+        .form-group
+            label(for='lastSeen') You were last seen the&nbsp;
+            output.mark(name='lastSeen')=user.lastSeen
+block foots
+    script(src='https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js')
+    script(type='text/ecmascript').
+        window.onload = () => {
+            if (!$('input[name="twoFA"]').prop('checked')) $('#FABox').hide();
+            //Fixes the toggle styling not showing up properly
+            setTimeout(() => $('.toggle-handle.btn').addClass('bg-light'), 0);
+        }
+        const showFABox = () => {
+            let $fab = $('#FABox');
+            $('input[name="twoFA"]').prop('checked') ? $fab.show() : $fab.hide();
+        }, showFAField = () => {
+            let $pb = $('#phonebox');
+            $('#twoFaMethod').val() === 'sms' ? $pb.show() : $pb.hide();
+        }

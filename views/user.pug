@@ -1,0 +1,23 @@
+extends layout
+
+block content
+    form(method='POST').mx-auto.col-md-4.col-sm-9
+        if same
+            legend= 'Profile - ' + visitedUser.username + ' [' + visitedUser.type + ']  '
+                a.btn.btn-primary(href=`/usr/${visitedUser.id}/edit`) Edit
+        else
+            legend= 'Profile - ' + visitedUser.username + ' [' + visitedUser.type + ']'
+        .card.text-white.bg-dark.text-white.mb-3(style='')
+            .card-header=`Informations`
+            .card-body
+                h4.card-title=`${visitedUser.title}. ${user.fname} ${visitedUser.lname}`
+                p.card-text=`Email: ${visitedUser.email}`
+
+        hr
+        h4.text-center Activity summary
+        .form-group
+            label(for='registerDate') Registered the&nbsp;
+            output.mark(name='registerDate')=visitedUser.registerDate
+        .form-group
+            label(for='lastSeen') Last seen the&nbsp;
+            output.mark(name='lastSeen')=visitedUser.lastSeen

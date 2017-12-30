@@ -1,0 +1,20 @@
+extends main
+
+block data
+    .mx-auto.col-md-4.col-sm-9
+        h3 I forgot my password
+        form#forgotForm(method='POST', action='/forgot')
+            .form-group
+                .input-group
+                    span.input-group-addon
+                        i.fa.fa-envelope
+                    input#email.form-control(type='email', name='email', required='', title='Please enter you email address', placeholder='example@gmail.com', value=email)
+                label(for='cemail') Re-enter your email:
+                .input-group
+                    span.input-group-addon
+                        i.fa.fa-envelope
+                    input#cemail.form-control(type='email', name='cemail', required='', title='Please re-enter you email address', placeholder='example@gmail.com')
+
+            button.btn.btn-success.btn-block(type='submit')
+                span.fa.fa-log-in
+                |  Send reset code
