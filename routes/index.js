@@ -20,17 +20,13 @@ const session = require('express-session'), mongoose = require('mongoose'), node
 const passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt-nodejs'), async = require('async'), crypto = require('crypto');
 const flash = require('express-flash'), validator = require('validator'), sgTransport = require('nodemailer-sendgrid-transport');
-const router = require('express').Router()/*, path = require('path')*/, cheerio = require('cheerio');
-const $ = cheerio.load('<body>...</body>'), Promise = require('promise')/*, swal = require('sweetalert')*/;
-const config = require('../config/config'), helmet = require('helmet'), RateLimit = require('express-rate-limit');
+const router = require('express').Router(), cheerio = require('cheerio');
+const $ = cheerio.load('<body>...</body>'), Promise = require('promise');
+const config = require('../config/config');
 const {
   incomingIp, requireLogin, adminOnly, memberOnly, sameUserOnly,
   sendSms, httpPage, setColours, clr, noSuchUser, emailError, execCaptcha} = require('./generic');
-const limiter = new RateLimit({
-    windowMs: 15 * 6e3, //15 minutes
-    max: 100, //Limit each IP to 100 requests per windowMs
-    delayMs: 0 //Disable delaying - full speed until the max limit is reached
-  }), tokenCooldown = 36e5; //1h in ms
+const tokenCooldown = 36e5; //1h in ms
 
 let esig = 'Best regards,\nMENP team\n';
 
@@ -52,20 +48,9 @@ router.use(session({
     })*/
 }));
 
-router.use(helmet({
-  frameguard: {action: 'deny'}, //No I-frame uses
-}));
-router.use(helmet.xssFilter());
-router.use(limiter);
-/*router.disable('x-powered-by')*/
 router.use(flash());
 router.use(passport.initialize());
 router.use(passport.session());
-// router.use(router.csrf()); //Cross-Site Request Forgery protection
-router.use((req, res, next) => {
-  //res.locals.csrftoken = req.session._csrf;
-  next();
-});
 
 mongoose.connect(config.db, {useMongoClient: true}, (err) => {
   if (err) console.log(clr.err('Mongoose: Error='), err);
@@ -164,6 +149,8 @@ This is a sample MENP (MongoDB, Express, Node, Pug) web app (which uses Bootstra
 <img src="img/cheerio.png" alt="c" class="tools" title="Cheerio" aria-label="Cheerio">
 <img src="img/nodemailer_sendgrid.png" alt="Nm+Sg" class="tools-wide" title="NodeMailer + Sendgrid" aria-label="NodeMailer + Sendgrid">
 <img src="img/passport.png" alt="p" class="tools" title="Passport" aria-label="Passport">
+<img src="img/helmet.png" alt="h" class="tools" title="Helmet" aria-label="Helmet">
+<img src="img/nexmo.png" alt="n" class="tools" title="Nexmo" aria-label="Nexmo">
 </p>
 <p>
 Basically: <ul>
@@ -173,7 +160,9 @@ Basically: <ul>
     <li>Boostrap for the UI</li>
     <li>jQuery and Cheerio for a sped up DOM access on both client and server sides</li>
     <li>NodeMailer + SendGrid for the emails</li>
+    <li>Nexmo for the SMSs</li>
     <li>Passport for the authentication</li>
+    <li>Helmet for the security</li>
 </ul>
 </p>`,
     user: req.user,

@@ -1,8 +1,7 @@
 {
   "name": "menp",
   "description": "This is a sample MENP web app",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
   "scripts": {
     "start": "node ./bin/www",
     "test": "echo No test specified yet\nTo run white box tests, please type 'npm run eslint' and/or 'npm run stylelint'",
@@ -32,6 +31,7 @@
     "mongoose": "^4.13.8",
     "morgan": "^1.9.0",
     "nexmo": "^2.1.1",
+    "node-uuid": "^1.4.8",
     "nodemailer": "^4.4.1",
     "nodemailer-sendgrid-transport": "^0.2.0",
     "passport": "^0.3.2",
@@ -40,7 +40,6 @@
     "pug": "^2.0.0-rc.4",
     "readable-stream": "^2.3.3",
     "serve-favicon": "~2.3.2",
-    "sweetalert": "^2.1.0",
     "trek-captcha": "^0.4.0",
     "validator": "^8.2.0"
   },
@@ -54,5 +53,7 @@
     "nodemon": "^1.14.6",
     "stylelint": "^7.9.0",
     "stylelint-config-standard": "^16.0.0"
-  }
+  },
+  "license": "MIT",
+  "repository": "http://github.com/Berkmann18/MENP"
 }

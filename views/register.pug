@@ -49,11 +49,11 @@ block data
                         i.fa.fa-lock
                     input.check(value='With 2-Factor Authentication', readonly, style='width: 28ex', title='Using your phone for additional security')
                     span.input-group-addon
-                        input#twoFA(type='checkbox', name='twoFA', title='Select if you want to activate 2FA', data-toggle='toggle', data-on='Enabled', data-off='Disabled', data-onstyle='success', data-offstyle='danger', onchange='showFABox()', checked=twoFA)
+                        input#twoFA(type='checkbox', name='twoFA', title='Select if you want to activate 2FA', data-toggle='toggle', data-on='Enabled', data-off='Disabled', data-onstyle='success', data-offstyle='danger', checked=twoFA)
             #FABox.form-group.card
                 .card-body
                     label(for='twoFaMethod') Method
-                    select#twoFaMethod.form-control.bg-light(name='twoFaMethod', title='Please select the 2FA method you wish to use', onchange='showFAField()', value=twoFaMethod)
+                    select#twoFaMethod.form-control.bg-light(name='twoFaMethod', title='Please select the 2FA method you wish to use', value=twoFaMethod)
                         option(value='sms') SMS
                         option(value='email') Email
                         option(value='ga', disabled='', aria-disabled='not available') Google Authentication
@@ -91,16 +91,4 @@ block data
 block foots
     script(type='application/ecmascript', src='/js/utils.js')
     script(src='https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js')
-    script(type='text/ecmascript').
-        window.onload = () => {
-            if (!$('input[name="twoFA"]').prop('checked')) $('#FABox').hide();
-            //Fixes the toggle styling not showing up properly
-            setTimeout(() => $('.toggle-handle.btn').addClass('bg-light'), 0);
-        }
-        const showFABox = () => {
-            let $fab = $('#FABox');
-            $('input[name="twoFA"]').prop('checked') ? $fab.show() : $fab.hide();
-        }, showFAField = () => {
-            let $pb = $('#phonebox');
-            $('#twoFaMethod').val() === 'sms' ? $pb.show() : $pb.hide();
-        }
+    script(type='text/ecmascript', src='js/faHdl.js', integrity='sha256-sj3OU5N34uU881eHoZRZhkIOsT4H+v7D6TiEEQnP6U8=', crossorigin='anonymous')
