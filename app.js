@@ -22,7 +22,7 @@ const limiter = new RateLimit({
  * @description Express application
  * @type {*|Function}
  */
-const app = express(), uuid = require('node-uuid');
+const app = express(), uuid = require('uuid');
 
 /**
  * View engine setup
