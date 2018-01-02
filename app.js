@@ -16,7 +16,7 @@ const limiter = new RateLimit({
   windowMs: 15 * 6e3, //15 minutes
   max: 100, //Limit each IP to 100 requests per windowMs
   delayMs: 0 //Disable delaying - full speed until the max limit is reached
-});
+}), OneYear = 31536e3;
 
 /**
  * @description Express application
@@ -67,6 +67,12 @@ app.use(helmet.contentSecurityPolicy({
   reportOnly: (req, res) => req.query.cspmode === 'debug',
   loose: false
 }));
+app.use(helmet.hsts({
+    maxAge: OneYear,
+    includeSubDomains: true,
+    preload: true
+    //setIf: (req, res) => req.secure;
+}));
 app.use(limiter);
 /*app.disable('x-powered-by')*/
 /*app.use(router.csrf()); //Cross-Site Request Forgery protection
@@ -75,6 +81,7 @@ app.use((req, res, next) => {
   next();
 });
 */
+
 app.use('/', index);
 
 // If CSURF is present put this route above the csurf middleware

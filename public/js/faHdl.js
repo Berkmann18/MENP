@@ -25,8 +25,8 @@ const showFABox = () => {
     $('input[name="twoFA"]').prop('checked') ? $fab.show() : $fab.hide();
   },
   /**
-     * @description Show the phone field when the 2FA method is set to 'sms'.
-      */
+   * @description Show the phone field when the 2FA method is set to 'sms'.
+   */
   showFAField = () => {
     let $pb = $('#phonebox');
     $('#twoFaMethod').val() === 'sms' ? $pb.show() : $pb.hide();

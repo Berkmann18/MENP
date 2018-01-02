@@ -1,7 +1,8 @@
 # User-specific stuff:
+config/env
 .idea
 .idea_modules/
-
+server.*
 ## File-based project format:
 *.iws
 
