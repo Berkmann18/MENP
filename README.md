@@ -6,7 +6,7 @@
 
 This is a sample MENP (MongoDB, Express, Node, Pug) web app (which uses Bootstrap and jQuery).
 
-<style type="text/css">
+<!--<style type="text/css">
 img {
     height: 52px;
     width: 52px;
@@ -16,17 +16,17 @@ img[alt="NmSg"] {
     height: 52px;
     width: 104px;
 }
-</style>
+</style>-->
 
-![M](./public/img/mongodb.png "MongoDB")
-![E](./public/img/expressjs.png "Express")
-![N](./public/img/nodejs-512.png "NodeJS")
-![P](./public/img/pugjs.png "Pug")
-![B](./public/img/bootstrap-4.svg "Bootstrap")
-![jQ](./public/img/jquery-icon-17841.png "jQuery")
-![c](./public/img/cheerio.png "Cheerio")
-![NmSg](./public/img/nodemailer_sendgrid.png "Nodemailer + Sendgrid")
-![p](./public/img/passport.png "Passport")
+![M](./public/img/mongodb.png "MongoDB"){:height="52px" width="52px"}
+![E](./public/img/expressjs.png "Express"){:height="52px" width="52px"}
+![N](./public/img/nodejs-512.png "NodeJS"){:height="52px" width="52px"}
+![P](./public/img/pugjs.png "Pug"){:height="52px" width="52px"}
+![B](./public/img/bootstrap-4.svg "Bootstrap"){:height="52px" width="52px"}
+![jQ](./public/img/jquery-icon-17841.png "jQuery"){:height="52px" width="52px"}
+![c](./public/img/cheerio.png "Cheerio"){:height="52px" width="52px"}
+![NmSg](./public/img/nodemailer_sendgrid.png "Nodemailer + Sendgrid"){:height="52px" width="104px"}
+![p](./public/img/passport.png "Passport"){:height="52px" width="52px"}
 
 Basically:
 

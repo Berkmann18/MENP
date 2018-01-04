@@ -4,7 +4,8 @@ module.exports = {
     "es6": true,
     "node": true
   },
-  "extends": "eslint:recommended",
+  "plugins": ["security"],
+  "extends": "plugin:security/recommended",
   "rules": {
     "indent": [
       "error",

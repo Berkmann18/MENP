@@ -25,7 +25,7 @@ while [[ $# -gt 0 ]]; do
             name=$1
             fname=${path}${name}
             npm run flowchart ${fname}.${format} && mv ${fname}.${format}.svg charts/${name}.svg
-            echo And available as ${fname}.svg in charts
+            echo And available as ${name}.svg in charts
         ;;
     esac
     shift

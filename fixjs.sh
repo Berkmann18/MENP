@@ -5,4 +5,3 @@ while (( "$#" )); do
   eslint -c config/.eslintrc.js $1 --fix
   shift
 done
-

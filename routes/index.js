@@ -194,11 +194,11 @@ router.post('/contact', (req, res) => {
     return keepDetails();
   }
   let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)), mailOptions = {
-    to: config.email.to,
-    from: req.body.email,
-    subject: req.body.subject || '[?] No subject',
-    text: `Contact email from ${req.body.name}:\n\n${req.body.message}`
-  };
+      to: config.email.to,
+      from: req.body.email,
+      subject: req.body.subject || '[?] No subject',
+      text: `Contact email from ${req.body.name}:\n\n${req.body.message}`
+    };
   smtpTransport.sendMail(mailOptions, (err) => {
     if (err) emailError(req, err);
     else req.flash('info', 'The email was sent! Thank you for your interest.');
@@ -284,15 +284,15 @@ router.post('/login', (req, res, next) => {
           } else if (user.twoFaMethod === 'email') {
             twoFaHandler(token);
             let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)), mailOptions = {
-              to: user.email,
-              from: config.email.from,
-              subject: '[ACTION] 2nd Factor Authentication',
-              html: `<p>You are receiving this because you (or someone else) authenticated with your username/password and now need the code
+                to: user.email,
+                from: config.email.from,
+                subject: '[ACTION] 2nd Factor Authentication',
+                html: `<p>You are receiving this because you (or someone else) authenticated with your username/password and now need the code
                             for the second factor of the authentication which is the following: <em>${token}</em></p><br>
                             <p>If you can't get the page to enter the code, you should see one pointing to
                             <a href="http://${req.headers.host}/2fa">http://${req.headers.host}/2fa</a></p><br>
                             <p>If you did not request this, please ignore this email and your account won't be accessed.</p><br>${esig}`
-            };
+              };
             smtpTransport.sendMail(mailOptions, (err) => {
               if (err) emailError(req, err);
               else {
@@ -427,11 +427,11 @@ router.post('/register', (req, res) => {
       });
 
       let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)), mailOptions = {
-        to: user.email,
-        from: config.email.from,
-        subject: '[INFO] Welcome to MENP',
-        text: `Hello ${user.username},\nWelcome to MENP! I hope you'll enjoy using our application.\n${esig}`
-      };
+          to: user.email,
+          from: config.email.from,
+          subject: '[INFO] Welcome to MENP',
+          text: `Hello ${user.username},\nWelcome to MENP! I hope you'll enjoy using our application.\n${esig}`
+        };
       smtpTransport.sendMail(mailOptions, (err) => {
         if (err) emailError(req, err);
       });
@@ -446,7 +446,8 @@ router.get('/logout', (req, res) => {
   if (req.user) {
     User.findById(req.body.id, (err, user) => {
       if (!user) {
-        req.flash('error', `The user account you tried to logout from wasn't found (error ${err.statusCode})`);
+        let errCode = err ? ` (error ${err.code})` : '';
+        req.flash('error', `The user account you tried to logout from wasn't found${errCode}`);
         console.log(clr.warn('No user found pre-logout?'));
         return;
       }
@@ -505,14 +506,14 @@ router.post('/forgot', (req, res, next) => {
       });
     }, (token, user, done) => {
       let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)), mailOptions = {
-        to: user.email,
-        from: config.email.from,
-        subject: '[ACTION] Password Reset',
-        text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
+          to: user.email,
+          from: config.email.from,
+          subject: '[ACTION] Password Reset',
+          text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
                 Please click on the following link, or paste this into your browser to complete the process:\n\n
                 http://${req.headers.host}/reset/${token}\n\n
                 If you did not request this, please ignore this email and your password will remain unchanged.\n${esig}`
-      };
+        };
       smtpTransport.sendMail(mailOptions, (err) => {
         if (err) emailError(req, err);
         else req.flash('info', `An e-mail has been sent to ${user.email} with further instructions.`);
@@ -568,11 +569,11 @@ router.post('/reset/:token', (req, res) => {
     },
     (user, done) => {
       let smtpTransport = nodemailer.createTransport(config.smtp), mailOptions = {
-        to: user.email,
-        from: config.email.from,
-        subject: '[INFO] Your password has been changed',
-        text: `Hello,\n\nThis is a confirmation that the password for your account ${user.email} has just been changed.\n${esig}`
-      };
+          to: user.email,
+          from: config.email.from,
+          subject: '[INFO] Your password has been changed',
+          text: `Hello,\n\nThis is a confirmation that the password for your account ${user.email} has just been changed.\n${esig}`
+        };
       smtpTransport.sendMail(mailOptions, (err) => {
         if (err) emailError(req, err);
         else req.flash('success', 'Success! Your password has been changed.');
@@ -871,48 +872,6 @@ router.get('/user/@:username', requireLogin, (req, res) => {
     } else res.render('user', {visitedUser, user: req.user});
   });
 });
-
-/*User.findById(req.user.id, (err, user) => {
-    if (!user) {
-        noSuchUser();
-        return res.redirect('/');
-    }
-    user.remove((err) => {
-        if (err) throw err;
-        req.flash('success', 'User successfully deleted!');
-        return res.redirect('/');
-    });
-});*/
-
-/*
-/!**
- * @description Encrypt data.
- * @param {*} data Data to encrypt
- * @param {number} [rounds=5] Number of salting rounds
- * @return Encrypted data
- *!/
-let encrypt = (data, rounds=5) => bcrypt.hashSync(data, bcrypt.genSaltSync(rounds), null);
-router.get('/xpw/:pw', (req, res) => {
-    res.render('page', {
-       data: `<strong>${encrypt(req.params.pw)}</strong>
-        <form method="post">
-            <div class="form-group">
-                <label for="cmp">Compare to:</label>
-                <input class="form-control" name="cmp" id="cmp"><input type="submit" class="btn btn-default" value="compare">
-            </div>
-        </form>`
-    });
-});
-
-router.post('/xpw/:pw', (req, res) => {
-    let encrypted = encrypt(req.params.pw);
-    res.render('page', {
-        data: `<strong>${encrypted}</strong>
-        <form method="post">
-                <input class="form-control" name="cmp" id="cmp"><input type="submit" class="btn btn-default" value="compare">&rArr; ${bcrypt.compareSync(req.body.cmp, encrypted)}
-        </form>`
-    });
-});*/
 
 router.get('/tac', (req, res) => {
   res.render('page', {

@@ -1,9 +1,9 @@
 {
   "tags": {
-    "allowUnknownTags": true
+    "allowUnknownTags": false
   },
   "source": {
-    "include": ["./routes", "./"],
+    "include": ["./routes"],
     "includePattern": ".+\\.js(doc|x)?$",
     "excludePattern": "(^|\\/|\\\\)_"
   },

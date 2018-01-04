@@ -13,10 +13,10 @@ const favicon = require('serve-favicon'), RateLimit = require('express-rate-limi
 const cookieParser = require('cookie-parser'), bodyParser = require('body-parser');
 const index = require('./routes/index'), logger = require('morgan'), {httpPage, codeToMsg} = require('./routes/generic');
 const limiter = new RateLimit({
-  windowMs: 15 * 6e3, //15 minutes
-  max: 100, //Limit each IP to 100 requests per windowMs
-  delayMs: 0 //Disable delaying - full speed until the max limit is reached
-}), OneYear = 31536e3;
+    windowMs: 15 * 6e3, //15 minutes
+    max: 100, //Limit each IP to 100 requests per windowMs
+    delayMs: 0 //Disable delaying - full speed until the max limit is reached
+  }), OneYear = 31536e3;
 
 /**
  * @description Express application
@@ -56,8 +56,8 @@ app.use(helmet.contentSecurityPolicy({
     scriptSrc: ['\'self\'', 'maxcdn.bootstrapcdn.com', 'code.jquery.com', 'cdnjs.cloudflare.com', 'gitcdn.github.io', '\'unsafe-eval\'', '\'unsafe-inline\'',
       'sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ', 'sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh',
       'sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN', 'sha256-C/MMeoQHEyhrrD8wEB7zDbcJTaUUbPn+oab7cS5qSiI=',
-      'sha256-sj3OU5N34uU881eHoZRZhkIOsT4H+v7D6TiEEQnP6U8=',
-      (req, res) => `'nonce-${res.locals.nonce}'`  // 'nonce-614d9122-d5b0-4760-aecf-3a5d17cf0ac9'
+      'sha256-QKjHHMX7oHE6t1zmdZLnYz8zlNXBh+cquflnewhru5Q=',
+      //(req, res) => `'nonce-${res.locals.nonce}'`  // 'nonce-614d9122-d5b0-4760-aecf-3a5d17cf0ac9'
     ],
     reportUri: '/report-violation',
     fontSrc: ['\'self\'', 'maxcdn.bootstrapcdn.com', 'https://maxcdn.bootstrapcdn.com/'],
@@ -68,9 +68,9 @@ app.use(helmet.contentSecurityPolicy({
   loose: false
 }));
 app.use(helmet.hsts({
-    maxAge: OneYear,
-    includeSubDomains: true,
-    preload: true
+  maxAge: OneYear,
+  includeSubDomains: true,
+  preload: true
     //setIf: (req, res) => req.secure;
 }));
 app.use(limiter);
