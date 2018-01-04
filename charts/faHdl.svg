@@ -1,0 +1,792 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                width="706" height="1736">
+                
+            <g>
+                <rect x="50" y="80"
+            width="213.79999999999998" height="30"
+            style="fill:#a5d6a7; stroke:#444; stroke-width:1" />
+                    
+                <line x1="60" y1="80" x2="60" y2="110"
+                style="fill:#a5d6a7; stroke:#444; stroke-width:1" />
+                <line x1="253.79999999999995" y1="80" x2="253.79999999999995" y2="110"
+                style="fill:#a5d6a7; stroke:#444; stroke-width:1" />
+             
+                <title>window.onload = () =&gt;</title>
+            <text x="75" y="100"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="75" y="100">window.onload = () =&gt;</tspan>
+            </text>
+                
+            </g><g>
+            <rect x="117" y="143.5"
+            width="395.4" height="30"
+            rx="3" ry="3"
+            style="fill:#ce93d8; stroke:#444; stroke-width:1" />                
+            <polygon points="87,158.5 117,128.5 147,158.5 117,188.5"
+            style="fill:#ce93d8; stroke:#444; stroke-width:1" />
+            <title>(!$(&apos;input[name=&quot;twoFA&quot;]&apos;).prop(&apos;checked&apos;))</title>
+            <text x="162" y="163.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="162" y="163.5">(!$(&apos;input[name=&quot;twoFA&quot;]&apos;).prop(&apos;checked&apos;))</tspan>
+            </text>
+            
+            <text x="109.2" y="163.5"
+        font-family="monospace" font-size="13" fill="#222">if</text> <text x="124.8" y="190.45"
+        font-family="monospace" font-size="13" fill="#222">+</text> 
+        </g>
+                <g>
+                   <rect x="137" y="198.5"
+            width="217.2" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>$(&apos;input[name=&quot;twoFA&quot;]&apos;)</title>
+            <text x="152" y="218.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="152" y="218.5">$(&apos;input[name=&quot;twoFA&quot;]&apos;)</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="137" y="247"
+            width="115.8" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>$(&apos;#FABox&apos;)</title>
+            <text x="152" y="267"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="152" y="267">$(&apos;#FABox&apos;)</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="137" y="295.5"
+            width="84.6" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>.hide()</title>
+            <text x="152" y="315.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="152" y="315.5">.hide()</tspan>
+            </text>
+                   <circle cx="143" cy="319.5" r="4"
+        style="fill:#ede7f6; stroke:#444; stroke-width:1" />
+                   
+                </g>
+                <g>
+                   <rect x="87" y="345.5"
+            width="170.4" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>setTimeout(*(), 0)</title>
+            <text x="102" y="365.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="102" y="365.5">setTimeout(*(), 0)</tspan>
+            </text>
+                   
+                   
+                </g>
+            <g>
+                <rect x="124" y="394"
+            width="89" height="30"
+            style="fill:#a5d6a7; stroke:#444; stroke-width:1" />
+                    
+                <line x1="134" y1="394" x2="134" y2="424"
+                style="fill:#a5d6a7; stroke:#444; stroke-width:1" />
+                <line x1="203" y1="394" x2="203" y2="424"
+                style="fill:#a5d6a7; stroke:#444; stroke-width:1" />
+             
+                <title>() =&gt;</title>
+            <text x="149" y="414"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="149" y="414">() =&gt;</tspan>
+            </text>
+                
+            </g>
+                <g>
+                   <rect x="161" y="442.5"
+            width="209.4" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>$(&apos;.toggle-handle.btn&apos;)</title>
+            <text x="176" y="462.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="176" y="462.5">$(&apos;.toggle-handle.btn&apos;)</tspan>
+            </text>
+                   
+                   
+                </g>
+            <g>
+                <rect x="161" y="491"
+            width="248.39999999999998" height="30"
+            rx="3" ry="3"
+            style="fill:#90caf9; stroke:#444; stroke-width:1" />
+                
+                <line x1="409.4" y1="501" x2="414.4" y2="501"
+                style="fill:#a5d6a7; stroke:#444; stroke-width:1" />
+                
+                <line x1="409.4" y1="511" x2="414.4" y2="511"
+                style="fill:#a5d6a7; stroke:#444; stroke-width:1" />
+
+                <path d="M414.4, 495 L430.4, 506 L414.4, 517 Z" 
+        fill="#a5d6a7" stroke="#444" stroke-width="1" />
+                             
+                <title>return .addClass(&apos;bg-light&apos;)</title>
+            <text x="176" y="511"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="176" y="511">return .addClass(&apos;bg-light&apos;)</tspan>
+            </text>
+                
+            </g>
+                <g>
+                   <rect x="87" y="539.5"
+            width="53.4" height="30"
+            rx="2" ry="2"
+            style="fill:#FFE082; stroke:#444; stroke-width:1" />
+                   <title>try</title>
+            <text x="102" y="559.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="102" y="559.5">try</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="124" y="588"
+            width="115.8" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>$(&apos;#twoFA&apos;)</title>
+            <text x="139" y="608"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="139" y="608">$(&apos;#twoFA&apos;)</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="124" y="636.5"
+            width="217.2" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>.on(&apos;change&apos;, showFABox)</title>
+            <text x="139" y="656.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="139" y="656.5">.on(&apos;change&apos;, showFABox)</tspan>
+            </text>
+                   <circle cx="130" cy="660.5" r="4"
+        style="fill:#ede7f6; stroke:#444; stroke-width:1" />
+                   
+                </g>
+            <g>
+                <rect x="124" y="685"
+            width="115.80000000000001" height="30"
+            rx="2" ry="2"
+            style="fill:#ef9a9a; stroke:#444; stroke-width:1" />
+                
+                <line x1="239.8" y1="698" x2="241.8" y2="698"
+                style="fill:#ef9a9a; stroke:#444; stroke-width:1" />
+                
+                <line x1="239.8" y1="702" x2="241.8" y2="702"
+                style="fill:#ef9a9a; stroke:#444; stroke-width:1" />
+
+                <path d="M241.8, 686 L257.8, 700 L241.8, 714 Z" 
+        fill="#ef9a9a" stroke="#444" stroke-width="1" />
+                             
+                <title>catch (err)</title>
+            <text x="139" y="705"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="139" y="705">catch (err)</tspan>
+            </text>
+                
+            </g>
+                <g>
+                   <rect x="161" y="733.5"
+            width="53.4" height="30"
+            rx="3" ry="3"
+            style="fill:#90caf9; stroke:#444; stroke-width:1" />
+                   <title>err</title>
+            <text x="176" y="753.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="176" y="753.5">err</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="161" y="782"
+            width="334.2" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>console.warn(&apos;There&apos;s no #twoFA!&apos;, err)</title>
+            <text x="176" y="802"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="176" y="802">console.warn(&apos;There&apos;s no #twoFA!&apos;, err)</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="87" y="830.5"
+            width="53.4" height="30"
+            rx="2" ry="2"
+            style="fill:#FFE082; stroke:#444; stroke-width:1" />
+                   <title>try</title>
+            <text x="102" y="850.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="102" y="850.5">try</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="124" y="879"
+            width="162.6" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>$(&apos;#twoFaMethod&apos;)</title>
+            <text x="139" y="899"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="139" y="899">$(&apos;#twoFaMethod&apos;)</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="124" y="927.5"
+            width="232.79999999999998" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>.on(&apos;change&apos;, showFAField)</title>
+            <text x="139" y="947.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="139" y="947.5">.on(&apos;change&apos;, showFAField)</tspan>
+            </text>
+                   <circle cx="130" cy="951.5" r="4"
+        style="fill:#ede7f6; stroke:#444; stroke-width:1" />
+                   
+                </g>
+            <g>
+                <rect x="124" y="976"
+            width="115.80000000000001" height="30"
+            rx="2" ry="2"
+            style="fill:#ef9a9a; stroke:#444; stroke-width:1" />
+                
+                <line x1="239.8" y1="989" x2="241.8" y2="989"
+                style="fill:#ef9a9a; stroke:#444; stroke-width:1" />
+                
+                <line x1="239.8" y1="993" x2="241.8" y2="993"
+                style="fill:#ef9a9a; stroke:#444; stroke-width:1" />
+
+                <path d="M241.8, 977 L257.8, 991 L241.8, 1005 Z" 
+        fill="#ef9a9a" stroke="#444" stroke-width="1" />
+                             
+                <title>catch (err)</title>
+            <text x="139" y="996"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="139" y="996">catch (err)</tspan>
+            </text>
+                
+            </g>
+                <g>
+                   <rect x="161" y="1024.5"
+            width="53.4" height="30"
+            rx="3" ry="3"
+            style="fill:#90caf9; stroke:#444; stroke-width:1" />
+                   <title>err</title>
+            <text x="176" y="1044.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="176" y="1044.5">err</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="161" y="1073"
+            width="381" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>console.warn(&apos;There&apos;s no #twoFaMethod!&apos;, err)</title>
+            <text x="176" y="1093"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="176" y="1093">console.warn(&apos;There&apos;s no #twoFaMethod!&apos;, err)</tspan>
+            </text>
+                   
+                   
+                </g>
+            <g>
+                <rect x="50" y="1136.5"
+            width="182.6" height="30"
+            style="fill:#a5d6a7; stroke:#444; stroke-width:1" />
+                    
+                <line x1="60" y1="1136.5" x2="60" y2="1166.5"
+                style="fill:#a5d6a7; stroke:#444; stroke-width:1" />
+                <line x1="222.6" y1="1136.5" x2="222.6" y2="1166.5"
+                style="fill:#a5d6a7; stroke:#444; stroke-width:1" />
+             
+                <title>showFABox = () =&gt;</title>
+            <text x="75" y="1156.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="75" y="1156.5">showFABox = () =&gt;</tspan>
+            </text>
+                
+            </g>
+                <g>
+                   <rect x="87" y="1185"
+            width="201.6" height="30"
+            rx="3" ry="3"
+            style="fill:#90caf9; stroke:#444; stroke-width:1" />
+                   <title>let $fab = $(&apos;#FABox&apos;)</title>
+            <text x="102" y="1205"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="102" y="1205">let $fab = $(&apos;#FABox&apos;)</tspan>
+            </text>
+                   
+                   
+                </g><g>
+            <rect x="117" y="1248.5"
+            width="387.59999999999997" height="30"
+            rx="3" ry="3"
+            style="fill:#ce93d8; stroke:#444; stroke-width:1" />                
+            <polygon points="87,1263.5 117,1233.5 147,1263.5 117,1293.5"
+            style="fill:#ce93d8; stroke:#444; stroke-width:1" />
+            <title>($(&apos;input[name=&quot;twoFA&quot;]&apos;).prop(&apos;checked&apos;))</title>
+            <text x="162" y="1268.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="162" y="1268.5">($(&apos;input[name=&quot;twoFA&quot;]&apos;).prop(&apos;checked&apos;))</tspan>
+            </text>
+            
+            <text x="113.1" y="1268.5"
+        font-family="monospace" font-size="13" fill="#222">?</text> <text x="124.8" y="1295.45"
+        font-family="monospace" font-size="13" fill="#222">+</text> <text x="508.49999999999994" y="1261.55"
+        font-family="monospace" font-size="13" fill="#222">-</text>
+        </g>
+                <g>
+                   <rect x="137" y="1303.5"
+            width="217.2" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>$(&apos;input[name=&quot;twoFA&quot;]&apos;)</title>
+            <text x="152" y="1323.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="152" y="1323.5">$(&apos;input[name=&quot;twoFA&quot;]&apos;)</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="137" y="1352"
+            width="154.8" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>.prop(&apos;checked&apos;)</title>
+            <text x="152" y="1372"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="152" y="1372">.prop(&apos;checked&apos;)</tspan>
+            </text>
+                   <circle cx="143" cy="1376" r="4"
+        style="fill:#ede7f6; stroke:#444; stroke-width:1" />
+                   
+                </g>
+                <g>
+                   <rect x="137" y="1400.5"
+            width="115.8" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>$fab.show()</title>
+            <text x="152" y="1420.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="152" y="1420.5">$fab.show()</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="564.5999999999999" y="1303.5"
+            width="115.8" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>$fab.hide()</title>
+            <text x="579.5999999999999" y="1323.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="579.5999999999999" y="1323.5">$fab.hide()</tspan>
+            </text>
+                   
+                   
+                </g>
+            <g>
+                <rect x="50" y="1465.5"
+            width="198.2" height="30"
+            style="fill:#a5d6a7; stroke:#444; stroke-width:1" />
+                    
+                <line x1="60" y1="1465.5" x2="60" y2="1495.5"
+                style="fill:#a5d6a7; stroke:#444; stroke-width:1" />
+                <line x1="238.2" y1="1465.5" x2="238.2" y2="1495.5"
+                style="fill:#a5d6a7; stroke:#444; stroke-width:1" />
+             
+                <title>showFAField = () =&gt;</title>
+            <text x="75" y="1485.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="75" y="1485.5">showFAField = () =&gt;</tspan>
+            </text>
+                
+            </g>
+                <g>
+                   <rect x="87" y="1514"
+            width="217.2" height="30"
+            rx="3" ry="3"
+            style="fill:#90caf9; stroke:#444; stroke-width:1" />
+                   <title>let $pb = $(&apos;#phonebox&apos;)</title>
+            <text x="102" y="1534"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="102" y="1534">let $pb = $(&apos;#phonebox&apos;)</tspan>
+            </text>
+                   
+                   
+                </g><g>
+            <rect x="117" y="1577.5"
+            width="333" height="30"
+            rx="3" ry="3"
+            style="fill:#ce93d8; stroke:#444; stroke-width:1" />                
+            <polygon points="87,1592.5 117,1562.5 147,1592.5 117,1622.5"
+            style="fill:#ce93d8; stroke:#444; stroke-width:1" />
+            <title>($(&apos;#twoFaMethod&apos;).val() === &apos;sms&apos;)</title>
+            <text x="162" y="1597.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="162" y="1597.5">($(&apos;#twoFaMethod&apos;).val() === &apos;sms&apos;)</tspan>
+            </text>
+            
+            <text x="113.1" y="1597.5"
+        font-family="monospace" font-size="13" fill="#222">?</text> <text x="124.8" y="1624.45"
+        font-family="monospace" font-size="13" fill="#222">+</text> <text x="453.9" y="1590.55"
+        font-family="monospace" font-size="13" fill="#222">-</text>
+        </g>
+                <g>
+                   <rect x="137" y="1632.5"
+            width="162.6" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>$(&apos;#twoFaMethod&apos;)</title>
+            <text x="152" y="1652.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="152" y="1652.5">$(&apos;#twoFaMethod&apos;)</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="137" y="1681"
+            width="108" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>$pb.show()</title>
+            <text x="152" y="1701"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="152" y="1701">$pb.show()</tspan>
+            </text>
+                   
+                   
+                </g>
+                <g>
+                   <rect x="510" y="1632.5"
+            width="108" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>$pb.hide()</title>
+            <text x="525" y="1652.5"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="525" y="1652.5">$pb.hide()</tspan>
+            </text>
+                   
+                   
+                </g>
+            <g>
+               <rect x="25" y="13.75"
+            width="216.6" height="24"
+            style="fill:#fff59d; stroke:#444; stroke-width:1" />
+               <circle cx="25" cy="25" r="15"
+        style="fill:#fff59d; stroke:#444; stroke-width:1" />
+               <title>Program: source module</title>
+            <text x="55" y="30"
+                font-family="monospace" font-size="13" fill="#222">
+                <tspan x="55" y="30">Program: source module</tspan>
+            </text>
+            </g>
+            <g>
+               <path d="M25, 40 L25 91 Q25 95
+                29 95
+                L42 95 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M42, 92 L50, 95 L42, 98 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M68.5, 110 L68.5 154.5 Q68.5 158.5
+                72.5 158.5
+                L79 158.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M79, 155.5 L87, 158.5 L79, 161.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M117, 188.5 L117 209.5 Q117 213.5
+                121 213.5
+                L129 213.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M129, 210.5 L137, 213.5 L129, 216.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M117, 188.5 L117 258 Q117 262
+                121 262
+                L129 262 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M129, 259 L137, 262 L129, 265 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M117, 188.5 L117 306.5 Q117 310.5
+                121 310.5
+                L129 310.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M129, 307.5 L137, 310.5 L129, 313.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M68.5, 110 L68.5 356.5 Q68.5 360.5
+                72.5 360.5
+                L79 360.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M79, 357.5 L87, 360.5 L79, 363.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M105.5, 375.5 L105.5 405 Q105.5 409
+                109.5 409
+                L124 409 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               false
+            </g>
+            <g>
+               <path d="M142.5, 424 L142.5 453.5 Q142.5 457.5
+                146.5 457.5
+                L153 457.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M153, 454.5 L161, 457.5 L153, 460.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M142.5, 424 L142.5 502 Q142.5 506
+                146.5 506
+                L153 506 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M153, 503 L161, 506 L153, 509 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M68.5, 110 L68.5 550.5 Q68.5 554.5
+                72.5 554.5
+                L79 554.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M79, 551.5 L87, 554.5 L79, 557.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M105.5, 569.5 L105.5 599 Q105.5 603
+                109.5 603
+                L116 603 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M116, 600 L124, 603 L116, 606 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M105.5, 569.5 L105.5 647.5 Q105.5 651.5
+                109.5 651.5
+                L116 651.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M116, 648.5 L124, 651.5 L116, 654.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M105.5, 569.5 L105.5 696 Q105.5 700
+                109.5 700
+                L116 700 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M116, 697 L124, 700 L116, 703 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M142.5, 715 L142.5 744.5 Q142.5 748.5
+                146.5 748.5
+                L153 748.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M153, 745.5 L161, 748.5 L153, 751.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M142.5, 715 L142.5 793 Q142.5 797
+                146.5 797
+                L153 797 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M153, 794 L161, 797 L153, 800 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M68.5, 110 L68.5 841.5 Q68.5 845.5
+                72.5 845.5
+                L79 845.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M79, 842.5 L87, 845.5 L79, 848.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M105.5, 860.5 L105.5 890 Q105.5 894
+                109.5 894
+                L116 894 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M116, 891 L124, 894 L116, 897 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M105.5, 860.5 L105.5 938.5 Q105.5 942.5
+                109.5 942.5
+                L116 942.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M116, 939.5 L124, 942.5 L116, 945.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M105.5, 860.5 L105.5 987 Q105.5 991
+                109.5 991
+                L116 991 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M116, 988 L124, 991 L116, 994 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M142.5, 1006 L142.5 1035.5 Q142.5 1039.5
+                146.5 1039.5
+                L153 1039.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M153, 1036.5 L161, 1039.5 L153, 1042.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M142.5, 1006 L142.5 1084 Q142.5 1088
+                146.5 1088
+                L153 1088 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M153, 1085 L161, 1088 L153, 1091 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M25, 40 L25 1147.5 Q25 1151.5
+                29 1151.5
+                L42 1151.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M42, 1148.5 L50, 1151.5 L42, 1154.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M68.5, 1166.5 L68.5 1196 Q68.5 1200
+                72.5 1200
+                L79 1200 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M79, 1197 L87, 1200 L79, 1203 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M68.5, 1166.5 L68.5 1259.5 Q68.5 1263.5
+                72.5 1263.5
+                L79 1263.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M79, 1260.5 L87, 1263.5 L79, 1266.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M117, 1293.5 L117 1314.5 Q117 1318.5
+                121 1318.5
+                L129 1318.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M129, 1315.5 L137, 1318.5 L129, 1321.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M117, 1293.5 L117 1363 Q117 1367
+                121 1367
+                L129 1367 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M129, 1364 L137, 1367 L129, 1370 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M117, 1293.5 L117 1411.5 Q117 1415.5
+                121 1415.5
+                L129 1415.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M129, 1412.5 L137, 1415.5 L129, 1418.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M504.59999999999997, 1263.5 L540.5999999999999 1263.5  Q544.5999999999999 1263.5
+                544.5999999999999 1267.5
+                L544.5999999999999 1310.5 Q544.5999999999999 1318.5
+                548.5999999999999 1318.5
+                L556.5999999999999 1318.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M556.5999999999999, 1315.5 L564.5999999999999, 1318.5 L556.5999999999999, 1321.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M25, 40 L25 1476.5 Q25 1480.5
+                29 1480.5
+                L42 1480.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M42, 1477.5 L50, 1480.5 L42, 1483.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M68.5, 1495.5 L68.5 1525 Q68.5 1529
+                72.5 1529
+                L79 1529 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M79, 1526 L87, 1529 L79, 1532 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M68.5, 1495.5 L68.5 1588.5 Q68.5 1592.5
+                72.5 1592.5
+                L79 1592.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M79, 1589.5 L87, 1592.5 L79, 1595.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M117, 1622.5 L117 1643.5 Q117 1647.5
+                121 1647.5
+                L129 1647.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M129, 1644.5 L137, 1647.5 L129, 1650.5 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M117, 1622.5 L117 1692 Q117 1696
+                121 1696
+                L129 1696 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M129, 1693 L137, 1696 L129, 1699 Z" 
+        fill="#333" />
+            </g>
+            <g>
+               <path d="M450, 1592.5 L486 1592.5  Q490 1592.5
+                490 1596.5
+                L490 1639.5 Q490 1647.5
+                494 1647.5
+                L502 1647.5 "
+        style="fill:none; stroke:#444; stroke-width:1" />
+               <path d="M502, 1644.5 L510, 1647.5 L502, 1650.5 Z" 
+        fill="#333" />
+            </g>
+            </svg>

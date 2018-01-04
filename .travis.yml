@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - "node"
+cache:
+  directories:
+    - "node_modules"
+install: ./fixNodeModules.sh
+# safelist
+branches:
+  only:
+  - master
+  - /^v\d+\.\d+(\.\d+)?(-\S*)?$/ #vX.Y
