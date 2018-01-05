@@ -865,6 +865,7 @@ router.get('/delete/:id', requireLogin, (req, res) => {
  */
 router.post('/delete/:id', requireLogin, (req, res) => {
   User.findById(req.user.id, (err, user) => {
+    if (err) _err('POST deletion error:', err);
     if (!user) {
       noSuchUser();
       return res.redirect('/');
@@ -883,6 +884,7 @@ router.post('/delete/:id', requireLogin, (req, res) => {
  */
 router.get('/user/@:username', requireLogin, (req, res) => {
   User.findOne({username: req.params.username}, (err, visitedUser) => {
+    if (err) _err('User page error:', err);
     if (!visitedUser) {
       _warn('No user with username:', req.params.username);
       noSuchUser();
