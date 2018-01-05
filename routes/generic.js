@@ -2,7 +2,7 @@
  * @description Generic (utility) route.
  * @module generic
  * @exports {load, incomingIp, requireLogin, adminOnly, modOnly, memberOnly, sameUserOnly, codeToMsg, sendSms, httpPage, setColours, clr, noSuchUser,
- * emailError, execCaptcha}
+ * emailError, execCaptcha, _in, _out, _inf, _err, _warn, _dbg}
  */
 
 /* eslint-env es6, node */
@@ -10,12 +10,71 @@ const config = require('../config/config'), Nexmo = require('nexmo'), clr = requ
   path = require('path'), _async = require('asyncawait/async'), _await = require('asyncawait/await');
 const nexmo = new Nexmo(config.nexmoOptions), clrScheme = {
     in: 'white',
+    out: 'cyan',
     inf: 'green',
     err: 'red',
     warn: 'yellow',
-    debug: 'grey',
-    out: 'cyan'
+    debug: 'grey'
   };
+
+/**
+ * @description Print an error.
+ * @param {...*} data Data to print
+ * @private
+ */
+let _err = (...data) => console.error(clr.err(...data));
+
+/**
+ * @description Print an information.
+ * @param {...*} data Data to print
+ * @private
+ */
+let _inf = (...data) => {
+  try {
+    console.info(clr.inf(...data));
+  } catch (err) {
+    console.log(clr.inf(...data));
+  }
+};
+
+/**
+ * @description Print a  warning.
+ * @param {...*} data Data to print
+ * @private
+ */
+let _warn = (...data) => {
+  try {
+    console.warn(clr.warn(...data));
+  } catch (err) {
+    console.log(clr.warn(...data));
+  }
+};
+
+/**
+ * @description Print a debug message.
+ * @param {...*} data Data to print
+ * @private
+ */
+let _dbg = (...data) => {
+  try {
+    console.debug(clr.debug(...data));
+  } catch (err) {
+    console.log(clr.debug(...data));
+  }
+};
+
+/**
+ * @description Print an output.
+ * @param {...*} data Data to print
+ * @private
+ */
+let _out = (...data) => console.log(clr.out(...data));
+/**
+ * @description Print an input.
+ * @param {...*} data Data to print
+ * @private
+ */
+let _in = (...data) => console.log(clr.in(...data));
 
 /**
  * @description Set a colour scheme for the CLI.
@@ -205,7 +264,7 @@ let noSuchUser = () => req.flash('error', 'No such user');
  */
 let emailError = (req, err) => {
   req.flash('error', `An error occured while sending the email (error ${err.statusCode})`);
-  console.log(clr.err('SMTP error:'), err);
+  _err('SMTP error:', err);
 };
 
 /**
@@ -228,5 +287,6 @@ let execCaptcha = _async((callback, gifPath=`${path.dirname(__dirname)}/public/i
 module.exports = {
   load, httpPage, noSuchUser, emailError, codeToMsg, sendSms,
   incomingIp, requireLogin, adminOnly, modOnly, memberOnly, sameUserOnly,
-  setColours, clr, execCaptcha
+  setColours, clr, execCaptcha,
+  _in, _out, _inf, _err, _warn, _dbg
 };

@@ -1,6 +1,14 @@
 # MENP
-
-[![npm version](http://img.shields.io/npm/v/menp.svg?style=flat-square)](https://npmjs.org/package/menp)
+[![NPM](https://nodei.co/npm/menp.png)](https://nodei.co/npm/menp/)
+<!--[![tested with jest](https://img.shields.io/badge/tested_with-jest-99424f.svg)](https://github.com/facebook/jest)-->
+[![Inline docs](http://inch-ci.org/github/Berkmann18/MENP.svg?branch=master)](http://inch-ci.org/github/Berkmann18/MENP)
+[![NSP Status](https://nodesecurity.io/orgs/berkmann18/projects/fd479365-365e-4a75-9a25-ba37e69f9780/badge)](https://nodesecurity.io/orgs/berkmann18/projects/fd479365-365e-4a75-9a25-ba37e69f9780)
+[![codecov.io Code Coverage](https://img.shields.io/codecov/c/github/Berkmann18/MENP.svg?maxAge=2592000)](https://codecov.io/github/Berkmann18/MENP?branch=master)
+[![bitHound Overall Score](https://www.bithound.io/github/Berkmann18/MENP/badges/score.svg)](https://www.bithound.io/github/Berkmann18/MENP)
+[![bitHound Dev Dependencies](https://www.bithound.io/github/Berkmann18/MENP/badges/devDependencies.svg)](https://www.bithound.io/github/Berkmann18/MENP/master/dependencies/npm)
+[![bitHound Code](https://www.bithound.io/github/Berkmann18/MENP/badges/code.svg)](https://www.bithound.io/github/Berkmann18/MENP)
+[![dependencies Status](https://david-dm.org/Berkmann18/MENP/status.svg)](https://david-dm.org/Berkmann18/MENP)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/Berkmann18/MENP/issues)
 [![MIT license](http://img.shields.io/npm/l/menp.svg?style=flat-square)](https://npmjs.org/package/menp)
 <!--[![dependencies](...)](..)-->
 

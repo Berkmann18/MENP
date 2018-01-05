@@ -9,9 +9,6 @@
 /* eslint-env es6, node */
 
 /**
- * @todo Fix the issue with users not being able to go on their edit page
- * @todo Add a token (2FA code) expiry date (like the reset code), add the option to choose the 2FA method
- * @todo Implement email based 2FA
  * @todo Add more security with helmet
  * @todo Fix the impossibility to register on production mode
  */
@@ -25,7 +22,7 @@ const $ = cheerio.load('<body>...</body>'), Promise = require('promise');
 const config = require('../config/config');
 const {
   incomingIp, requireLogin, adminOnly, memberOnly, sameUserOnly,
-  sendSms, httpPage, setColours, clr, noSuchUser, emailError, execCaptcha} = require('./generic');
+  sendSms, httpPage, setColours, clr, noSuchUser, emailError, execCaptcha, _err, _dbg, _warn} = require('./generic');
 const tokenCooldown = 36e5; //1h in ms
 
 let esig = 'Best regards,\nMENP team\n';
@@ -53,7 +50,7 @@ router.use(passport.initialize());
 router.use(passport.session());
 
 mongoose.connect(config.db, {useMongoClient: true}, (err) => {
-  if (err) console.log(clr.err('Mongoose: Error='), err);
+  if (err) _err('Mongoose: Error=', err);
 });
 
 let userSchema = new mongoose.Schema({
@@ -93,7 +90,10 @@ userSchema.pre('save', function(next) {
 
 userSchema.methods.comparePassword = function(candidatePassword, cb) {
   bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
-    if (err) return cb(err);
+    if (err) {
+      _err('Password compare error', err);
+      return cb(err);
+    }
     cb(null, isMatch);
   });
 };
@@ -107,6 +107,7 @@ passport.use(new LocalStrategy((username, password, done) => {
     if (err) return done(err);
     if (!user) return done(null, false, {message: 'Incorrect username.'});
     user.comparePassword(password, (err, isMatch) => {
+      if (err) _err('LocalStrategy error:', err);
       return isMatch ? done(null, user) : done(null, false, {message: 'Incorrect password.'});
     });
   });
@@ -117,7 +118,7 @@ passport.use(new LocalStrategy((username, password, done) => {
  */
 router.all('/*', (req, res, next) => {
   let iip = incomingIp(req); //::1 if it's localhost (0:0:0:0:0:0:0:1)
-  console.log(clr.inf(`Incoming IP: ${iip}`));
+  _inf(`Incoming IP: ${iip}`);
   next();
 });
 
@@ -229,10 +230,13 @@ router.post('/login', (req, res, next) => {
     if (err) return next(err);
     let login = () => {
       req.logIn(user, (err) => {
-        if (err) return next(err);
+        if (err) {
+          _err('Login error:', err);
+          return next(err);
+        }
         user.lastSeen = new Date();
         user.save((err) => {
-          if (err) console.log(clr.err('Last seen login save error:'), err);
+          if (err) _err('Last seen login save error:', err);
           req.flash('success', `Welcome "${user.title}. ${user.fname} ${user.lname}"`);
           console.log(clr.inf(`${user.username} <${user.email}> just logged in`));
           return res.redirect(`/usr/${user.id}`);
@@ -249,7 +253,7 @@ router.post('/login', (req, res, next) => {
           crypto.randomBytes(4, (err, buf) => {
             let token = buf.toString('hex');
             if (err) {
-              console.log(clr.err('Crypto gen error'), err);
+              _err('Crypto gen error:', err);
               req.flash('error', `Error in generating the code (error ${err.statusCode})`);
             }
             done(err, token);
@@ -266,7 +270,7 @@ router.post('/login', (req, res, next) => {
               });
               // console.log(clr.debug('Expecting token:'), token);
               if (err) {
-                console.log(clr.err('2FA handling error'), err);
+                _err('2FA handling error:', err);
                 req.flash('error', `Error in the Authentication process (error ${err.statusCode})`);
               }
               //done(err, token, user);
@@ -278,7 +282,7 @@ router.post('/login', (req, res, next) => {
           console.log('2FA w/', user.twoFaMethod);
           if (user.twoFaMethod === 'sms') {
             sendSms(config.nexmoOptions.from, user.phone, `Your code is ${token}.`, (ans) => {
-              console.log(clr.debug('SMS callback response: '), ans);
+              _dbg('SMS callback response:', ans);
               twoFaHandler(token);
             });
           } else if (user.twoFaMethod === 'email') {
@@ -305,7 +309,7 @@ router.post('/login', (req, res, next) => {
 
         }], (token, err) => {
         if (err) {
-          console.log(clr.err('2FA login error'), err);
+          _err('2FA login error', err);
           //return next(err);
         } //else res.redirect('/login');
       });
@@ -318,7 +322,7 @@ router.post('/login', (req, res, next) => {
  */
 router.get('/register', (req, res) => {
   execCaptcha((token) => {
-    // console.log('Captcha token:', token);
+    // _dbg('Captcha token:', token);
     res.render('register', {
       page: 'register',
       captcha: token
@@ -349,12 +353,14 @@ router.post('/register', (req, res) => {
     }, wrongs = false;
 
   User.findOne({email: req.body.email}, (err, user) => {
+    if (err) _err('Error:', err);
     if (user) {
       req.flash('error', 'The email address is already used by an existing account');
       //console.log('Email already used');
       wrongs = true;
     } //else console.log('Email fine');
   }).then(User.findOne({username: req.body.username}, (err, user) => {
+    if (err) _err('Error:', err);
     if (user) {
       req.flash('error', 'The username is already used by an existing account');
       //console.log('Un already used');
@@ -386,15 +392,16 @@ router.post('/register', (req, res) => {
 
     if (req.body.captcha !== req.body.cct) {
       req.flash('error', 'The captcha is wrong');
-      console.log('Wrong captcha');
+      // console.log('Wrong captcha');
       wrongs = true;
-    } else console.log('Captcha fine');
+    } else //console.log('Captcha fine');
 
     if (wrongs) {
       keepDetails();
-      console.log('Going again');
+      // console.log('Going again');
       return false;
     } //Allow to display all issues with the form in one go and to minimise POST requests
+
     let usr = {
       title: req.body.title,
       fname: req.body.fname,
@@ -414,13 +421,13 @@ router.post('/register', (req, res) => {
     user.save((err) => {
       if (err) {
         req.flash('error', `Something went wrong in the registration (error ${err.statusCode})`);
-        console.log(clr.err('Failed registration:'), err);
+        _err('Failed registration:', err);
       }
       req.flash('success', 'Registration successful!');
-      console.log(clr.inf(`${user.username} <${user.email}> just registered`));
+      _inf(`${user.username} <${user.email}> just registered`);
       req.logIn(user, (err) => {
         if (err) {
-          console.log(clr.err('Post-registration login error'), err);
+          _err('Post-registration login error', err);
           req.flash('error', `Post-registration login error (error ${err.statusCode}`)
         }
         res.redirect(`/usr/${user.id}`)
@@ -436,7 +443,7 @@ router.post('/register', (req, res) => {
         if (err) emailError(req, err);
       });
     });
-  }).catch(err => console.log(clr.err(err)));
+  }).catch(err => _err(err));
 });
 
 /**
@@ -448,16 +455,16 @@ router.get('/logout', (req, res) => {
       if (!user) {
         let errCode = err ? ` (error ${err.code})` : '';
         req.flash('error', `The user account you tried to logout from wasn't found${errCode}`);
-        console.log(clr.warn('No user found pre-logout?'));
+        _warn('No user found pre-logout?');
         return;
       }
       user.lastSeen = new Date();
       user.save((err) => {
         if (err) {
-          console.log(clr.err('Last seen logout save error:'), err);
+          _err('Last seen logout save error:', err);
           req.flash('error', `Internal "last-seen" update issue (error ${err.statusCode})`)
         }
-        console.log(clr.inf(`${user.username} <${user.email}> just logged out`));
+        _inf(`${user.username} <${user.email}> just logged out`);
       });
     });
   } else req.flash('error', 'Error in trying to logout from an account');
@@ -494,6 +501,7 @@ router.post('/forgot', (req, res, next) => {
       }
 
       User.findOne({email: req.body.email}, (err, user) => {
+        if (err) _err('Error:', err);
         if (!user) {
           req.flash('error', 'No account with that email address exists.');
           return res.redirect('/forgot');
@@ -531,6 +539,7 @@ router.post('/forgot', (req, res, next) => {
  */
 router.get('/reset/:token', (req, res) => {
   User.findOne({resetPasswordToken: req.params.token, resetPasswordExpires: {$gt: Date.now()}}, (err, user) => {
+    if (err) _err('Error:', err);
     if (!user) {
       req.flash('error', 'The password reset token is invalid or has expired.');
       return res.redirect('/forgot');
@@ -549,6 +558,7 @@ router.post('/reset/:token', (req, res) => {
   async.waterfall([
     (done) => {
       User.findOne({resetPasswordToken: req.params.token, resetPasswordExpires: {$gt: Date.now()}}, (err, user) => {
+        if (err) _err('Error:', err);
         if (!user) {
           req.flash('error', 'The password reset token is invalid or has expired.');
           return res.redirect('back');
@@ -560,7 +570,7 @@ router.post('/reset/:token', (req, res) => {
 
         user.save((err) => {
           if (err) {
-            console.log(clr.err('Post-registration login error'), err);
+            _err('Post-registration login error', err);
             req.flash('error', `Post-registration login error (error ${err.statusCode}`)
           }
           req.logIn(user, (err) => done(err, user))
@@ -582,7 +592,7 @@ router.post('/reset/:token', (req, res) => {
     }
   ], (err) => {
     if (err) {
-      console.log(clr.err('Password resetting error'), err);
+      _err('Password resetting error', err);
       req.flash('error', `Password resetting error (error ${err.statusCode}`)
     }
     res.redirect('/')
@@ -615,6 +625,7 @@ router.get('/admin', adminOnly, (req, res) => {
   for (let col of cols) usrlist += `<th>${col}</th>`;
   usrlist += '</tr>';
   User.find({}, (err, users) => {
+    if (err) _err('Error:', err);
     if (!users) {
       req.flash('error', 'No users :(');
       return res.redirect('/');
@@ -689,6 +700,7 @@ router.get('/admin', adminOnly, (req, res) => {
  */
 router.get('/admin/ch', adminOnly, (req, res, next) => {
   User.findById(req.body.id, (err, user) => {
+    if (err) _err('Error:', err);
     if (!user) {
       noSuchUser();
       return res.redirect('back');
@@ -704,7 +716,7 @@ router.get('/admin/ch', adminOnly, (req, res, next) => {
     user.type = req.body.type || user.type;
     req.flash('success', 'Information updated');
     user.save((err) => {
-      if (err) console.log(clr.err('Admin authored change error:'), err);
+      if (err) _err('Admin authored change error:', err);
     });
     next(); //This may need to be moved to user.save
   });
@@ -720,6 +732,7 @@ router.get('/users', memberOnly, (req, res) => {
   for (let col of visualCols) usrlist += `<th>${col}</th>`;
   usrlist += '</tr>';
   User.find({}, (err, users) => {
+    if (err) _err('Error:', err);
     if (!users) {
       req.flash('error', 'No users :(');
       return res.redirect('/');
@@ -730,7 +743,7 @@ router.get('/users', memberOnly, (req, res) => {
         usrlist += (col === 'username') ? `<td><a href="/user/@${user[col]}">${user[col]}</a></td>` : `<td>${user[col]}</td>`;
       }
       usrlist += '</tr>';
-      nb++;''
+      nb++;
     }
     usrlist += `</table><p><em>${nb}</em> users (as of ${new Date()})</p>`;
     res.render('page', {
@@ -746,12 +759,17 @@ router.get('/users', memberOnly, (req, res) => {
  */
 router.get('/usr/:id', sameUserOnly, (req, res) => {
   User.findById(req.params.id, (err, user) => {
+    if (err) _err('Error:', err);
     if (!user) {
-      console.log(clr.err('No user with id'), req.params.id);
+      _err('No user with id:', req.params.id);
       noSuchUser();
       return res.redirect('/');
     }
-    res.render('user', {user, visitedUser: user, same: true});
+    res.render('user', {
+      user,
+      visitedUser: user,
+      same: true
+    });
   });
 });
 
@@ -760,8 +778,9 @@ router.get('/usr/:id', sameUserOnly, (req, res) => {
  */
 router.get('/usr/:id/edit', sameUserOnly, (req, res) => {
   User.findById(req.params.id, (err, user) => {
+    if (err) _err('Error:', err);
     if (!user) {
-      console.log(clr.err('No user with id'), req.params.id);
+      _err('No user with id', req.params.id);
       noSuchUser();
       return res.redirect('/');
     }
@@ -774,6 +793,7 @@ router.get('/usr/:id/edit', sameUserOnly, (req, res) => {
  */
 router.post('/usr/:id/edit', (req, res) => {
   User.findById(req.params.id, (err, user) => {
+    if (err) _err('Error:', err);
     if (!user) {
       noSuchUser();
       return res.redirect('/');
@@ -818,7 +838,7 @@ router.post('/usr/:id/edit', (req, res) => {
 
     user.save((err) => {
       if (err) {
-        console.log(clr.err('Update error:'), err);
+        _err('Update error:', err);
         req.flash('error', `There was an error in the information update (error ${err.statusCode})`);
       } else {
         res.render('update', {user});
@@ -833,8 +853,6 @@ router.post('/usr/:id/edit', (req, res) => {
  * @description User account deletion page.
  */
 router.get('/delete/:id', requireLogin, (req, res) => {
-  console.log('req uid=', req.user.id);
-  console.log('param id=', req.params.id);
   if (req.user.id === req.params.id) {
     res.render('delete', {
       user: req.user
@@ -852,9 +870,9 @@ router.post('/delete/:id', requireLogin, (req, res) => {
       return res.redirect('/');
     }
     user.remove((err) => {
-      if (err) throw err;
+      if (err) _err('User deletion error:', err);
       req.flash('success', 'User successfully deleted!');
-      console.log(clr.inf(`${user.username} <${user.email}> is gone`));
+      _inf(`${user.username} <${user.email}> is gone`);
       return res.redirect('/');
     });
   });
@@ -866,7 +884,7 @@ router.post('/delete/:id', requireLogin, (req, res) => {
 router.get('/user/@:username', requireLogin, (req, res) => {
   User.findOne({username: req.params.username}, (err, visitedUser) => {
     if (!visitedUser) {
-      console.log(clr.warn('No user with username'), req.params.username);
+      _warn('No user with username:', req.params.username);
       noSuchUser();
       httpPage(404, res);
     } else res.render('user', {visitedUser, user: req.user});
@@ -901,34 +919,32 @@ router.get('/2fa', (req, res) => {
 
 router.post('/2fa', /*requireLogin,*/ (req, res, next) => {
   User.findById(req.body.id, (err, user) => {
+    if (err) _err('Error:', err);
     if (!user) {
       noSuchUser();
-      console.log(console.err('No such user with id=', req.body.id));
+      _err('No such user with id=', req.body.id);
       return res.redirect('/login');
     }
     if (user.id !== req.body.id) {
       req.flash('error', 'The request originated from a different user. Aborting!');
       return httpPage(550, res);
     }
-    if (!user.key) console.log(clr.err(`User ${user.username} doesn't have any key :(`));
-    /*
-        @todo Make sure the expirancy is right on that (use <= instead?)
-         */
+    if (!user.key) _err(`User ${user.username} doesn't have any key :(`);
     if (req.body.token === user.key && user.keyExpires > Date.now()) {
       req.flash('success', 'Successful Authentication!');
       req.logIn(user, (err) => {
         if (err) return next(err);
         user.lastSeen = new Date();
         user.save((err) => {
-          if (err) console.log(clr.err('2FA error'), err);
+          if (err) _err('2FA error:', err);
           req.flash('success', `Welcome "${user.title}. ${user.fname} ${user.lname}"`);
-          console.log(clr.inf(`${user.username} <${user.email}> just logged in`));
+          _inf(`${user.username} <${user.email}> just logged in`);
           return res.redirect(`/usr/${user.id}`);
         });
       });
     } else {
       req.flash('error', 'The code you gave is the wrong one or it expired');
-      //console.log(clr.debug('Code given:'), req.body.token, clr.warn('\nCode expected:'), user.key);
+      //_debug('Code given:', req.body.token, '\nCode expected:', user.key);
       res.redirect('/login');
     }
   });
