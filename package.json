@@ -17,7 +17,8 @@
     "fmt": "eslint -c ./config/.eslintrc.js *.js routes/*.js public/js/*.js --fix",
     "stylelint": "stylelint public/css/*.css --config ./config/.stylelintrc --color --report-needless-disables",
     "doc": "jsdoc -c ./config/jsdoc.json",
-    "hash": "node node_modules/hashmyjs/index.js -f json -p -o hashes.json public/js/*.js"
+    "hash": "node node_modules/hashmyjs/index.js -f json -p -o hashes.json public/js/*.js",
+    "browser": "browser-sync start --files 'app/css/*.css, app/js/*.js' --server"
   },
   "dependencies": {
     "async": "^2.6.0",
@@ -48,6 +49,7 @@
     "validator": "^9.2.0"
   },
   "devDependencies": {
+    "browser-sync": "^2.23.2",
     "complexity-report": "^2.0.0-alpha",
     "eslint": "^4.14.0",
     "eslint-config-google": "^0.9.1",

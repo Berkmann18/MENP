@@ -22,7 +22,7 @@ const $ = cheerio.load('<body>...</body>'), Promise = require('promise');
 const config = require('../config/config');
 const {
   incomingIp, requireLogin, adminOnly, memberOnly, sameUserOnly,
-  sendSms, httpPage, setColours, clr, noSuchUser, emailError, execCaptcha, _err, _dbg, _warn} = require('./generic');
+  sendSms, httpPage, setColours, clr, noSuchUser, emailError, execCaptcha, _err, _dbg, _warn, _inf} = require('./generic');
 const tokenCooldown = 36e5; //1h in ms
 
 let esig = 'Best regards,\nMENP team\n';
@@ -145,7 +145,7 @@ This is a sample MENP (MongoDB, Express, Node, Pug) web app (which uses Bootstra
 <img src="img/expressjs.png" alt="E" class="tools" title="Express" aria-label="Express">
 <img src="img/nodejs-512.png" alt="N" class="tools" title="NodeJS" aria-label="NodeJS">
 <img src="img/pugjs.png" alt="P" class="tools" title="Pug" aria-label="Pug"> +
-<img src="img/bootstrap-4.svg" alt="B" class="tools" title="Bootstrap" aria-label="Bootstrap">
+<img src="img/bootstrap4.png" alt="B" class="tools" title="Bootstrap" aria-label="Bootstrap">
 <img src="img/jquery-icon-17841.png" alt="jQ" class="tools" title="jQuery" aria-label="jQuery">
 <img src="img/cheerio.png" alt="c" class="tools" title="Cheerio" aria-label="Cheerio">
 <img src="img/nodemailer_sendgrid.png" alt="Nm+Sg" class="tools-wide" title="NodeMailer + Sendgrid" aria-label="NodeMailer + Sendgrid">

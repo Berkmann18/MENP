@@ -20,7 +20,7 @@ This is a sample MENP (MongoDB, Express, Node, Pug) web app (which uses Bootstra
 <img src="./public/img/expressjs.png" alt="E" title="Express" height="52px" width="52px">
 <img src="./public/img/nodejs-512.png" alt="N" title="NodeJS" height="52px" width="52px">
 <img src="./public/img/pugjs.png" alt="P" title="Pug" height="52px" width="52px">
-<img src="./public/img/boostrap-4.svg" alt="B" title="Boostrap" height="52px" width="52px">
+<img src="./public/img/bootstrap4.png" alt="B" title="Boostrap" height="52px" width="52px">
 <img src="./public/img/jquery-icon-17841.png" alt="jQ" title="jQuery" height="52px" width="52px">
 <img src="./public/img/cheerio.png" alt="c" title="Cheerio" height="52px" width="52px">
 <img src="./public/img/nodemailer_sendgrid.png" alt="NmSg" title="Nodemailer + Sendgrid" height="52px" width="104px">

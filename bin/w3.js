@@ -22,7 +22,6 @@ let normalizePort = (val) => {
 
 let port = normalizePort(process.env.PORT || 3e3), uPort = normalizePort(process.env.UNSECURE_PORT || 3001);
 
-//let server = app.listen(port, () => {
 let server = https.createServer(tlsOptions, app).listen(port, () => {
   let ipAddress = server.address();
   // :: is the reduced form of the unspecified IPv6 address 0:0:0:0:0:0:0:0
@@ -32,6 +31,12 @@ let server = https.createServer(tlsOptions, app).listen(port, () => {
 
   console.log('Server listening at', location);
 }), unsecureServer = http.createServer(app).listen(uPort, () => {
+  if (app.get('env') === 'development') {
+    require('browser-sync')({
+      proxy: `localhost:${uPort}`,
+      files: ['public/**/*.{js,css}']
+    });
+  }
   let ipAddress = unsecureServer.address();
   let location = typeof ipAddress === 'string'
     ? `pipe ${ipAddress}`
