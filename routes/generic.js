@@ -9,13 +9,13 @@
 const config = require('../config/config'), Nexmo = require('nexmo'), clr = require('colors'), fs = require('fs'), captcha = require('trek-captcha'),
   path = require('path'), _async = require('asyncawait/async'), _await = require('asyncawait/await');
 const nexmo = new Nexmo(config.nexmoOptions), clrScheme = {
-    in: 'white',
-    out: 'cyan',
-    inf: 'green',
-    err: 'red',
-    warn: 'yellow',
-    debug: 'grey'
-  };
+  in: 'white',
+  out: 'cyan',
+  inf: 'green',
+  err: 'red',
+  warn: 'yellow',
+  debug: 'grey'
+};
 
 /**
  * @description Print an error.
@@ -126,9 +126,11 @@ let incomingIp = (req) => {
  * @param {object} req HTTP request
  * @param {object} res ExpressJS result
  * @param {function} next Function that will execute as the next step
+ * @throws {Error} No req
  */
 let requireLogin = (req, res, next) => {
-    //req.session.loggedIn ? next() : res.redirect('/login');
+  if (!req) throw new Error('requireLogin needs a request to proceed');
+  //req.session.loggedIn ? next() : res.redirect('/login');
   req.user || req.isAuthenticated() ? next() : httpPage(403, res);
 };
 
@@ -154,7 +156,7 @@ let httpPage = (code, res) => {
     <a href="/">Go back to the home page</a>&nbsp; &nbsp;
     <a href="/sitemap">Go back to the sitemap</a>`
   });
-    //res.status(code).send(codeToMsg({status: code}));
+  //res.status(code).send(codeToMsg({status: code}));
 };
 
 /**
@@ -164,7 +166,7 @@ let httpPage = (code, res) => {
  * @param {function} next Function that will execute as the next step
  */
 let adminOnly = (req, res, next) => {
-  (req.user.type === 'admin') ? next() : httpPage(403, res);
+  (req.user && req.user.type === 'admin') ? next() : httpPage(403, res);
 };
 
 /**
@@ -184,7 +186,7 @@ let modOnly = (req, res, next) => {
  * @param {function} next Function that will execute as the next step
  */
 let memberOnly = (req, res, next) => {
-    //userTypeCheck(req) ? next() : httpPage(403, res);
+  //userTypeCheck(req) ? next() : httpPage(403, res);
   (req.user && ['member', 'moderator', 'admin'].indexOf(req.user.type) > -1) ? next() : httpPage(403, res);
 };
 
@@ -246,9 +248,9 @@ let codeToMsg = (err) => {
  */
 let sendSms = (from, to, text, callback) => {
   nexmo.message.sendSms(
-        from, to, text,
-        (err, responseData) => callback(err || responseData)
-    );
+    from, to, text,
+    (err, responseData) => callback(err || responseData)
+  );
 
 };
 

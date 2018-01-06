@@ -11,7 +11,8 @@
 [![dependencies Status](https://david-dm.org/Berkmann18/MENP/status.svg)](https://david-dm.org/Berkmann18/MENP)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/Berkmann18/MENP/issues)
 <!--[![MIT license](http://img.shields.io/npm/l/menp.svg?style=flat-square)](https://npmjs.org/package/menp)-->
-
+[![Sauce Test Status](https://saucelabs.com/buildstatus/Berkmann18)](https://saucelabs.com/u/Berkmann18)
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/Berkmann18.svg)](https://saucelabs.com/u/Berkmann18)
 This is a sample MENP (MongoDB, Express, Node, Pug) web app (which uses Bootstrap and jQuery).
 
 <table>

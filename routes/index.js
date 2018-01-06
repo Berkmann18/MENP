@@ -11,6 +11,7 @@
 /**
  * @todo Add more security with helmet
  * @todo Fix the impossibility to register on production mode
+ * @todo Add ‘Access-Control-Allow-Origin' to satisfy Firefox with faHdl.js which works on update pages
  */
 
 const session = require('express-session'), mongoose = require('mongoose'), nodemailer = require('nodemailer');
@@ -18,14 +19,25 @@ const passport = require('passport'), LocalStrategy = require('passport-local').
 const bcrypt = require('bcrypt-nodejs'), async = require('async'), crypto = require('crypto');
 const flash = require('express-flash'), validator = require('validator'), sgTransport = require('nodemailer-sendgrid-transport');
 const router = require('express').Router(), cheerio = require('cheerio');
-const $ = cheerio.load('<body>...</body>'), Promise = require('promise');
+const $ = cheerio.load('<body>...</body>'), Promise = require('promise'), cors = require('cors');
 const config = require('../config/config');
 const {
   incomingIp, requireLogin, adminOnly, memberOnly, sameUserOnly,
-  sendSms, httpPage, setColours, clr, noSuchUser, emailError, execCaptcha, _err, _dbg, _warn, _inf} = require('./generic');
+  sendSms, httpPage, setColours, noSuchUser, emailError, execCaptcha, _err, _dbg, _warn, _inf} = require('./generic');
 const tokenCooldown = 36e5; //1h in ms
 
 let esig = 'Best regards,\nMENP team\n';
+
+let urlWhiteList = ['https://localhost', 'http://localhost'], /*corsOptions = {
+    origin: (origin, callback) => {
+      _warn('Origin:', origin);
+      (urlWhiteList.indexOf(origin) !== -1) ? callback(null, true) : callback(new Error('Not allowed by CORS'))
+    }
+  }*/ corsOptionsDelegate = (req, callback) => {
+    let corsOptions = { origin: (urlWhiteList.indexOf(req.header('Origin')) !== -1) };
+    //Reflect (enable) the requested origin in the CORS response or disable CORS for this request
+    callback(null, corsOptions) //Callback expects two parameters: error and options
+  }, url = (req) => `${router.get('protocol')}://${req.headers.host}`;
 
 setColours();
 
@@ -117,8 +129,8 @@ passport.use(new LocalStrategy((username, password, done) => {
  * @description Universal route handler that indicates the incoming IP address.
  */
 router.all('/*', (req, res, next) => {
-  let iip = incomingIp(req); //::1 if it's localhost (0:0:0:0:0:0:0:1)
-  _inf(`Incoming IP: ${iip}`);
+  _inf(`Incoming IP: ${incomingIp(req)}`); //::1 if it's localhost (0:0:0:0:0:0:0:1)
+  res.header('Access-Control-Allow-Origin', urlWhiteList.toString());
   next();
 });
 
@@ -195,11 +207,11 @@ router.post('/contact', (req, res) => {
     return keepDetails();
   }
   let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)), mailOptions = {
-      to: config.email.to,
-      from: req.body.email,
-      subject: req.body.subject || '[?] No subject',
-      text: `Contact email from ${req.body.name}:\n\n${req.body.message}`
-    };
+    to: config.email.to,
+    from: req.body.email,
+    subject: req.body.subject || '[?] No subject',
+    text: `Contact email from ${req.body.name}:\n\n${req.body.message}`
+  };
   smtpTransport.sendMail(mailOptions, (err) => {
     if (err) emailError(req, err);
     else req.flash('info', 'The email was sent! Thank you for your interest.');
@@ -238,7 +250,7 @@ router.post('/login', (req, res, next) => {
         user.save((err) => {
           if (err) _err('Last seen login save error:', err);
           req.flash('success', `Welcome "${user.title}. ${user.fname} ${user.lname}"`);
-          console.log(clr.inf(`${user.username} <${user.email}> just logged in`));
+          _inf(`${user.username} <${user.email}> just logged in`);
           return res.redirect(`/usr/${user.id}`);
         });
       });
@@ -268,7 +280,7 @@ router.post('/login', (req, res, next) => {
                 user,
                 page: '2fa'
               });
-              // console.log(clr.debug('Expecting token:'), token);
+              // _dbg('Expecting token:', token);
               if (err) {
                 _err('2FA handling error:', err);
                 req.flash('error', `Error in the Authentication process (error ${err.statusCode})`);
@@ -288,15 +300,15 @@ router.post('/login', (req, res, next) => {
           } else if (user.twoFaMethod === 'email') {
             twoFaHandler(token);
             let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)), mailOptions = {
-                to: user.email,
-                from: config.email.from,
-                subject: '[ACTION] 2nd Factor Authentication',
-                html: `<p>You are receiving this because you (or someone else) authenticated with your username/password and now need the code
+              to: user.email,
+              from: config.email.from,
+              subject: '[ACTION] 2nd Factor Authentication',
+              html: `<p>You are receiving this because you (or someone else) authenticated with your username/password and now need the code
                             for the second factor of the authentication which is the following: <em>${token}</em></p><br>
                             <p>If you can't get the page to enter the code, you should see one pointing to
-                            <a href="http://${req.headers.host}/2fa">http://${req.headers.host}/2fa</a></p><br>
+                            <a href="${url(req)}/2fa">${url(req)}/2fa</a></p><br>
                             <p>If you did not request this, please ignore this email and your account won't be accessed.</p><br>${esig}`
-              };
+            };
             smtpTransport.sendMail(mailOptions, (err) => {
               if (err) emailError(req, err);
               else {
@@ -317,10 +329,12 @@ router.post('/login', (req, res, next) => {
   })(req, res, next);
 });
 
+router.options('/register', cors());
 /**
  * @description Registration page.
  */
-router.get('/register', (req, res) => {
+router.get('/register', cors(corsOptionsDelegate), (req, res) => {
+  // console.log('Origin header on register:', req.header('Origin'));
   execCaptcha((token) => {
     // _dbg('Captcha token:', token);
     res.render('register', {
@@ -434,11 +448,11 @@ router.post('/register', (req, res) => {
       });
 
       let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)), mailOptions = {
-          to: user.email,
-          from: config.email.from,
-          subject: '[INFO] Welcome to MENP',
-          text: `Hello ${user.username},\nWelcome to MENP! I hope you'll enjoy using our application.\n${esig}`
-        };
+        to: user.email,
+        from: config.email.from,
+        subject: '[INFO] Welcome to MENP',
+        text: `Hello ${user.username},\nWelcome to MENP! I hope you'll enjoy using our application.\n${esig}`
+      };
       smtpTransport.sendMail(mailOptions, (err) => {
         if (err) emailError(req, err);
       });
@@ -514,14 +528,14 @@ router.post('/forgot', (req, res, next) => {
       });
     }, (token, user, done) => {
       let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)), mailOptions = {
-          to: user.email,
-          from: config.email.from,
-          subject: '[ACTION] Password Reset',
-          text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
+        to: user.email,
+        from: config.email.from,
+        subject: '[ACTION] Password Reset',
+        text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
                 Please click on the following link, or paste this into your browser to complete the process:\n\n
-                http://${req.headers.host}/reset/${token}\n\n
+                ${url(req)}/reset/${token}\n\n
                 If you did not request this, please ignore this email and your password will remain unchanged.\n${esig}`
-        };
+      };
       smtpTransport.sendMail(mailOptions, (err) => {
         if (err) emailError(req, err);
         else req.flash('info', `An e-mail has been sent to ${user.email} with further instructions.`);
@@ -579,11 +593,11 @@ router.post('/reset/:token', (req, res) => {
     },
     (user, done) => {
       let smtpTransport = nodemailer.createTransport(config.smtp), mailOptions = {
-          to: user.email,
-          from: config.email.from,
-          subject: '[INFO] Your password has been changed',
-          text: `Hello,\n\nThis is a confirmation that the password for your account ${user.email} has just been changed.\n${esig}`
-        };
+        to: user.email,
+        from: config.email.from,
+        subject: '[INFO] Your password has been changed',
+        text: `Hello,\n\nThis is a confirmation that the password for your account ${user.email} has just been changed.\n${esig}`
+      };
       smtpTransport.sendMail(mailOptions, (err) => {
         if (err) emailError(req, err);
         else req.flash('success', 'Success! Your password has been changed.');
@@ -912,7 +926,7 @@ router.get('/tac', (req, res) => {
   })
 });
 
-router.get('/2fa', (req, res) => {
+router.get('/2fa', requireLogin, (req, res) => {
   res.render('2fa', {
     user: req.user,
     page: '2fa'
@@ -951,5 +965,11 @@ router.post('/2fa', /*requireLogin,*/ (req, res, next) => {
     }
   });
 });
+
+//?/browser-sync/browser-sync-client.js?v=2.23.2
+/*router.get('/browser-sync/socket.io/?EIO=3&transport=polling&t=M37JxGZ', (req, res, next) => {
+  _warn('Went on that weird route');
+  next();
+});*/
 
 module.exports = router;

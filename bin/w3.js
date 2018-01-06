@@ -1,11 +1,15 @@
 #!/usr/bin/env node
 /* eslint-env es6, node */
+'use strict';
 
-const fs = require('fs'), http = require('http'), https = require('https'), app = require('../app'), eip = require('externalip');
+const fs = require('fs'), http = require('http'), https = require('https'), app = require('../app'), eip = require('external-ip')();
+const {setColours, _inf, _err} = require('../routes/generic');
 const tlsOptions = {
   key: fs.readFileSync('keys/server-key.pem'),
   cert: fs.readFileSync('keys/server-cert.pem')
 };
+
+setColours();
 
 /**
  * Normalize a port into a number, string, or false.
@@ -19,31 +23,6 @@ let normalizePort = (val) => {
   if (port >= 0) return port; //Port number
   return false;
 };
-
-let port = normalizePort(process.env.PORT || 3e3), uPort = normalizePort(process.env.UNSECURE_PORT || 3001);
-
-let server = https.createServer(tlsOptions, app).listen(port, () => {
-  let ipAddress = server.address();
-  // :: is the reduced form of the unspecified IPv6 address 0:0:0:0:0:0:0:0
-  let location = typeof ipAddress === 'string'
-    ? `pipe ${ipAddress}`
-    : `https://${ipAddress.address === '::' ? 'localhost' : ipAddress.address}:${ipAddress.port}`;
-
-  console.log('Server listening at', location);
-}), unsecureServer = http.createServer(app).listen(uPort, () => {
-  if (app.get('env') === 'development') {
-    require('browser-sync')({
-      proxy: `localhost:${uPort}`,
-      files: ['public/**/*.{js,css}']
-    });
-  }
-  let ipAddress = unsecureServer.address();
-  let location = typeof ipAddress === 'string'
-    ? `pipe ${ipAddress}`
-    : `http://${ipAddress.address === '::' ? 'localhost' : ipAddress.address}:${ipAddress.port}`;
-
-  console.log('Unsecure server listening at', location);
-});
 
 /**
  * @description Server error handler.
@@ -70,10 +49,41 @@ let onErr = (error) => {
   }
 };
 
-server.on('error', onErr);
-unsecureServer.on('error', onErr);
+let port = normalizePort(process.env.PORT || 3e3), uPort = normalizePort(process.env.UNSECURE_PORT || 3001);
+
+/**
+ * @description Start a server.
+ * @param {(string|number)} port Port/pipe
+ * @param {boolean} secure Is this server using an HTTPS connection
+ * @return {any} Server
+ */
+let startServer = (port, secure=false) => {
+  let www = secure ? https.createServer(tlsOptions, app) : http.createServer(app);
+  www.listen(port, () => {
+    app.set('port', port);
+    app.set('protocol', secure ? 'https' : 'http');
+    console.log(app.get('hostname'));
+    if (app.get('browser') || process.env.BROWSER) {
+      require('browser-sync')({
+        proxy: `localhost:${port}`,
+        files: ['public/**/*.{js,css}']
+      });
+    }
+    let ipAddress = www.address();
+    // :: is the reduced form of the unspecified IPv6 address 0:0:0:0:0:0:0:0
+    let location = typeof ipAddress === 'string'
+      ? `pipe ${ipAddress}`
+      : `http${secure ? 's' : ''}://${ipAddress.address === '::' ? 'localhost' : ipAddress.address}:${ipAddress.port}`;
+
+    console.log(`${secure ? '' : 'Unsecure '}Server listening at ${location}`);
+  });
+  www.on('error', onErr);
+  return www;
+};
+
+let server = startServer(port, true), unsecureServer = startServer(uPort);
 
 eip((err, ip) => {
-  if (err) console.log('Public IP error:', err);
-  console.log('Public IP:', ip);
+  if (err) _err('Public IP error:', err);
+  _inf('Public IP:', ip);
 });

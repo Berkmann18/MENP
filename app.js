@@ -51,17 +51,18 @@ app.use(helmet({
 app.use(helmet.xssFilter());
 app.use(helmet.contentSecurityPolicy({
   directives: {
-    defaultSrc: ['\'self\'', 'github.com', 'Berkmann18.github.io', 'https://maxcdn.bootstrapcdn.com'],
+    defaultSrc: ['\'self\'', 'github.com', 'Berkmann18.github.io', 'https://maxcdn.bootstrapcdn.com', 'ws://localhost:3002', ],
     styleSrc: ['\'self\'', 'maxcdn.bootstrapcdn.com', 'gitcdn.github.io', '\'unsafe-inline\''],
     scriptSrc: ['\'self\'', 'maxcdn.bootstrapcdn.com', 'code.jquery.com', 'cdnjs.cloudflare.com', 'gitcdn.github.io', '\'unsafe-eval\'', '\'unsafe-inline\'',
       'sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ', 'sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh',
       'sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN', 'sha256-C/MMeoQHEyhrrD8wEB7zDbcJTaUUbPn+oab7cS5qSiI=',
-      'sha256-QKjHHMX7oHE6t1zmdZLnYz8zlNXBh+cquflnewhru5Q=',
+      'sha256-GFyS9Ty2WZ6hM5H1/143GVklcV2FECoTbXLxaIGLMiE='
       //(req, res) => `'nonce-${res.locals.nonce}'`  // 'nonce-614d9122-d5b0-4760-aecf-3a5d17cf0ac9'
     ],
     reportUri: '/report-violation',
     fontSrc: ['\'self\'', 'maxcdn.bootstrapcdn.com', 'https://maxcdn.bootstrapcdn.com/'],
-    sandbox: ['allow-forms', 'allow-scripts']
+    sandbox: ['allow-forms', 'allow-scripts'],
+    imgSrc: ['\'self\'', 'data:']
   },
   browserSniff: false,
   reportOnly: (req, res) => req.query.cspmode === 'debug',
@@ -71,7 +72,7 @@ app.use(helmet.hsts({
   maxAge: OneYear,
   includeSubDomains: true,
   preload: true
-    //setIf: (req, res) => req.secure;
+  //setIf: (req, res) => req.secure;
 }));
 app.use(limiter);
 /*app.disable('x-powered-by')*/
