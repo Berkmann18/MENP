@@ -1,11 +1,11 @@
+/* eslint-env es6, node */
 /**
  * @description Generic (utility) route.
  * @module generic
  * @exports {load, incomingIp, requireLogin, adminOnly, modOnly, memberOnly, sameUserOnly, codeToMsg, sendSms, httpPage, setColours, clr, noSuchUser,
- * emailError, execCaptcha, _in, _out, _inf, _err, _warn, _dbg}
+ * noUsers, emailError, execCaptcha, _in, _out, _inf, _err, _warn, _dbg, welcomeUser}
  */
 
-/* eslint-env es6, node */
 const config = require('../config/config'), Nexmo = require('nexmo'), clr = require('colors'), fs = require('fs'), captcha = require('trek-captcha'),
   path = require('path'), _async = require('asyncawait/async'), _await = require('asyncawait/await');
 const nexmo = new Nexmo(config.nexmoOptions), clrScheme = {
@@ -78,6 +78,7 @@ let _in = (...data) => console.log(clr.in(...data));
 
 /**
  * @description Set a colour scheme for the CLI.
+ * @protected
  */
 let setColours = () => clr.setTheme(clrScheme);
 
@@ -85,6 +86,7 @@ let setColours = () => clr.setTheme(clrScheme);
  * @description Load an HTML page.
  * @param {Object} res ExpressJS result
  * @param {string} [page='index'] Page name
+ * @protected
  */
 let load = (res, page='index') => res.sendFile(path.join(`${__dirname}/../public/${page}.html`));
 
@@ -103,6 +105,7 @@ let getIncomingIp = (req) => {
  * @description Get the Incoming IP address.
  * @param {Object} req HTTP request
  * @return {?string} IP Address
+ * @protected
  */
 let incomingIp = (req) => {
   if ('x-forwarded-for' in req.headers) return req.headers['x-forwarded-for'].split(',').pop();
@@ -127,6 +130,7 @@ let incomingIp = (req) => {
  * @param {object} res ExpressJS result
  * @param {function} next Function that will execute as the next step
  * @throws {Error} No req
+ * @protected
  */
 let requireLogin = (req, res, next) => {
   if (!req) throw new Error('requireLogin needs a request to proceed');
@@ -139,6 +143,7 @@ let requireLogin = (req, res, next) => {
  * @param {object} req HTTP request
  * @param {string} [type='member'] User type allowed.
  * @return {boolean} Type check passed
+ * @protected
  */
 let userTypeCheck = (req, type='member') => {
   if (!req.user) return false;
@@ -149,6 +154,7 @@ let userTypeCheck = (req, type='member') => {
  * @description Show a page based on the HTTP code provided.
  * @param {number} code HTTP code
  * @param {object} res ExpressJS result
+ * @protected
  */
 let httpPage = (code, res) => {
   res.status(code).render('page', {
@@ -164,6 +170,7 @@ let httpPage = (code, res) => {
  * @param {object} req HTTP request
  * @param {object} res ExpressJS result
  * @param {function} next Function that will execute as the next step
+ * @protected
  */
 let adminOnly = (req, res, next) => {
   (req.user && req.user.type === 'admin') ? next() : httpPage(403, res);
@@ -174,6 +181,7 @@ let adminOnly = (req, res, next) => {
  * @param {object} req HTTP request
  * @param {object} res ExpressJS result
  * @param {function} next Function that will execute as the next step
+ * @protected
  */
 let modOnly = (req, res, next) => {
   userTypeCheck(req, 'moderator') ? next() : httpPage(403, res);
@@ -184,6 +192,7 @@ let modOnly = (req, res, next) => {
  * @param {object} req HTTP request
  * @param {object} res ExpressJS result
  * @param {function} next Function that will execute as the next step
+ * @protected
  */
 let memberOnly = (req, res, next) => {
   //userTypeCheck(req) ? next() : httpPage(403, res);
@@ -195,6 +204,7 @@ let memberOnly = (req, res, next) => {
  * @param {object} req HTTP request
  * @param {object} res ExpressJS result
  * @param {function} next Function that will execute as the next step
+ * @protected
  */
 let sameUserOnly = (req, res, next) => {
   req.user && req.user.id === req.params.id ? next() : httpPage(403, res);
@@ -204,6 +214,7 @@ let sameUserOnly = (req, res, next) => {
  * @description Get a message corresponding to an HTTP code.
  * @param {(error|{status:number, message:string=})} err Error
  * @return {string} Message
+ * @protected
  */
 let codeToMsg = (err) => {
   let msg = '';
@@ -245,6 +256,7 @@ let codeToMsg = (err) => {
  * @param {string} to Receiver's number.
  * @param {string} text SMS
  * @param {function((object|Error))} callback Callback that will handle either the error or the response data
+ * @protected
  */
 let sendSms = (from, to, text, callback) => {
   nexmo.message.sendSms(
@@ -256,13 +268,34 @@ let sendSms = (from, to, text, callback) => {
 
 /**
  * @description Error message when no user is found a particular request.
+ * @param {object} req HTTP request
+ * @protected
  */
-let noSuchUser = () => req.flash('error', 'No such user');
+let noSuchUser = (req) => req.flash('error', 'No such user');
+
+/**
+ * @description Error message and action when no users were found.
+ * @param {object} req HTTP request
+ * @param {object} res Express result object
+ * @protected
+ */
+let noUsers = (req, res) => {
+  req.flash('error', 'No users :(');
+  return res.redirect('/');
+};
+
+/**
+ * @description Welcome message for a user.
+ * @param {object} req HTTP request
+ * @param {object} user User
+ */
+let welcomeUser = (req, user) => req.flash('success', `Welcome "${user.title}. ${user.fname} ${user.lname}"`);
 
 /**
  * @description Error while sending an email.
  * @param {object} req HTTP request
  * @param {Error} err Error
+ * @protected
  */
 let emailError = (req, err) => {
   req.flash('error', `An error occured while sending the email (error ${err.statusCode})`);
@@ -273,7 +306,8 @@ let emailError = (req, err) => {
  * @description Create a captcha.
  * @param {function(File)} callback Callback that handles the token of the captcha
  * @param {string} [gifPath=`${path.dirname(__dirname)}/public/img/ct.gif`] Path of the captcha image that will be generated
- * @return {Promise.<void>}
+ * @return {Promise.<void>} Captcha promise
+ * @protected
  */
 let execCaptcha = _async((callback, gifPath=`${path.dirname(__dirname)}/public/img/ct.gif`) => {
   const {token, buffer} = _await(captcha());
@@ -287,8 +321,8 @@ let execCaptcha = _async((callback, gifPath=`${path.dirname(__dirname)}/public/i
 };*/
 
 module.exports = {
-  load, httpPage, noSuchUser, emailError, codeToMsg, sendSms,
+  load, httpPage, noSuchUser, noUsers, emailError, codeToMsg, sendSms,
   incomingIp, requireLogin, adminOnly, modOnly, memberOnly, sameUserOnly,
-  setColours, clr, execCaptcha,
+  setColours, clr, execCaptcha, welcomeUser,
   _in, _out, _inf, _err, _warn, _dbg
 };

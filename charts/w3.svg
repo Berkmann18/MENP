@@ -1119,10 +1119,10 @@
             width="115.8" height="30"
             rx="3" ry="3"
             style="fill:#90caf9; stroke:#444; stroke-width:1" />
-                   <title>&apos;Unsecure &apos;</title>
+                   <title>&apos;Insecure &apos;</title>
             <text x="388.4" y="3902"
                 font-family="monospace" font-size="13" fill="#222">
-                <tspan x="388.4" y="3902">&apos;Unsecure &apos;</tspan>
+                <tspan x="388.4" y="3902">&apos;Insecure &apos;</tspan>
             </text>
                    
                    
@@ -1145,10 +1145,10 @@
             width="443.4" height="30"
             rx="2" ry="2"
             style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
-                   <title>console.log(`${secure ? &apos;&apos; : &apos;Unsecure &apos;}Server listening at ${location}`)</title>
+                   <title>console.log(`${secure ? &apos;&apos; : &apos;Insecure &apos;}Server listening at ${location}`)</title>
             <text x="176" y="4000.5"
                 font-family="monospace" font-size="13" fill="#222">
-                <tspan x="176" y="4000.5">console.log(`${secure ? &apos;&apos; : &apos;Unsecure &apos;}Server li...</tspan>
+                <tspan x="176" y="4000.5">console.log(`${secure ? &apos;&apos; : &apos;Insecure &apos;}Server li...</tspan>
             </text>
                    
                    
@@ -1190,26 +1190,26 @@
             </g>
                 <g>
                    <rect x="50" y="4126"
-            width="310.8" height="30"
-            rx="3" ry="3"
-            style="fill:#90caf9; stroke:#444; stroke-width:1" />
-                   <title>let server = startServer(port, true)</title>
+            width="209.4" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>startServer(port, true)</title>
             <text x="65" y="4146"
                 font-family="monospace" font-size="13" fill="#222">
-                <tspan x="65" y="4146">let server = startServer(port, true)</tspan>
+                <tspan x="65" y="4146">startServer(port, true)</tspan>
             </text>
                    
                    
                 </g>
                 <g>
                    <rect x="50" y="4174.5"
-            width="334.2" height="30"
-            rx="3" ry="3"
-            style="fill:#90caf9; stroke:#444; stroke-width:1" />
-                   <title>let unsecureServer = startServer(uPort)</title>
+            width="170.4" height="30"
+            rx="2" ry="2"
+            style="fill:#C5E1A5; stroke:#444; stroke-width:1" />
+                   <title>startServer(uPort)</title>
             <text x="65" y="4194.5"
                 font-family="monospace" font-size="13" fill="#222">
-                <tspan x="65" y="4194.5">let unsecureServer = startServer(uPort)</tspan>
+                <tspan x="65" y="4194.5">startServer(uPort)</tspan>
             </text>
                    
                    

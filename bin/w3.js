@@ -2,7 +2,8 @@
 /* eslint-env es6, node */
 'use strict';
 
-const fs = require('fs'), http = require('http'), https = require('https'), app = require('../app'), eip = require('external-ip')();
+const fs = require('fs'), http = require('http'), https = require('https'), app = require('../app'),
+  eip = require('external-ip')();
 const {setColours, _inf, _err} = require('../routes/generic');
 const tlsOptions = {
   key: fs.readFileSync('keys/server-key.pem'),
@@ -57,7 +58,7 @@ let port = normalizePort(process.env.PORT || 3e3), uPort = normalizePort(process
  * @param {boolean} secure Is this server using an HTTPS connection
  * @return {any} Server
  */
-let startServer = (port, secure=false) => {
+let startServer = (port, secure = false) => {
   let www = secure ? https.createServer(tlsOptions, app) : http.createServer(app);
   www.listen(port, () => {
     app.set('port', port);
@@ -75,13 +76,14 @@ let startServer = (port, secure=false) => {
       ? `pipe ${ipAddress}`
       : `http${secure ? 's' : ''}://${ipAddress.address === '::' ? 'localhost' : ipAddress.address}:${ipAddress.port}`;
 
-    console.log(`${secure ? '' : 'Unsecure '}Server listening at ${location}`);
+    console.log(`${secure ? '' : 'Insecure '}Server listening at ${location}`);
   });
   www.on('error', onErr);
   return www;
 };
 
-let server = startServer(port, true), unsecureServer = startServer(uPort);
+startServer(port, true);
+startServer(uPort);
 
 eip((err, ip) => {
   if (err) _err('Public IP error:', err);

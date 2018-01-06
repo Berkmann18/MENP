@@ -13,9 +13,10 @@
 <!--[![MIT license](http://img.shields.io/npm/l/menp.svg?style=flat-square)](https://npmjs.org/package/menp)-->
 [![Sauce Test Status](https://saucelabs.com/buildstatus/Berkmann18)](https://saucelabs.com/u/Berkmann18)
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/Berkmann18.svg)](https://saucelabs.com/u/Berkmann18)
+
 This is a sample MENP (MongoDB, Express, Node, Pug) web app (which uses Bootstrap and jQuery).
 
-<table>
+<table style="background: #fff">
 <tr><td>
 <img src="./public/img/mongodb.png" alt="M" title="MongoDB" height="52px" width="52px">
 <img src="./public/img/expressjs.png" alt="E" title="Express" height="52px" width="52px">

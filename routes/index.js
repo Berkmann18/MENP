@@ -1,17 +1,11 @@
+/* eslint-env es6, node */
 /**
  * @description Main route for the MENP app.
  * @module index
  * @requires express, express-session, mongoose, nodemailer, passport, passport-local, bcrypt-nodejs, async, crypto, express-flash, validator, cheerio, promise, sweetalert
  * @requires ../config/config, ./generic
  * @exports router
- */
-
-/* eslint-env es6, node */
-
-/**
- * @todo Add more security with helmet
  * @todo Fix the impossibility to register on production mode
- * @todo Add ‘Access-Control-Allow-Origin' to satisfy Firefox with faHdl.js which works on update pages
  */
 
 const session = require('express-session'), mongoose = require('mongoose'), nodemailer = require('nodemailer');
@@ -22,8 +16,8 @@ const router = require('express').Router(), cheerio = require('cheerio');
 const $ = cheerio.load('<body>...</body>'), Promise = require('promise'), cors = require('cors');
 const config = require('../config/config');
 const {
-  incomingIp, requireLogin, adminOnly, memberOnly, sameUserOnly,
-  sendSms, httpPage, setColours, noSuchUser, emailError, execCaptcha, _err, _dbg, _warn, _inf} = require('./generic');
+  incomingIp, requireLogin, adminOnly, memberOnly, sameUserOnly, welcomeUser,
+  sendSms, httpPage, setColours, noSuchUser, noUsers, emailError, execCaptcha, _err, _dbg, _warn, _inf} = require('./generic');
 const tokenCooldown = 36e5; //1h in ms
 
 let esig = 'Best regards,\nMENP team\n';
@@ -249,7 +243,7 @@ router.post('/login', (req, res, next) => {
         user.lastSeen = new Date();
         user.save((err) => {
           if (err) _err('Last seen login save error:', err);
-          req.flash('success', `Welcome "${user.title}. ${user.fname} ${user.lname}"`);
+          welcomeUser(req, user);
           _inf(`${user.username} <${user.email}> just logged in`);
           return res.redirect(`/usr/${user.id}`);
         });
@@ -441,8 +435,9 @@ router.post('/register', (req, res) => {
       _inf(`${user.username} <${user.email}> just registered`);
       req.logIn(user, (err) => {
         if (err) {
-          _err('Post-registration login error', err);
-          req.flash('error', `Post-registration login error (error ${err.statusCode}`)
+          let msg = 'Post-registration login error';
+          _err(msg, err);
+          req.flash('error', `${msg} (error ${err.statusCode}`)
         }
         res.redirect(`/usr/${user.id}`)
       });
@@ -640,10 +635,7 @@ router.get('/admin', adminOnly, (req, res) => {
   usrlist += '</tr>';
   User.find({}, (err, users) => {
     if (err) _err('Error:', err);
-    if (!users) {
-      req.flash('error', 'No users :(');
-      return res.redirect('/');
-    }
+    if (!users) return noUsers(req, res);
     for (let user of users) {
       usrlist += '<tr>';
       for (let col of cols) usrlist += `<td>${user[col]}</td>`;
@@ -716,7 +708,7 @@ router.get('/admin/ch', adminOnly, (req, res, next) => {
   User.findById(req.body.id, (err, user) => {
     if (err) _err('Error:', err);
     if (!user) {
-      noSuchUser();
+      noSuchUser(req)(req);
       return res.redirect('back');
     }
     if (!validator.isEmail(req.body.email)) {
@@ -747,10 +739,7 @@ router.get('/users', memberOnly, (req, res) => {
   usrlist += '</tr>';
   User.find({}, (err, users) => {
     if (err) _err('Error:', err);
-    if (!users) {
-      req.flash('error', 'No users :(');
-      return res.redirect('/');
-    }
+    if (!users) return noUsers(req, res);
     for (let user of users) {
       usrlist += '<tr>';
       for (let col of cols) {
@@ -776,7 +765,7 @@ router.get('/usr/:id', sameUserOnly, (req, res) => {
     if (err) _err('Error:', err);
     if (!user) {
       _err('No user with id:', req.params.id);
-      noSuchUser();
+      noSuchUser(req);
       return res.redirect('/');
     }
     res.render('user', {
@@ -795,7 +784,7 @@ router.get('/usr/:id/edit', sameUserOnly, (req, res) => {
     if (err) _err('Error:', err);
     if (!user) {
       _err('No user with id', req.params.id);
-      noSuchUser();
+      noSuchUser(req);
       return res.redirect('/');
     }
     res.render('update', {user});
@@ -809,7 +798,7 @@ router.post('/usr/:id/edit', (req, res) => {
   User.findById(req.params.id, (err, user) => {
     if (err) _err('Error:', err);
     if (!user) {
-      noSuchUser();
+      noSuchUser(req);
       return res.redirect('/');
     }
     let keepDetails = () => {
@@ -881,7 +870,7 @@ router.post('/delete/:id', requireLogin, (req, res) => {
   User.findById(req.user.id, (err, user) => {
     if (err) _err('POST deletion error:', err);
     if (!user) {
-      noSuchUser();
+      noSuchUser(req);
       return res.redirect('/');
     }
     user.remove((err) => {
@@ -901,7 +890,7 @@ router.get('/user/@:username', requireLogin, (req, res) => {
     if (err) _err('User page error:', err);
     if (!visitedUser) {
       _warn('No user with username:', req.params.username);
-      noSuchUser();
+      noSuchUser(req);
       httpPage(404, res);
     } else res.render('user', {visitedUser, user: req.user});
   });
@@ -913,7 +902,7 @@ router.get('/tac', (req, res) => {
     <p>
         In order to use the services provided by this web application ('MENP'), you agree to the following:
         <ol>
-            <li>You will not commit any forms of illegal cyber activities such as: bullying, scamming, phishing, stealing, ...</li>
+            <li>You will not commit any forms of illegal cyber-activities such as: bullying, scamming, phishing, stealing, ...</li>
             <li>You will keep private what needs to be kept within the boundary of this web application</li>
             <li>You accept to have a minimum of information known about you</li>
             <li>You acknowledge the necessity to use an up-to-date web-browser regardless of the platform(s) you use</li>
@@ -937,7 +926,7 @@ router.post('/2fa', /*requireLogin,*/ (req, res, next) => {
   User.findById(req.body.id, (err, user) => {
     if (err) _err('Error:', err);
     if (!user) {
-      noSuchUser();
+      noSuchUser(req);
       _err('No such user with id=', req.body.id);
       return res.redirect('/login');
     }
@@ -953,7 +942,7 @@ router.post('/2fa', /*requireLogin,*/ (req, res, next) => {
         user.lastSeen = new Date();
         user.save((err) => {
           if (err) _err('2FA error:', err);
-          req.flash('success', `Welcome "${user.title}. ${user.fname} ${user.lname}"`);
+          welcomeUser(req, user);
           _inf(`${user.username} <${user.email}> just logged in`);
           return res.redirect(`/usr/${user.id}`);
         });

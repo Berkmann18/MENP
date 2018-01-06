@@ -1,3 +1,4 @@
+/* eslint-env es6, node */
 /**
  * @description Application module
  * @module app
@@ -5,8 +6,6 @@
  * @requires ./routes/index
  * @exports app
  */
-
-/* eslint-env es6, node */
 
 const express = require('express'), path = require('path');
 const favicon = require('serve-favicon'), RateLimit = require('express-rate-limit'), helmet = require('helmet');
