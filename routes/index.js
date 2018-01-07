@@ -2,7 +2,8 @@
 /**
  * @description Main route for the MENP app.
  * @module index
- * @requires express, express-session, mongoose, nodemailer, passport, passport-local, bcrypt-nodejs, async, crypto, express-flash, validator, cheerio, promise, sweetalert
+ * @requires express, express-session, mongoose, nodemailer, passport, passport-local, bcrypt-nodejs, async, crypto, express-flash, validator, cheerio,
+ * promise, cors, nodemailer-sendgrid-transport
  * @requires ../config/config, ./generic
  * @exports router
  * @todo Fix the impossibility to register on production mode

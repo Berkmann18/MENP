@@ -1,6 +1,7 @@
 # MENP
 <!--[![NPM](https://nodei.co/npm/menp.png)](https://nodei.co/npm/menp/)-->
 <!--[![tested with jest](https://img.shields.io/badge/tested_with-jest-99424f.svg)](https://github.com/facebook/jest)-->
+[![Build Status](https://travis-ci.org/Berkmann18/MENP.svg?branch=master)](https://travis-ci.org/Berkmann18/MENP)
 [![Inline docs](http://inch-ci.org/github/Berkmann18/MENP.svg?branch=master)](http://inch-ci.org/github/Berkmann18/MENP)
 [![NSP Status](https://nodesecurity.io/orgs/berkmann18/projects/fd479365-365e-4a75-9a25-ba37e69f9780/badge)](https://nodesecurity.io/orgs/berkmann18/projects/fd479365-365e-4a75-9a25-ba37e69f9780)
 [![codecov.io Code Coverage](https://img.shields.io/codecov/c/github/Berkmann18/MENP.svg?maxAge=2592000)](https://codecov.io/github/Berkmann18/MENP?branch=master)
