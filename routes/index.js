@@ -56,7 +56,7 @@ router.use(flash());
 router.use(passport.initialize());
 router.use(passport.session());
 
-mongoose.connect(config.db, {useMongoClient: true}, (err) => {
+mongoose.connect(config.db, (err) => {
   if (err) _err('Mongoose: Error=', err);
 });
 
@@ -197,6 +197,7 @@ router.post('/contact', (req, res) => {
     message: req.body.message,
     page: 'contact'
   });
+  // if (typeof req.body.email !== 'string') console.error('reqBodyEmail in /contact is:', req.body.email);
   if (!validator.isEmail(req.body.email)) {
     req.flash('error', 'The email isn\'t valid');
     return keepDetails();

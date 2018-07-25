@@ -14,6 +14,7 @@
 <!--[![MIT license](http://img.shields.io/npm/l/menp.svg?style=flat-square)](https://npmjs.org/package/menp)-->
 [![Sauce Test Status](https://saucelabs.com/buildstatus/Berkmann18)](https://saucelabs.com/u/Berkmann18)
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/Berkmann18.svg)](https://saucelabs.com/u/Berkmann18)
+[![BCH compliance](https://bettercodehub.com/edge/badge/Berkmann18/MENP?branch=dev)](https://bettercodehub.com/)
 
 This is a sample MENP (MongoDB, Express, Node, Pug) web app (which uses Bootstrap and jQuery).
 
