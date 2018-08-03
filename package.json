@@ -47,7 +47,7 @@
     "serve-favicon": "^2.5.0",
     "trek-captcha": "^0.4.0",
     "uuid": "^3.3.2",
-    "validator": "^10.4.0"
+    "validator": "^10.5.0"
   },
   "devDependencies": {
     "browser-sync": "^2.24.6",
