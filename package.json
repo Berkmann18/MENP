@@ -31,11 +31,11 @@
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "express-flash": "0.0.2",
-    "express-rate-limit": "^2.11.0",
+    "express-rate-limit": "^2.12.2",
     "express-session": "^1.15.6",
     "external-ip": "^2.0.3",
     "helmet": "^3.13.0",
-    "mongoose": "^5.2.5",
+    "mongoose": "^5.2.7",
     "morgan": "^1.9.0",
     "nexmo": "^2.3.2",
     "nodemailer": "^4.6.7",
@@ -47,12 +47,12 @@
     "serve-favicon": "^2.5.0",
     "trek-captcha": "^0.4.0",
     "uuid": "^3.3.2",
-    "validator": "^10.4.0"
+    "validator": "^10.5.0"
   },
   "devDependencies": {
     "browser-sync": "^2.24.6",
     "complexity-report": "^2.0.0-alpha",
-    "eslint": "^5.2.0",
+    "eslint": "^5.3.0",
     "eslint-config-google": "^0.9.1",
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-security": "^1.4.0",
@@ -61,7 +61,7 @@
     "jsdoc": "^3.5.5",
     "mocha": "^5.2.0",
     "nodemon": "^1.18.3",
-    "stylelint": "^9.3.0",
+    "stylelint": "^9.4.0",
     "stylelint-config-standard": "^18.2.0",
     "supertest": "^3.1.0"
   },
