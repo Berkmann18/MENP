@@ -1,7 +1,7 @@
 {
   "name": "menp",
   "description": "This is a sample MENP web app",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "main": "./bin/w3.js",
   "scripts": {
     "start": "node ./bin/w3.js",
