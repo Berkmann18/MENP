@@ -2,37 +2,62 @@
 /**
  * @description Main route for the MENP app.
  * @module index
- * @requires express, express-session, mongoose, nodemailer, passport, passport-local, bcrypt-nodejs, async, crypto, express-flash, validator, cheerio,
+ * @requires express, express-session, mongoose, nodemailer, passport, passport-local, async, crypto, express-flash, validator, cheerio,
  * promise, cors, nodemailer-sendgrid-transport
  * @requires ../config/config, ./generic
  * @exports router
  * @todo Fix the impossibility to register on production mode
  */
 
-const session = require('express-session'), mongoose = require('mongoose'), nodemailer = require('nodemailer');
-const passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
-const bcrypt = require('bcrypt-nodejs'), async = require('async'), crypto = require('crypto');
-const flash = require('express-flash'), validator = require('validator'), sgTransport = require('nodemailer-sendgrid-transport');
-const router = require('express').Router(), cheerio = require('cheerio');
-const $ = cheerio.load('<body>...</body>'), Promise = require('promise'), cors = require('cors');
+const session = require('express-session'),
+  nodemailer = require('nodemailer');
+const passport = require('passport'),
+  LocalStrategy = require('passport-local').Strategy;
+async = require('async'),
+crypto = require('crypto');
+const flash = require('express-flash'),
+  validator = require('validator'),
+  sgTransport = require('nodemailer-sendgrid-transport');
+const router = require('express').Router(),
+  cheerio = require('cheerio');
+const $ = cheerio.load('<body>...</body>'),
+  cors = require('cors');
 const config = require('../config/config');
 const {
-  incomingIp, requireLogin, adminOnly, memberOnly, sameUserOnly, welcomeUser,
-  sendSms, httpPage, setColours, noSuchUser, noUsers, emailError, execCaptcha, _err, _dbg, _warn, _inf} = require('./generic');
+  incomingIp,
+  requireLogin,
+  memberOnly,
+  welcomeUser,
+  sendSms,
+  httpPage,
+  setColours,
+  noSuchUser,
+  noUsers,
+  emailError,
+  execCaptcha,
+  _err,
+  _dbg,
+  _warn,
+  _inf
+} = require('./generic');
+const { User } = require('./model');
 const tokenCooldown = 36e5; //1h in ms
 
-let esig = 'Best regards,\nMENP team\n';
+let esig = 'Best regards,<br>MENP team\n';
 
-let urlWhiteList = ['https://localhost', 'http://localhost'], /*corsOptions = {
-    origin: (origin, callback) => {
-      _warn('Origin:', origin);
-      (urlWhiteList.indexOf(origin) !== -1) ? callback(null, true) : callback(new Error('Not allowed by CORS'))
-    }
-  }*/ corsOptionsDelegate = (req, callback) => {
+let urlWhiteList = ['https://localhost', 'http://localhost'],
+  /*corsOptions = {
+     origin: (origin, callback) => {
+       _warn('Origin:', origin);
+       (urlWhiteList.indexOf(origin) !== -1) ? callback(null, true) : callback(new Error('Not allowed by CORS'))
+     }
+   }*/
+  corsOptionsDelegate = (req, callback) => {
     let corsOptions = { origin: (urlWhiteList.indexOf(req.header('Origin')) !== -1) };
     //Reflect (enable) the requested origin in the CORS response or disable CORS for this request
     callback(null, corsOptions) //Callback expects two parameters: error and options
-  }, url = (req) => `${router.get('protocol')}://${req.headers.host}`;
+  },
+  url = (req) => `${router.get('protocol')}://${req.headers.host}`;
 
 setColours();
 
@@ -46,76 +71,21 @@ router.use(session({
     httpOnly: true,
     expires: new Date(Date.now() + 24 * tokenCooldown) //1 day
   }
-  /*store: new MongoStore({
-        mongooseConnection: config.db,
-        ttl: (3600 * 24)
-    })*/
 }));
 
 router.use(flash());
 router.use(passport.initialize());
 router.use(passport.session());
 
-mongoose.connect(config.db, (err) => {
-  if (err) _err('Mongoose: Error=', err);
-});
-
-let userSchema = new mongoose.Schema({
-  title: {type: String, require: true},
-  fname: {type: String, required: true},
-  lname: {type: String, required: true},
-  username: {type: String, required: true, unique: true},
-  email: {type: String, required: true, unique: true},
-  password: {type: String, required: true},
-  registerDate: {type: Date, required: true},
-  lastSeen: {type: Date},
-  resetPasswordToken: String,
-  resetPasswordExpires: Date,
-  type: {type: String, default: 'member'},
-  twoFA: {type: Boolean, required: true, default: false},
-  twoFaMethod: String,
-  phone: String,
-  key: String,
-  keyExpires: Date
-});
-
-userSchema.pre('save', function(next) {
-  let user = this, SALT_FACTOR = 5;
-
-  if (!user.isModified('password')) return next();
-
-  bcrypt.genSalt(SALT_FACTOR, (err, salt) => {
-    if (err) return next(err);
-
-    bcrypt.hash(user.password, salt, null, (err, hash) => {
-      if (err) return next(err);
-      user.password = hash;
-      next();
-    });
-  });
-});
-
-userSchema.methods.comparePassword = function(candidatePassword, cb) {
-  bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
-    if (err) {
-      _err('Password compare error', err);
-      return cb(err);
-    }
-    cb(null, isMatch);
-  });
-};
-
-mongoose.Promise = Promise;
-let User = mongoose.model('User', userSchema);
 passport.serializeUser((user, done) => done(null, user.id));
 passport.deserializeUser((id, done) => User.findById(id, (err, user) => done(err, user)));
 passport.use(new LocalStrategy((username, password, done) => {
-  User.findOne({username: username}, (err, user) => {
+  User.findOne({ username: username }, (err, user) => {
     if (err) return done(err);
-    if (!user) return done(null, false, {message: 'Incorrect username.'});
+    if (!user) return done(null, false, { message: 'Incorrect username.' });
     user.comparePassword(password, (err, isMatch) => {
       if (err) _err('LocalStrategy error:', err);
-      return isMatch ? done(null, user) : done(null, false, {message: 'Incorrect password.'});
+      return isMatch ? done(null, user) : done(null, false, { message: 'Incorrect password.' });
     });
   });
 }));
@@ -198,16 +168,20 @@ router.post('/contact', (req, res) => {
     page: 'contact'
   });
   // if (typeof req.body.email !== 'string') console.error('reqBodyEmail in /contact is:', req.body.email);
+  // console.log('body', req.body);
+  // console.log('req', req);
   if (!validator.isEmail(req.body.email)) {
+    console.log('wrong email');
     req.flash('error', 'The email isn\'t valid');
     return keepDetails();
   }
-  let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)), mailOptions = {
-    to: config.email.to,
-    from: req.body.email,
-    subject: req.body.subject || '[?] No subject',
-    text: `Contact email from ${req.body.name}:\n\n${req.body.message}`
-  };
+  let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)),
+    mailOptions = {
+      to: config.email.to,
+      from: req.body.email,
+      subject: req.body.subject || '[?] No subject',
+      text: `Contact email from ${req.body.name}:\n\n${req.body.message}`
+    };
   smtpTransport.sendMail(mailOptions, (err) => {
     if (err) emailError(req, err);
     else req.flash('info', 'The email was sent! Thank you for your interest.');
@@ -295,16 +269,17 @@ router.post('/login', (req, res, next) => {
             });
           } else if (user.twoFaMethod === 'email') {
             twoFaHandler(token);
-            let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)), mailOptions = {
-              to: user.email,
-              from: config.email.from,
-              subject: '[ACTION] 2nd Factor Authentication',
-              html: `<p>You are receiving this because you (or someone else) authenticated with your username/password and now need the code
+            let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)),
+              mailOptions = {
+                to: user.email,
+                from: config.email.from,
+                subject: '[ACTION] 2nd Factor Authentication',
+                html: `<p>You are receiving this because you (or someone else) authenticated with your username/password and now need the code
                             for the second factor of the authentication which is the following: <em>${token}</em></p><br>
                             <p>If you can't get the page to enter the code, you should see one pointing to
                             <a href="${url(req)}/2fa">${url(req)}/2fa</a></p><br>
                             <p>If you did not request this, please ignore this email and your account won't be accessed.</p><br>${esig}`
-            };
+              };
             smtpTransport.sendMail(mailOptions, (err) => {
               if (err) emailError(req, err);
               else {
@@ -315,7 +290,8 @@ router.post('/login', (req, res, next) => {
             });
           }
 
-        }], (token, err) => {
+        }
+      ], (token, err) => {
         if (err) {
           _err('2FA login error', err);
           //return next(err);
@@ -360,16 +336,17 @@ router.post('/register', (req, res) => {
           captcha: token
         })
       });
-    }, wrongs = false;
+    },
+    wrongs = false;
 
-  User.findOne({email: req.body.email}, (err, user) => {
+  User.findOne({ email: req.body.email }, (err, user) => {
     if (err) _err('Error:', err);
     if (user) {
       req.flash('error', 'The email address is already used by an existing account');
       //console.log('Email already used');
       wrongs = true;
     } //else console.log('Email fine');
-  }).then(User.findOne({username: req.body.username}, (err, user) => {
+  }).then(User.findOne({ username: req.body.username }, (err, user) => {
     if (err) _err('Error:', err);
     if (user) {
       req.flash('error', 'The username is already used by an existing account');
@@ -394,7 +371,7 @@ router.post('/register', (req, res) => {
       wrongs = true;
     } //else console.log('Conf fine');
 
-    if (req.body.twoFaMethod === 'sms' && !(req.body.phone && validator.isMobilePhone(req.body.phone))) {
+    if (req.body.twoFA && req.body.twoFaMethod === 'sms' && !(req.body.phone && validator.isMobilePhone(req.body.phone))) {
       req.flash('error', 'Invalid phone number');
       $('#phonechk').html('<span style="color: red;">The phone number isn\'t valid</span>');
       wrongs = true;
@@ -422,7 +399,7 @@ router.post('/register', (req, res) => {
       registerDate: new Date(),
       type: 'member',
       twoFA: req.body.twoFA,
-      twoFaMethod: req.body.twoFaMethod,
+      twoFaMethod: req.body.twoFA ? req.body.twoFaMethod : '',
       phone: (req.body.twoFA && req.body.twoFaMethod === 'sms') ? req.body.phone : ''
     };
 
@@ -444,12 +421,13 @@ router.post('/register', (req, res) => {
         res.redirect(`/usr/${user.id}`)
       });
 
-      let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)), mailOptions = {
-        to: user.email,
-        from: config.email.from,
-        subject: '[INFO] Welcome to MENP',
-        text: `Hello ${user.username},\nWelcome to MENP! I hope you'll enjoy using our application.\n${esig}`
-      };
+      let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)),
+        mailOptions = {
+          to: user.email,
+          from: config.email.from,
+          subject: '[INFO] Welcome to MENP',
+          text: `Hello <em>${user.username}</em>,<br>Welcome to MENP! I hope you'll enjoy using our application.<br>${esig}`
+        };
       smtpTransport.sendMail(mailOptions, (err) => {
         if (err) emailError(req, err);
       });
@@ -511,7 +489,7 @@ router.post('/forgot', (req, res, next) => {
 
       }
 
-      User.findOne({email: req.body.email}, (err, user) => {
+      User.findOne({ email: req.body.email }, (err, user) => {
         if (err) _err('Error:', err);
         if (!user) {
           req.flash('error', 'No account with that email address exists.');
@@ -524,15 +502,16 @@ router.post('/forgot', (req, res, next) => {
         user.save((err) => done(err, token, user));
       });
     }, (token, user, done) => {
-      let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)), mailOptions = {
-        to: user.email,
-        from: config.email.from,
-        subject: '[ACTION] Password Reset',
-        text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
+      let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)),
+        mailOptions = {
+          to: user.email,
+          from: config.email.from,
+          subject: '[ACTION] Password Reset',
+          text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
                 Please click on the following link, or paste this into your browser to complete the process:\n\n
                 ${url(req)}/reset/${token}\n\n
                 If you did not request this, please ignore this email and your password will remain unchanged.\n${esig}`
-      };
+        };
       smtpTransport.sendMail(mailOptions, (err) => {
         if (err) emailError(req, err);
         else req.flash('info', `An e-mail has been sent to ${user.email} with further instructions.`);
@@ -549,7 +528,7 @@ router.post('/forgot', (req, res, next) => {
  * @description Token-based reset page.
  */
 router.get('/reset/:token', (req, res) => {
-  User.findOne({resetPasswordToken: req.params.token, resetPasswordExpires: {$gt: Date.now()}}, (err, user) => {
+  User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, (err, user) => {
     if (err) _err('Error:', err);
     if (!user) {
       req.flash('error', 'The password reset token is invalid or has expired.');
@@ -568,7 +547,7 @@ router.get('/reset/:token', (req, res) => {
 router.post('/reset/:token', (req, res) => {
   async.waterfall([
     (done) => {
-      User.findOne({resetPasswordToken: req.params.token, resetPasswordExpires: {$gt: Date.now()}}, (err, user) => {
+      User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, (err, user) => {
         if (err) _err('Error:', err);
         if (!user) {
           req.flash('error', 'The password reset token is invalid or has expired.');
@@ -589,12 +568,13 @@ router.post('/reset/:token', (req, res) => {
       });
     },
     (user, done) => {
-      let smtpTransport = nodemailer.createTransport(config.smtp), mailOptions = {
-        to: user.email,
-        from: config.email.from,
-        subject: '[INFO] Your password has been changed',
-        text: `Hello,\n\nThis is a confirmation that the password for your account ${user.email} has just been changed.\n${esig}`
-      };
+      let smtpTransport = nodemailer.createTransport(config.smtp),
+        mailOptions = {
+          to: user.email,
+          from: config.email.from,
+          subject: '[INFO] Your password has been changed',
+          text: `Hello,\n\nThis is a confirmation that the password for your account ${user.email} has just been changed.\n${esig}`
+        };
       smtpTransport.sendMail(mailOptions, (err) => {
         if (err) emailError(req, err);
         else req.flash('success', 'Success! Your password has been changed.');
@@ -607,250 +587,6 @@ router.post('/reset/:token', (req, res) => {
       req.flash('error', `Password resetting error (error ${err.statusCode}`)
     }
     res.redirect('/')
-  });
-});
-
-/**
- * @description Global admin page authorisation system.
- */
-router.all('/admin/*', adminOnly, (req, res, next) => next());
-
-/**
- * @description Admin page.
- * @protected
- */
-router.get('/admin', adminOnly, (req, res) => {
-  /*swal({
-        title: 'Password',
-        input: 'text',
-        confirmButtonText: 'Enter',
-        allowOutsideClick: false,
-        confirmButtonAriaLabel: 'Enter'
-    }).then((result) => {
-        if (result.value && result.value === 'MenpAdmin') showTable();
-        else if (result.dismiss === 'cancel') res.redirect('/');
-    });*/
-
-  let cols = ['title', 'fname', 'lname', 'username', 'email', 'password', 'registerDate', 'lastSeen', 'id', 'type'];
-  let usrlist = '<table class="table"><caption>Users</caption><tr>', nb = 0;
-  for (let col of cols) usrlist += `<th>${col}</th>`;
-  usrlist += '</tr>';
-  User.find({}, (err, users) => {
-    if (err) _err('Error:', err);
-    if (!users) return noUsers(req, res);
-    for (let user of users) {
-      usrlist += '<tr>';
-      for (let col of cols) usrlist += `<td>${user[col]}</td>`;
-      usrlist += '</tr>';
-      nb++;
-    }
-    usrlist += `</table><p><em>${nb}</em> users</p>
-        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link active" id="pills-edit-tab" data-toggle="pill" href="#pills-edit" role="tab" aria-controls="pills-edit" aria-selected="true">Edit</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="pills-remove-tab" data-toggle="pill" href="#pills-remove" role="tab" aria-controls="pills-remove" aria-selected="false">Remove</a>
-          </li>
-        </ul>
-        <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade show active" id="pills-edit" role="tabpanel" aria-labelledby="pills-edit-tab">
-            <form name="usrChange" method="POST" action="/admin/ch/">
-                <div class="form-group">
-                    <label for="id">Id:</label>
-                    <input name='id' class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="fname">First name:</label>
-                    <input name='fname' class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="lname">Last name:</label>
-                    <input name='lname' class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input name='username' class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input name='email' type="email" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="type">Type:</label>
-                    <input name='type' class="form-control" required value="member">
-                </div>
-                <input type="submit" class="btn btn-success btn-block" value="Update">
-                <input type="reset" class="btn btn-default btn-block" value="Reset">
-            </form>
-        </div>
-        <div class="tab-pane fade" id="pills-remove" role="tabpanel" aria-labelledby="pills-remove-tab">
-          <form name="usrRemove" method="POST" action="/admin/rm/">
-                <div class="form-group">
-                    <label for="id">Id:</label>
-                    <input name='id' class="form-control" required>
-                </div>
-                <input type="submit" class="btn btn-danger btn-block" value="Remove">
-          </form>
-        </div>
-        </div>
-        `;
-    res.render('page', {
-      data: usrlist,
-      user: req.user
-    });
-  });
-});
-
-/**
- * @description Admin User change page.
- * @protected
- */
-router.get('/admin/ch', adminOnly, (req, res, next) => {
-  User.findById(req.body.id, (err, user) => {
-    if (err) _err('Error:', err);
-    if (!user) {
-      noSuchUser(req)(req);
-      return res.redirect('back');
-    }
-    if (!validator.isEmail(req.body.email)) {
-      req.flash('error', 'The email address isn\'t valid');
-      return res.redirect('back');
-    }
-    user.username = req.body.username || user.username;
-    user.email = req.body.email || user.email;
-    user.fname = req.body.fname || user.fname;
-    user.lname = req.body.lname || user.lname;
-    user.type = req.body.type || user.type;
-    req.flash('success', 'Information updated');
-    user.save((err) => {
-      if (err) _err('Admin authored change error:', err);
-    });
-    next(); //This may need to be moved to user.save
-  });
-});
-
-/**
- * @description Members list.
- * @protected
- */
-router.get('/users', memberOnly, (req, res) => {
-  let cols = ['username', 'registerDate', 'lastSeen', 'type'], visualCols = ['Username', 'Registration date', 'Last seen', 'Group'];
-  let usrlist = '<table class="table"><caption>Users</caption><tr>', nb = 0;
-  for (let col of visualCols) usrlist += `<th>${col}</th>`;
-  usrlist += '</tr>';
-  User.find({}, (err, users) => {
-    if (err) _err('Error:', err);
-    if (!users) return noUsers(req, res);
-    for (let user of users) {
-      usrlist += '<tr>';
-      for (let col of cols) {
-        usrlist += (col === 'username') ? `<td><a href="/user/@${user[col]}">${user[col]}</a></td>` : `<td>${user[col]}</td>`;
-      }
-      usrlist += '</tr>';
-      nb++;
-    }
-    usrlist += `</table><p><em>${nb}</em> users (as of ${new Date()})</p>`;
-    res.render('page', {
-      data: usrlist,
-      user: req.user,
-      page: 'users'
-    });
-  });
-});
-
-/**
- * @description User page where a user can see his/her informations.
- */
-router.get('/usr/:id', sameUserOnly, (req, res) => {
-  User.findById(req.params.id, (err, user) => {
-    if (err) _err('Error:', err);
-    if (!user) {
-      _err('No user with id:', req.params.id);
-      noSuchUser(req);
-      return res.redirect('/');
-    }
-    res.render('user', {
-      user,
-      visitedUser: user,
-      same: true
-    });
-  });
-});
-
-/**
- * @description User page where a user can update his/her informations.
- */
-router.get('/usr/:id/edit', sameUserOnly, (req, res) => {
-  User.findById(req.params.id, (err, user) => {
-    if (err) _err('Error:', err);
-    if (!user) {
-      _err('No user with id', req.params.id);
-      noSuchUser(req);
-      return res.redirect('/');
-    }
-    res.render('update', {user});
-  });
-});
-
-/**
- * @description User account update form handler.
- */
-router.post('/usr/:id/edit', (req, res) => {
-  User.findById(req.params.id, (err, user) => {
-    if (err) _err('Error:', err);
-    if (!user) {
-      noSuchUser(req);
-      return res.redirect('/');
-    }
-    let keepDetails = () => {
-        return res.render('update', {
-          user: {
-            title: req.body.title,
-            type: req.body.type,
-            fname: req.body.fname,
-            lname: req.body.lname,
-            username: req.body.username,
-            email: req.body.email,
-            id: req.params.id,
-            twoFA: req.body.twoFA,
-            phone: req.body.phone
-          }
-        });
-      }, updateDetail = (field) => {
-        user[field] = req.params[field] || req.body[field] || user[field];
-        // console.log(`Changing ${field} to ${user[field]}`, req.body[field], req.params[field]);
-      };
-
-    if (!validator.isEmail(req.body.email)) {
-      req.flash('error', 'The email address isn\'t valid');
-      keepDetails();
-    }
-    if (req.body.password.length < 8) req.flash('warning', 'The password is too weak.\nPlease make sure it\'s 8+ characters long');
-    if (req.body.confirm !== req.body.password) {
-      req.flash('error', 'The confirmation password must be identical to the password');
-      keepDetails();
-    }
-
-    updateDetail('title');
-    updateDetail('fname');
-    updateDetail('lname');
-    updateDetail('username');
-    updateDetail('email');
-    updateDetail('password');
-    updateDetail('twoFA');
-    updateDetail('phone');
-
-    user.save((err) => {
-      if (err) {
-        _err('Update error:', err);
-        req.flash('error', `There was an error in the information update (error ${err.statusCode})`);
-      } else {
-        res.render('update', {user});
-        req.flash('success', 'Information updated');
-      }
-    });
-
   });
 });
 
@@ -881,20 +617,6 @@ router.post('/delete/:id', requireLogin, (req, res) => {
       _inf(`${user.username} <${user.email}> is gone`);
       return res.redirect('/');
     });
-  });
-});
-
-/**
- * @description User page where a user can see a user's page.
- */
-router.get('/user/@:username', requireLogin, (req, res) => {
-  User.findOne({username: req.params.username}, (err, visitedUser) => {
-    if (err) _err('User page error:', err);
-    if (!visitedUser) {
-      _warn('No user with username:', req.params.username);
-      noSuchUser(req);
-      httpPage(404, res);
-    } else res.render('user', {visitedUser, user: req.user});
   });
 });
 
@@ -956,11 +678,5 @@ router.post('/2fa', /*requireLogin,*/ (req, res, next) => {
     }
   });
 });
-
-//?/browser-sync/browser-sync-client.js?v=2.23.2
-/*router.get('/browser-sync/socket.io/?EIO=3&transport=polling&t=M37JxGZ', (req, res, next) => {
-  _warn('Went on that weird route');
-  next();
-});*/
 
 module.exports = router;
