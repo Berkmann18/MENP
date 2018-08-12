@@ -1,4 +1,4 @@
 exclude:
     - /doc/.*
     - /config/.*
-    - *.sh
+    - ./*\.sh
