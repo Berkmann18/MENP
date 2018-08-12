@@ -45,7 +45,6 @@ router.post('/', (req, res) => {
       text: `Contact email from "${req.body.name}":\n\n${req.body.message}\n\nTicket number: ${genTicket()}`
     };
   smtpTransport.sendMail(mailOptions, (err) => {
-    console.log('Sending an email...');
     if (err) {
       emailError(req, err);
       res.redirect('/contact');

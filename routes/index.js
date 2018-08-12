@@ -41,7 +41,7 @@ const {
 const { User } = require('../src/model');
 const tokenCooldown = 36e5; //1h in ms
 
-let esig = 'Best regards,<br>MENP team\n';
+let esig = 'Best regards,\nMENP team\n';
 
 let urlWhiteList = ['https://localhost', 'http://localhost'],
   /*corsOptions = {
@@ -55,7 +55,7 @@ let urlWhiteList = ['https://localhost', 'http://localhost'],
     //Reflect (enable) the requested origin in the CORS response or disable CORS for this request
     callback(null, corsOptions) //Callback expects two parameters: error and options
   },
-  url = (req) => `${router.get('protocol')}://${req.headers.host}`;
+  url = (req) => `${req.protocol}://${req.headers.host}`;
 
 setColours();
 
@@ -100,14 +100,16 @@ router.all('/*', (req, res, next) => {
 /**
  * @description Landing page of the application.
  */
-router.get('/', (req, res) => res.render('index', {
-  data: `<h1>Welcome</h1>
+router.get('/', (req, res) => {
+  res.render('index', {
+    data: `<h1>Welcome</h1>
         <img src="img/favicon.png" alt="MENP" class="float-left">
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
         `,
-  user: req.user,
-  page: 'home'
-}));
+    user: req.user,
+    page: 'home'
+  })
+});
 
 /**
  * @description 'About us' page containing a few bits from the README.md file
@@ -194,7 +196,7 @@ router.post('/login', (req, res, next) => {
             let token = buf.toString('hex');
             if (err) {
               _err('Crypto gen error:', err);
-              req.flash('error', `Error in generating the code (error ${err.statusCode})`);
+              req.flash('error', `Error in generating the code (${err.code} ${err.responseCode})`);
             }
             done(err, token);
           });
@@ -211,7 +213,7 @@ router.post('/login', (req, res, next) => {
               // _dbg('Expecting token:', token);
               if (err) {
                 _err('2FA handling error:', err);
-                req.flash('error', `Error in the Authentication process (error ${err.statusCode})`);
+                req.flash('error', `Error in the Authentication process (${err.code} ${err.responseCode})`);
               }
               //done(err, token, user);
             });
@@ -219,10 +221,10 @@ router.post('/login', (req, res, next) => {
             done(token);
             //login()
           };
-          console.log('2FA w/', user.twoFaMethod);
+          // console.log('2FA w/', user.twoFaMethod);
           if (user.twoFaMethod === 'sms') {
             sendSms(config.nexmoOptions.from, user.phone, `Your code is ${token}.`, (ans) => {
-              _dbg('SMS callback response:', ans);
+              if (process.env.NODE_ENV === 'development') _dbg('SMS callback response:', ans);
               twoFaHandler(token);
             });
           } else if (user.twoFaMethod === 'email') {
@@ -279,7 +281,8 @@ router.get('/register', cors(corsOptionsDelegate), (req, res) => {
  * @description Registration form handler.
  */
 router.post('/register', (req, res) => {
-  let keepDetails = () => {
+  const switch2bool = (val) => (val === 'on' || val === 'enabled'),
+    keepDetails = () => {
       execCaptcha((token) => {
         res.render('register', {
           title: req.body.title,
@@ -287,16 +290,18 @@ router.post('/register', (req, res) => {
           lname: req.body.lname,
           username: req.body.username,
           email: req.body.email,
-          twoFA: req.body.twoFA,
+          twoFA: switch2bool(req.body.twoFA),
           twoFaMethod: req.body.twoFaMethod,
           phone: req.body.phone,
           page: 'register',
           captcha: token
         })
       });
-    },
-    wrongs = false;
+    };
+  let wrongs = false,
+    twoFA = switch2bool(req.body.twoFA);
 
+  // console.log('req.body/register:', req.body);
   User.findOne({ email: req.body.email }, (err, user) => {
     if (err) _err('Error:', err);
     if (user) {
@@ -329,7 +334,7 @@ router.post('/register', (req, res) => {
       wrongs = true;
     } //else console.log('Conf fine');
 
-    if (req.body.twoFA && req.body.twoFaMethod === 'sms' && !(req.body.phone && validator.isMobilePhone(req.body.phone))) {
+    if (twoFA && req.body.twoFaMethod === 'sms' && !(req.body.phone && validator.isMobilePhone(req.body.phone))) {
       req.flash('error', 'Invalid phone number');
       $('#phonechk').html('<span style="color: red;">The phone number isn\'t valid</span>');
       wrongs = true;
@@ -356,16 +361,19 @@ router.post('/register', (req, res) => {
       password: req.body.password,
       registerDate: new Date(),
       type: 'member',
-      twoFA: req.body.twoFA,
-      twoFaMethod: req.body.twoFA ? req.body.twoFaMethod : '',
-      phone: (req.body.twoFA && req.body.twoFaMethod === 'sms') ? req.body.phone : ''
+      twoFA,
+      twoFaMethod: twoFA ? req.body.twoFaMethod : '',
+      phone: (twoFA && req.body.twoFaMethod === 'sms') ? req.body.phone : ''
     };
+
+    // console.log('usr:');
+    // console.dir(usr);
 
     let user = new User(usr);
 
     user.save((err) => {
       if (err) {
-        req.flash('error', `Something went wrong in the registration (error ${err.statusCode})`);
+        req.flash('error', `Something went wrong in the registration (${err.code} ${err.responseCode})`);
         _err('Failed registration:', err);
       }
       req.flash('success', 'Registration successful!');
@@ -384,7 +392,7 @@ router.post('/register', (req, res) => {
           to: user.email,
           from: config.email.from,
           subject: '[INFO] Welcome to MENP',
-          text: `Hello <em>${user.username}</em>,<br>Welcome to MENP! I hope you'll enjoy using our application.<br>${esig}`
+          html: `Hello <em>${user.username}</em>,<br>Welcome to MENP! I hope you'll enjoy using our application.<br>Best regards,<br>MENP Team`
         };
       smtpTransport.sendMail(mailOptions, (err) => {
         if (err) emailError(req, err);
@@ -409,7 +417,7 @@ router.get('/logout', (req, res) => {
       user.save((err) => {
         if (err) {
           _err('Last seen logout save error:', err);
-          req.flash('error', `Internal "last-seen" update issue (error ${err.statusCode})`)
+          req.flash('error', `Internal "last-seen" update issue (${err.code} ${err.responseCode})`)
         }
         _inf(`${user.username} <${user.email}> just logged out`);
       });
@@ -465,10 +473,7 @@ router.post('/forgot', (req, res, next) => {
           to: user.email,
           from: config.email.from,
           subject: '[ACTION] Password Reset',
-          text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
-                Please click on the following link, or paste this into your browser to complete the process:\n\n
-                ${url(req)}/reset/${token}\n\n
-                If you did not request this, please ignore this email and your password will remain unchanged.\n${esig}`
+          text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\nPlease click on the following link, or paste this into your browser to complete the process:\n\n${url(req)}/reset/${token}\n\nIf you did not request this, please ignore this email and your password will remain unchanged.\n${esig}`
         };
       smtpTransport.sendMail(mailOptions, (err) => {
         if (err) emailError(req, err);
@@ -542,7 +547,7 @@ router.post('/reset/:token', (req, res) => {
   ], (err) => {
     if (err) {
       _err('Password resetting error', err);
-      req.flash('error', `Password resetting error (error ${err.statusCode}`)
+      req.flash('error', `Password resetting error (${err.code} ${err.responseCode})`)
     }
     res.redirect('/')
   });

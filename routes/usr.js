@@ -36,6 +36,7 @@ router.get('/:id/edit', sameUserOnly, (req, res) => {
       noSuchUser(req);
       return res.redirect('/');
     }
+    console.log('2FA method:', user.twoFaMethod);
     res.render('update', { user });
   });
 });
