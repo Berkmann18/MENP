@@ -1,8 +1,8 @@
-const router = require('express').Router();
+const router = require('express').Router(),
+  flash = require('express-flash'),
+  validator = require('validator');
 const { adminOnly, noSuchUser, noUsers, _err } = require('./generic');
-const { User } = require('./model');
-const flash = require('express-flash');
-const validator = require('validator');
+const { User } = require('../src/model');
 
 router.use(flash());
 

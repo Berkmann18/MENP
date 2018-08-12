@@ -16,7 +16,7 @@ setColours();
 
 /**
  * @description Callback for the server.
- * @param {Server} server ServerBuilder instance 
+ * @param {Server} server ServerBuilder instance
  * @param {object} cfg Server configuration
  */
 const serverCallback = (server, cfg) => {

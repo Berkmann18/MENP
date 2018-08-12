@@ -18,6 +18,7 @@ const index = require('./routes/index'),
   admin = require('./routes/admin'),
   usr = require('./routes/usr'),
   users = require('./routes/users'),
+  contact = require('./routes/contact'),
   logger = require('morgan'),
   { httpPage, codeToMsg } = require('./routes/generic');
 const limiter = new RateLimit({
@@ -69,7 +70,7 @@ app.use(helmet.contentSecurityPolicy({
       'sha256-GFyS9Ty2WZ6hM5H1/143GVklcV2FECoTbXLxaIGLMiE='
     ],
     reportUri: '/report-violation',
-    fontSrc: ['\'self\'', 'maxcdn.bootstrapcdn.com', 'https://maxcdn.bootstrapcdn.com/', 'https://fonts.gstatic.com/s/opensans/v15/', 'data:font/'],
+    fontSrc: ['\'self\'', 'maxcdn.bootstrapcdn.com', 'https://maxcdn.bootstrapcdn.com/', 'https://fonts.gstatic.com/s/opensans/v15/', 'data:'],
     sandbox: ['allow-forms', 'allow-scripts'],
     imgSrc: ['\'self\'', 'data:']
   },
@@ -95,6 +96,7 @@ app.use('/', index);
 app.use('/admin', admin);
 app.use('/usr', usr);
 app.use('/users', users);
+app.use('/contact', contact);
 
 // If CSURF is present put this route above the csurf middleware
 app.post('/report-violation', (req, res) => {
@@ -109,33 +111,33 @@ app.post('/report-violation', (req, res) => {
 let env = process.argv[2] || process.env.NODE_ENV || 'development';
 
 switch (env) {
-case 'development':
-  console.log('Development mode');
-  app.use((err, req, res, next) => {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
+  case 'development':
+    console.log('Development mode');
+    app.use((err, req, res, next) => {
+      res.status(err.status || 500);
+      res.render('error', {
+        message: err.message,
+        error: err
+      });
     });
-  });
-  break;
-case 'production':
-  console.log('Production mode');
-  app.use((req, res) => { //404
-    console.log('status:', req.status);
-    httpPage(404, res);
-  });
-  app.use((err, req, res, next) => { //500
-    res.status(err.status || 500);
-    console.log(`Error status: ${err.status}`);
-    let msg = codeToMsg(err);
-    res.render('page', {
-      data: `${msg}<br><em>Error ${err.status} on ${err.path}</em>`
+    break;
+  case 'production':
+    console.log('Production mode');
+    app.use((req, res) => { //404
+      console.log('status:', req.status);
+      httpPage(404, res);
     });
-  });
-  break;
-default:
-  console.log(`Unknown mode: ${env}`);
+    app.use((err, req, res, next) => { //500
+      res.status(err.status || 500);
+      console.log(`Error status: ${err.status}`);
+      let msg = codeToMsg(err);
+      res.render('page', {
+        data: `${msg}<br><em>Error ${err.status} on ${err.path}</em>`
+      });
+    });
+    break;
+  default:
+    console.log(`Unknown mode: ${env}`);
 }
 
 module.exports = app;

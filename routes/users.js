@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User } = require('./model');
+const { User } = require('../src/model');
 const { noUsers, noSuchUser, _err, _warn, httpPage, memberOnly, requireLogin } = require('./generic');
 
 /**

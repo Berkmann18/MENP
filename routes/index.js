@@ -12,9 +12,9 @@
 const session = require('express-session'),
   nodemailer = require('nodemailer');
 const passport = require('passport'),
-  LocalStrategy = require('passport-local').Strategy;
-async = require('async'),
-crypto = require('crypto');
+  LocalStrategy = require('passport-local').Strategy,
+  async = require('async'),
+  crypto = require('crypto');
 const flash = require('express-flash'),
   validator = require('validator'),
   sgTransport = require('nodemailer-sendgrid-transport');
@@ -26,13 +26,11 @@ const config = require('../config/config');
 const {
   incomingIp,
   requireLogin,
-  memberOnly,
   welcomeUser,
   sendSms,
   httpPage,
   setColours,
   noSuchUser,
-  noUsers,
   emailError,
   execCaptcha,
   _err,
@@ -40,7 +38,7 @@ const {
   _warn,
   _inf
 } = require('./generic');
-const { User } = require('./model');
+const { User } = require('../src/model');
 const tokenCooldown = 36e5; //1h in ms
 
 let esig = 'Best regards,<br>MENP team\n';
@@ -145,46 +143,6 @@ Basically: <ul>
 </p>`,
     user: req.user,
     page: 'about'
-  });
-});
-
-/**
- * @description 'Contact us' page.
- */
-router.get('/contact', (req, res) => res.render('contact', {
-  user: req.user,
-  page: 'contact'
-}));
-
-/**
- * @description 'Contact us' form handler.
- */
-router.post('/contact', (req, res) => {
-  let keepDetails = () => res.render('contact', {
-    name: req.body.name,
-    email: req.body.email,
-    subject: req.body.subject,
-    message: req.body.message,
-    page: 'contact'
-  });
-  // if (typeof req.body.email !== 'string') console.error('reqBodyEmail in /contact is:', req.body.email);
-  // console.log('body', req.body);
-  // console.log('req', req);
-  if (!validator.isEmail(req.body.email)) {
-    console.log('wrong email');
-    req.flash('error', 'The email isn\'t valid');
-    return keepDetails();
-  }
-  let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)),
-    mailOptions = {
-      to: config.email.to,
-      from: req.body.email,
-      subject: req.body.subject || '[?] No subject',
-      text: `Contact email from ${req.body.name}:\n\n${req.body.message}`
-    };
-  smtpTransport.sendMail(mailOptions, (err) => {
-    if (err) emailError(req, err);
-    else req.flash('info', 'The email was sent! Thank you for your interest.');
   });
 });
 

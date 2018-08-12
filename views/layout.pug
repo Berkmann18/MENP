@@ -75,17 +75,25 @@ html(lang='en')
                                 |  Register
         .container-fluid.text-center.content
             if messages.error
-                .alert.alert-danger
-                    div= messages.error
+                .alert.alert-danger.alert-dismissible.fade.show(role='alert')
+                    span= messages.error
+                    button.close(type='button' data-dismiss='alert' aria-label='Close')
+                        span(aria-hidden='true') &times;
             if messages.warning
-                .alert.alert-warning
-                    div= messages.warning
+                .alert.alert-warning.alert-dismissible.fade.show(role='alert')
+                    span= messages.warning
+                    button.close(type='button' data-dismiss='alert' aria-label='Close')
+                        span(aria-hidden='true') &times;
             if messages.info
-                .alert.alert-info
-                    div= messages.info
+                .alert.alert-info.alert-dismissible.fade.show(role='alert')
+                    span= messages.info
+                    button.close(type='button' data-dismiss='alert' aria-label='Close')
+                        span(aria-hidden='true') &times;
             if messages.success
-                .alert.alert-success
-                    div= messages.success
+                .alert.alert-success.alert-dismissible.fade.show(role='alert')
+                    span= messages.success
+                    button.close(type='button' data-dismiss='alert' aria-label='Close')
+                        span(aria-hidden='true') &times;
             block content
             br
         footer.container-fluid.text-center

@@ -1,8 +1,10 @@
-const router = require('express').Router();
+const router = require('express').Router(),
+  flash = require('express-flash'),
+  validator = require('validator');
 const { noSuchUser, sameUserOnly, _err } = require('./generic');
-const { User } = require('./model');
-const flash = require('express-flash');
-const validator = require('validator');
+const { User } = require('../src/model');
+
+router.use(flash());
 
 /**
  * @description User page where a user can see his/her informations.
