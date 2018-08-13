@@ -43,6 +43,18 @@ html(lang='en')
                                 a.nav-link(href='/users')
                                     span.fa.fa-users.icons
                                     |  Users
+                        - var isAdmin = user && user.type == 'admin';
+                        - var isMod = user && user.type == 'moderator';
+                        if isAdmin
+                            li#admin.nav-item
+                                    a.nav-link(href='/admin')
+                                        span.fa.fa-shield.icons
+                                        |  Admin
+                        if isMod
+                            li#mod.nav-item
+                                    a.nav-link(href='/mod')
+                                        span.fa.fa-shield.icons
+                                        |  Moderator
                 span(class=page)
                     if user
                         li.nav-item.dropdown(style='display: inline-block').dropleft

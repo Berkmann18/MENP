@@ -1,7 +1,7 @@
 const router = require('express').Router(),
   flash = require('express-flash'),
   validator = require('validator');
-const { adminOnly, noSuchUser, noUsers, _err } = require('./generic');
+const { adminOnly, noSuchUser, noUsers, _err, _inf } = require('./generic');
 const { User } = require('../src/model');
 
 router.use(flash());
@@ -41,7 +41,7 @@ router.get('/', adminOnly, (req, res) => {
         </ul>
         <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active" id="pills-edit" role="tabpanel" aria-labelledby="pills-edit-tab">
-            <form name="usrChange" method="POST" action="/admin/ch/">
+            <form name="usrChange" method="POST" action="/admin/ch">
                 <div class="form-group">
                     <label for="id">Id:</label>
                     <input name='id' class="form-control" required>
@@ -71,7 +71,7 @@ router.get('/', adminOnly, (req, res) => {
             </form>
         </div>
         <div class="tab-pane fade" id="pills-remove" role="tabpanel" aria-labelledby="pills-remove-tab">
-          <form name="usrRemove" method="POST" action="/admin/rm/">
+          <form name="usrRemove" method="POST" action="/admin/rm">
                 <div class="form-group">
                     <label for="id">Id:</label>
                     <input name='id' class="form-control" required>
@@ -92,7 +92,7 @@ router.get('/', adminOnly, (req, res) => {
  * @description Admin User change page.
  * @protected
  */
-router.get('/ch', adminOnly, (req, res, next) => {
+router.post('/ch', adminOnly, (req, res, next) => {
   User.findById(req.body.id, (err, user) => {
     if (err) _err('Error:', err);
     if (!user) {
@@ -108,11 +108,39 @@ router.get('/ch', adminOnly, (req, res, next) => {
     user.fname = req.body.fname || user.fname;
     user.lname = req.body.lname || user.lname;
     user.type = req.body.type || user.type;
-    req.flash('success', 'Information updated');
     user.save((err) => {
-      if (err) _err('Admin authored change error:', err);
+      req.flash('success', 'Information updated');
+      if (err) {
+        req.flash('error', `Change error: ${err.code} ${err.responseCode}`)
+        _err('Admin authored change error:', err);
+      }
     });
+    res.redirect('/admin');
     next(); //This may need to be moved to user.save
+  });
+});
+
+/**
+ * @description Admin User removal page.
+ * @protected
+ */
+router.post('/rm', adminOnly, (req, res, next) => {
+  User.findById(req.body.id, (err, user) => {
+    if (err) _err('Error:', err);
+    if (!user) {
+      noSuchUser(req)(req);
+      return res.redirect('back');
+    }
+    user.remove((err) => {
+      if (err) {
+        req.flash('error', `Removal error: ${err.code} ${err.responseCode}`)
+        _err('Admin authored removal error:', err);
+      }
+      req.flash('success', 'User successfully deleted!');
+      _inf(`${user.username} <${user.email}> got kicked out`);
+      return res.redirect('/admin');
+    });
+    next();
   });
 });
 

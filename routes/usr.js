@@ -17,6 +17,7 @@ router.get('/:id', sameUserOnly, (req, res) => {
       noSuchUser(req);
       return res.redirect('/');
     }
+    console.log('user=', user);
     res.render('user', {
       user,
       visitedUser: user,

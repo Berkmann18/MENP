@@ -79,3 +79,15 @@ span.register span#register {
 .empty-item {
   display: inline-block;
 }
+
+.member {
+  color: #000;
+}
+
+.moderator {
+  color: #0f0;
+}
+
+.admin {
+  color: #f00;
+}

@@ -16,6 +16,7 @@ const cookieParser = require('cookie-parser'),
   bodyParser = require('body-parser');
 const index = require('./routes/index'),
   admin = require('./routes/admin'),
+  mod = require('./routes/moderator'),
   usr = require('./routes/usr'),
   users = require('./routes/users'),
   contact = require('./routes/contact'),
@@ -97,6 +98,7 @@ app.use('/admin', admin);
 app.use('/usr', usr);
 app.use('/users', users);
 app.use('/contact', contact);
+app.use('/mod', mod);
 
 // If CSURF is present put this route above the csurf middleware
 app.post('/report-violation', (req, res) => {

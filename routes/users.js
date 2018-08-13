@@ -19,7 +19,9 @@ router.get('/', memberOnly, (req, res) => {
     for (let user of users) {
       usrlist += '<tr>';
       for (let col of cols) {
-        usrlist += (col === 'username') ? `<td><a href="/users/@${user[col]}">${user[col]}</a></td>` : `<td>${user[col]}</td>`;
+        if (col === 'username') usrlist += `<td><a href="/users/@${user[col]}">${user[col]}</a></td>`
+        else if (col === 'type') usrlist += `<td><span class="${user[col]}">${user[col]}</span<</td>`;
+        else usrlist += `<td>${user[col]}</td>`;
       }
       usrlist += '</tr>';
       ++nb;
