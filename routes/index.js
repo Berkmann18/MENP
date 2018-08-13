@@ -201,7 +201,6 @@ router.post('/login', (req, res, next) => {
             done(err, token);
           });
         }, (token, done) => {
-          //console.log('Token', token);
           let twoFaHandler = (token) => {
             user.key = token;
             user.keyExpires = Date.now() + tokenCooldown; //1 hour
@@ -210,18 +209,14 @@ router.post('/login', (req, res, next) => {
                 user,
                 page: '2fa'
               });
-              // _dbg('Expecting token:', token);
               if (err) {
                 _err('2FA handling error:', err);
                 req.flash('error', `Error in the Authentication process (${err.code} ${err.responseCode})`);
               }
-              //done(err, token, user);
             });
 
             done(token);
-            //login()
           };
-          // console.log('2FA w/', user.twoFaMethod);
           if (user.twoFaMethod === 'sms') {
             sendSms(config.nexmoOptions.from, user.phone, `Your code is ${token}.`, (ans) => {
               if (process.env.NODE_ENV === 'development') _dbg('SMS callback response:', ans);
@@ -244,18 +239,13 @@ router.post('/login', (req, res, next) => {
               if (err) emailError(req, err);
               else {
                 req.flash('info', 'Please see and enter the code you were sent.');
-                //twoFaHandler(token);
               }
-              //done(err, 'done');
             });
           }
 
         }
       ], (token, err) => {
-        if (err) {
-          _err('2FA login error', err);
-          //return next(err);
-        } //else res.redirect('/login');
+        if (err) _err('2FA login error', err);
       });
     } else login();
   })(req, res, next);
@@ -266,9 +256,7 @@ router.options('/register', cors());
  * @description Registration page.
  */
 router.get('/register', cors(corsOptionsDelegate), (req, res) => {
-  // console.log('Origin header on register:', req.header('Origin'));
   execCaptcha((token) => {
-    // _dbg('Captcha token:', token);
     res.render('register', {
       page: 'register',
       captcha: token
@@ -301,38 +289,31 @@ router.post('/register', (req, res) => {
   let wrongs = false,
     twoFA = switch2bool(req.body.twoFA);
 
-  // console.log('req.body/register:', req.body);
   User.findOne({ email: req.body.email }, (err, user) => {
     if (err) _err('Error:', err);
     if (user) {
       req.flash('error', 'The email address is already used by an existing account');
-      //console.log('Email already used');
       wrongs = true;
-    } //else console.log('Email fine');
+    }
   }).then(User.findOne({ username: req.body.username }, (err, user) => {
     if (err) _err('Error:', err);
     if (user) {
       req.flash('error', 'The username is already used by an existing account');
-      //console.log('Un already used');
       wrongs = true;
-    } //else console.log('Username fine');
+    }
   })).then(() => {
     if (!validator.isEmail(req.body.email)) {
-      //req.flash('error', 'The email address isn\'t valid');
       $('#emailchk').html('<span style="color: red;">The email address isn\'t valid</span>');
-      //console.log('Email not valid');
       wrongs = true;
-    } //else console.log('Email good');
+    }
     if (req.body.password.length < 8) {
       req.flash('warning', 'The password is too weak.\nPlease make sure it\'s 8+ characters long');
-      //console.log('Password too short');
       wrongs = true;
-    } //else console.log('Password fine');
+    }
     if (req.body.cpw !== req.body.password) {
       req.flash('error', 'The confirmation password must be identical to the password');
-      //console.log('Password not confirmed');
       wrongs = true;
-    } //else console.log('Conf fine');
+    }
 
     if (twoFA && req.body.twoFaMethod === 'sms' && !(req.body.phone && validator.isMobilePhone(req.body.phone))) {
       req.flash('error', 'Invalid phone number');
@@ -342,13 +323,11 @@ router.post('/register', (req, res) => {
 
     if (req.body.captcha !== req.body.cct) {
       req.flash('error', 'The captcha is wrong');
-      // console.log('Wrong captcha');
       wrongs = true;
-    } else //console.log('Captcha fine');
+    }
 
     if (wrongs) {
       keepDetails();
-      // console.log('Going again');
       return false;
     } //Allow to display all issues with the form in one go and to minimise POST requests
 
@@ -636,7 +615,6 @@ router.post('/2fa', /*requireLogin,*/ (req, res, next) => {
       });
     } else {
       req.flash('error', 'The code you gave is the wrong one or it expired');
-      //_debug('Code given:', req.body.token, '\nCode expected:', user.key);
       res.redirect('/login');
     }
   });

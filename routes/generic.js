@@ -140,7 +140,6 @@ let incomingIp = (req) => {
  */
 let requireLogin = (req, res, next) => {
   if (!req) throw new Error('requireLogin needs a request to proceed');
-  //req.session.loggedIn ? next() : res.redirect('/login');
   req.user || req.isAuthenticated() ? next() : httpPage(403, res);
 };
 
@@ -168,7 +167,6 @@ let httpPage = (code, res) => {
     <a href="/">Go back to the home page</a>&nbsp; &nbsp;
     <a href="/sitemap">Go back to the sitemap</a>`
   });
-  //res.status(code).send(codeToMsg({status: code}));
 };
 
 /**
@@ -201,7 +199,6 @@ let modOnly = (req, res, next) => {
  * @protected
  */
 let memberOnly = (req, res, next) => {
-  //userTypeCheck(req) ? next() : httpPage(403, res);
   (req.user && ['member', 'moderator', 'admin'].indexOf(req.user.type) > -1) ? next(): httpPage(403, res);
 };
 
@@ -225,33 +222,33 @@ let sameUserOnly = (req, res, next) => {
 let codeToMsg = (err) => {
   let msg = '';
   switch (err.status) {
-    case 400:
-      msg = '<h1>Ooh dear!! You asked the wrong thing mate!</h1><img src="/img/400.png" alt="400">';
-      break;
-    case 401:
-    case 403:
-      msg = '<h1>HALT!! You\'re not authorised to be here!!</h1><img src="/img/403.png" alt="401-403">';
-      break;
-    case 404:
-      msg = '<h1>Whoops!!</h1>The page you requested ran away so can\'t found<br><img src="/img/404.gif" alt="404">';
-      break;
-    case 410:
-      msg = '<h1>My condolences :(!</h1>The page you wanted, sadly left us!<br><img src="/img/410.jpg" alt="410">';
-      break;
-    case 500:
-      msg = '<h1>Something went wrong in the server... Apologies :s</h1><img src="/img/500.png" alt="500">';
-      break;
-    case 501:
-      msg = '<h1>Wow! This wasn\'t implemented, what a shame!</h1><img src="/img/501.jpg" alt="501">';
-      break;
-    case 503:
-      msg = '<h1>The service in charge went for a nap, please require it later!</h1><img src="/img/503.jpg" alt="503">';
-      break;
-    case 550:
-      msg = '<h1>What are you doing? You\'re not allowed here!</h1><img src="/img/550.jpg" alt="550">';
-      break;
-    default:
-      msg = err.message
+  case 400:
+    msg = '<h1>Ooh dear!! You asked the wrong thing mate!</h1><img src="/img/400.png" alt="400">';
+    break;
+  case 401:
+  case 403:
+    msg = '<h1>HALT!! You\'re not authorised to be here!!</h1><img src="/img/403.png" alt="401-403">';
+    break;
+  case 404:
+    msg = '<h1>Whoops!!</h1>The page you requested ran away so can\'t found<br><img src="/img/404.gif" alt="404">';
+    break;
+  case 410:
+    msg = '<h1>My condolences :(!</h1>The page you wanted, sadly left us!<br><img src="/img/410.jpg" alt="410">';
+    break;
+  case 500:
+    msg = '<h1>Something went wrong in the server... Apologies :s</h1><img src="/img/500.png" alt="500">';
+    break;
+  case 501:
+    msg = '<h1>Wow! This wasn\'t implemented, what a shame!</h1><img src="/img/501.jpg" alt="501">';
+    break;
+  case 503:
+    msg = '<h1>The service in charge went for a nap, please require it later!</h1><img src="/img/503.jpg" alt="503">';
+    break;
+  case 550:
+    msg = '<h1>What are you doing? You\'re not allowed here!</h1><img src="/img/550.jpg" alt="550">';
+    break;
+  default:
+    msg = err.message
   }
   return msg;
 };
