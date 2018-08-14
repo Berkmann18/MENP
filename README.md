@@ -1,19 +1,19 @@
 # MENP
-<!--[![NPM](https://nodei.co/npm/menp.png)](https://nodei.co/npm/menp/)-->
-<!--[![tested with jest](https://img.shields.io/badge/tested_with-jest-99424f.svg)](https://github.com/facebook/jest)-->
 [![Build Status](https://travis-ci.org/Berkmann18/MENP.svg?branch=master)](https://travis-ci.org/Berkmann18/MENP)
-[![Inline docs](http://inch-ci.org/github/Berkmann18/MENP.svg?branch=master)](http://inch-ci.org/github/Berkmann18/MENP)
+[![GitHub package version](https://img.shields.io/github/package-json/v/Berkmann18/MENP.svg)](https://github.com/Berkmann18/MENP)
+[![GitHub commit activity the past year](https://img.shields.io/github/commit-activity/y/Berkmann18/MENP.svg)](https://github.com/Berkmann18/MENP/graphs/commit-activity)
+[![GH Downloads](https://img.shields.io/github/downloads/Berkmann18/MENP/total.svg)](https://github.com/Berkmann18/MENP/network/members)
+[![Github search hit counter](https://img.shields.io/github/search/Berkmann18/MENP/goto.svg)](https://github.com/Berkmann18/MENP/graphs/traffic)
 [![NSP Status](https://nodesecurity.io/orgs/berkmann18/projects/fd479365-365e-4a75-9a25-ba37e69f9780/badge)](https://nodesecurity.io/orgs/berkmann18/projects/fd479365-365e-4a75-9a25-ba37e69f9780)
 [![codecov.io Code Coverage](https://img.shields.io/codecov/c/github/Berkmann18/MENP.svg?maxAge=2592000)](https://codecov.io/github/Berkmann18/MENP?branch=master)
-[![bitHound Overall Score](https://www.bithound.io/github/Berkmann18/MENP/badges/score.svg)](https://www.bithound.io/github/Berkmann18/MENP)
-[![bitHound Dependencies](https://www.bithound.io/github/Berkmann18/MENP/badges/dependencies.svg)](https://www.bithound.io/github/Berkmann18/MENP/dev/dependencies/npm)
-[![bitHound Dev Dependencies](https://www.bithound.io/github/Berkmann18/MENP/badges/devDependencies.svg)](https://www.bithound.io/github/Berkmann18/MENP/master/dependencies/npm)
-[![bitHound Code](https://www.bithound.io/github/Berkmann18/MENP/badges/code.svg)](https://www.bithound.io/github/Berkmann18/MENP)
 [![dependencies Status](https://david-dm.org/Berkmann18/MENP/status.svg)](https://david-dm.org/Berkmann18/MENP)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/Berkmann18/MENP/issues)
-<!--[![MIT license](http://img.shields.io/npm/l/menp.svg?style=flat-square)](https://npmjs.org/package/menp)-->
 [![Sauce Test Status](https://saucelabs.com/buildstatus/Berkmann18)](https://saucelabs.com/u/Berkmann18)
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/Berkmann18.svg)](https://saucelabs.com/u/Berkmann18)
+[![BCH compliance](https://bettercodehub.com/edge/badge/Berkmann18/MENP?branch=dev)](https://bettercodehub.com/)
+[![GitHub top language](https://img.shields.io/github/languages/top/Berkmann18/MENP.svg)](https://github.com/Berkmann18/MENP)
+[![GitHub language count](https://img.shields.io/github/languages/count/Berkmann18/MENP.svg)](https://github.com/Berkmann18/MENP)
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Berkmann18/MENP.svg)](https://github.com/Berkmann18/MENP)
 
 This is a sample MENP (MongoDB, Express, Node, Pug) web app (which uses Bootstrap and jQuery).
 

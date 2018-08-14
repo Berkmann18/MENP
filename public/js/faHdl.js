@@ -1,7 +1,7 @@
 /* eslint-env browser, es6 */
 /* globals $ */
 
-window.onload = () => {
+window.onpageshow = () => {
   if (!$('input[name="twoFA"]').prop('checked')) $('#FABox').hide();
   //Fixes the toggle styling not showing up properly
   setTimeout(() => $('.toggle-handle.btn').addClass('bg-light'), 0);

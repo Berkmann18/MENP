@@ -3,6 +3,7 @@
   -webkit-border-radius: 0;
   border-radius: 0;
   margin-bottom: 0;
+  /* min-height: 10vh; */
 }
 
 footer {
@@ -20,7 +21,8 @@ footer {
   min-height: 80vh;
 }
 
-.icons, #userDropdown {
+.icons,
+#userDropdown {
   color: #fff;
 }
 
@@ -29,7 +31,12 @@ footer {
   margin: 0 auto;
 }
 
-ul.home li#home, ul.about li#about, ul.contact li#contact, ul.sitemap li#sitemap, span.login span#login, span.register span#register {
+ul.home li#home,
+ul.about li#about,
+ul.contact li#contact,
+ul.sitemap li#sitemap,
+span.login span#login,
+span.register span#register {
   /* .active from Bootstrap */
   -moz-border-radius: .25rem;
   -webkit-border-radius: .25rem;
@@ -51,7 +58,9 @@ ul.home li#home, ul.about li#about, ul.contact li#contact, ul.sitemap li#sitemap
   width: 104px;
 }
 
+
 /* Read-only checkboxes */
+
 .check {
   background: rgba(255, 255, 255, 0);
   border: 1px solid #ced4da;
@@ -62,10 +71,23 @@ ul.home li#home, ul.about li#about, ul.contact li#contact, ul.sitemap li#sitemap
   color: #fff;
 }
 
-.dropdown-menu[aria-labelledby="userDropdown"] a.dropdown-item:hover, .dropdown-menu[aria-labelledby="userDropdown"] a.dropdown-item:hover span.fa {
+.dropdown-menu[aria-labelledby="userDropdown"] a.dropdown-item:hover,
+.dropdown-menu[aria-labelledby="userDropdown"] a.dropdown-item:hover span.fa {
   color: #000;
 }
 
 .empty-item {
   display: inline-block;
+}
+
+.member {
+  color: #000;
+}
+
+.moderator {
+  color: #0f0;
+}
+
+.admin {
+  color: #f00;
 }

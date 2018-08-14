@@ -3,25 +3,38 @@
  * @description Application module
  * @module app
  * @requires express, path, serve-favicon, cookie-parser, body-parser, morgan
- * @requires ./routes/index
+ * @requires ./routes/index, ./routes/admin, ./routes/user
  * @exports app
  */
 
-const express = require('express'), path = require('path');
-const favicon = require('serve-favicon'), RateLimit = require('express-rate-limit'), helmet = require('helmet');
-const cookieParser = require('cookie-parser'), bodyParser = require('body-parser');
-const index = require('./routes/index'), logger = require('morgan'), {httpPage, codeToMsg} = require('./routes/generic');
+const express = require('express'),
+  path = require('path');
+const favicon = require('serve-favicon'),
+  RateLimit = require('express-rate-limit'),
+  helmet = require('helmet');
+const cookieParser = require('cookie-parser'),
+  bodyParser = require('body-parser');
+const index = require('./routes/index'),
+  admin = require('./routes/admin'),
+  mod = require('./routes/moderator'),
+  usr = require('./routes/usr'),
+  users = require('./routes/users'),
+  contact = require('./routes/contact'),
+  logger = require('morgan'),
+  { httpPage, codeToMsg } = require('./routes/generic');
 const limiter = new RateLimit({
     windowMs: 15 * 6e3, //15 minutes
     max: 100, //Limit each IP to 100 requests per windowMs
     delayMs: 0 //Disable delaying - full speed until the max limit is reached
-  }), OneYear = 31536e3;
+  }),
+  OneYear = 31536e3;
 
 /**
  * @description Express application
  * @type {*|Function}
  */
-const app = express(), uuid = require('uuid');
+const app = express(),
+  uuid = require('uuid');
 
 /**
  * View engine setup
@@ -45,7 +58,7 @@ app.use((req, res, next) => {
 });
 
 app.use(helmet({
-  frameguard: {action: 'deny'}, //No I-frame uses
+  frameguard: { action: 'deny' }, //No I-frame uses
 }));
 app.use(helmet.xssFilter());
 app.use(helmet.contentSecurityPolicy({
@@ -56,10 +69,9 @@ app.use(helmet.contentSecurityPolicy({
       'sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ', 'sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh',
       'sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN', 'sha256-C/MMeoQHEyhrrD8wEB7zDbcJTaUUbPn+oab7cS5qSiI=',
       'sha256-GFyS9Ty2WZ6hM5H1/143GVklcV2FECoTbXLxaIGLMiE='
-      //(req, res) => `'nonce-${res.locals.nonce}'`  // 'nonce-614d9122-d5b0-4760-aecf-3a5d17cf0ac9'
     ],
     reportUri: '/report-violation',
-    fontSrc: ['\'self\'', 'maxcdn.bootstrapcdn.com', 'https://maxcdn.bootstrapcdn.com/'],
+    fontSrc: ['\'self\'', 'maxcdn.bootstrapcdn.com', 'https://maxcdn.bootstrapcdn.com/', 'https://fonts.gstatic.com/s/opensans/v15/', 'data:'],
     sandbox: ['allow-forms', 'allow-scripts'],
     imgSrc: ['\'self\'', 'data:']
   },
@@ -71,7 +83,6 @@ app.use(helmet.hsts({
   maxAge: OneYear,
   includeSubDomains: true,
   preload: true
-  //setIf: (req, res) => req.secure;
 }));
 app.use(limiter);
 /*app.disable('x-powered-by')*/
@@ -83,6 +94,11 @@ app.use((req, res, next) => {
 */
 
 app.use('/', index);
+app.use('/admin', admin);
+app.use('/usr', usr);
+app.use('/users', users);
+app.use('/contact', contact);
+app.use('/mod', mod);
 
 // If CSURF is present put this route above the csurf middleware
 app.post('/report-violation', (req, res) => {

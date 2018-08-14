@@ -6,16 +6,22 @@
  * noUsers, emailError, execCaptcha, _in, _out, _inf, _err, _warn, _dbg, welcomeUser}
  */
 
-const config = require('../config/config'), Nexmo = require('nexmo'), clr = require('colors'), fs = require('fs'), captcha = require('trek-captcha'),
-  path = require('path'), _async = require('asyncawait/async'), _await = require('asyncawait/await');
-const nexmo = new Nexmo(config.nexmoOptions), clrScheme = {
-  in: 'white',
-  out: 'cyan',
-  inf: 'green',
-  err: 'red',
-  warn: 'yellow',
-  debug: 'grey'
-};
+const config = require('../config/config'),
+  Nexmo = require('nexmo'),
+  clr = require('colors'),
+  fs = require('fs'),
+  captcha = require('trek-captcha'),
+  path = require('path'),
+  _async = require('asyncawait/async'),
+  _await = require('asyncawait/await');
+const nexmo = new Nexmo(config.nexmoOptions),
+  clrScheme = { in: 'white',
+    out: 'cyan',
+    inf: 'green',
+    err: 'red',
+    warn: 'yellow',
+    debug: 'grey'
+  };
 
 /**
  * @description Print an error.
@@ -88,7 +94,7 @@ let setColours = () => clr.setTheme(clrScheme);
  * @param {string} [page='index'] Page name
  * @protected
  */
-let load = (res, page='index') => res.sendFile(path.join(`${__dirname}/../public/${page}.html`));
+let load = (res, page = 'index') => res.sendFile(path.join(`${__dirname}/../public/${page}.html`));
 
 /**
  * @description Get the IP address of where the request originated from.
@@ -134,7 +140,6 @@ let incomingIp = (req) => {
  */
 let requireLogin = (req, res, next) => {
   if (!req) throw new Error('requireLogin needs a request to proceed');
-  //req.session.loggedIn ? next() : res.redirect('/login');
   req.user || req.isAuthenticated() ? next() : httpPage(403, res);
 };
 
@@ -145,7 +150,7 @@ let requireLogin = (req, res, next) => {
  * @return {boolean} Type check passed
  * @protected
  */
-let userTypeCheck = (req, type='member') => {
+let userTypeCheck = (req, type = 'member') => {
   if (!req.user) return false;
   return req.user.type === type || req.user.type === 'admin' || (req.user.type === 'moderator' && type === 'member');
 };
@@ -162,7 +167,6 @@ let httpPage = (code, res) => {
     <a href="/">Go back to the home page</a>&nbsp; &nbsp;
     <a href="/sitemap">Go back to the sitemap</a>`
   });
-  //res.status(code).send(codeToMsg({status: code}));
 };
 
 /**
@@ -173,7 +177,7 @@ let httpPage = (code, res) => {
  * @protected
  */
 let adminOnly = (req, res, next) => {
-  (req.user && req.user.type === 'admin') ? next() : httpPage(403, res);
+  (req.user && req.user.type === 'admin') ? next(): httpPage(403, res);
 };
 
 /**
@@ -195,8 +199,7 @@ let modOnly = (req, res, next) => {
  * @protected
  */
 let memberOnly = (req, res, next) => {
-  //userTypeCheck(req) ? next() : httpPage(403, res);
-  (req.user && ['member', 'moderator', 'admin'].indexOf(req.user.type) > -1) ? next() : httpPage(403, res);
+  (req.user && ['member', 'moderator', 'admin'].indexOf(req.user.type) > -1) ? next(): httpPage(403, res);
 };
 
 /**
@@ -298,7 +301,7 @@ let welcomeUser = (req, user) => req.flash('success', `Welcome "${user.title}. $
  * @protected
  */
 let emailError = (req, err) => {
-  req.flash('error', `An error occured while sending the email (error ${err.statusCode})`);
+  req.flash('error', `An error occured while sending the email (${err.code} ${err.responseCode})`);
   _err('SMTP error:', err);
 };
 
@@ -309,20 +312,34 @@ let emailError = (req, err) => {
  * @return {Promise.<void>} Captcha promise
  * @protected
  */
-let execCaptcha = _async((callback, gifPath=`${path.dirname(__dirname)}/public/img/ct.gif`) => {
-  const {token, buffer} = _await(captcha());
+let execCaptcha = _async((callback, gifPath = `${path.dirname(__dirname)}/public/img/ct.gif`) => {
+  const { token, buffer } = _await(captcha());
 
   fs.createWriteStream(gifPath).on('finish', () => callback(token)).end(buffer)
 });
-/*let execCaptcha = async function(callback, gifPath=`${path.dirname(__dirname)}/public/img/ct.gif`) {
-    const {token, buffer} = await captcha();
-
-    fs.createWriteStream(gifPath).on('finish', () => callback(token)).end(buffer)
-};*/
 
 module.exports = {
-  load, httpPage, noSuchUser, noUsers, emailError, codeToMsg, sendSms,
-  incomingIp, requireLogin, adminOnly, modOnly, memberOnly, sameUserOnly,
-  setColours, clr, execCaptcha, welcomeUser,
-  _in, _out, _inf, _err, _warn, _dbg
+  load,
+  httpPage,
+  noSuchUser,
+  noUsers,
+  emailError,
+  codeToMsg,
+  sendSms,
+  incomingIp,
+  requireLogin,
+  adminOnly,
+  modOnly,
+  memberOnly,
+  sameUserOnly,
+  setColours,
+  clr,
+  execCaptcha,
+  welcomeUser,
+  _in,
+  _out,
+  _inf,
+  _err,
+  _warn,
+  _dbg
 };
