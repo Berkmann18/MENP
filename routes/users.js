@@ -1,64 +1,24 @@
 const router = require('express').Router();
 const { User } = require('../src/model');
 const { noUsers, noSuchUser, _err, _warn, httpPage, memberOnly, requireLogin } = require('./generic');
-const { dateDiff } = require('../src/utils');
+const { dateDiff, userTable } = require('../src/utils');
 
-/**
- * @description Make a table with informations of users.
- * @param {User[]} users List of users
- * @param {?Object} [filter=null] Filter criteria
- * @returns {string} HTML code of the table
- */
-const userTable = (users, filter = null) => {
-  let cols = ['username', 'registerDate', 'lastSeen', 'type'],
-    visualCols = ['Username', 'Registration date', 'Last seen', 'Type'],
-    usrlist = '<table class="table"><caption>Users</caption><tr>',
-    nb = 0;
-  for (let col of visualCols) usrlist += `<th>${col}</th>`;
-  usrlist += '</tr>';
-  for (let user of users) {
-    if (filter && !Object.values(user).includes(filter.term)) console.log('skipping', user);
-    usrlist += '<tr>';
-    for (let col of cols) {
-      if (col === 'username') usrlist += `<td><a href="/users/@${user[col]}">${user[col]}</a></td>`
-      else if (col === 'type') usrlist += `<td><span class="${user[col]}">${user[col]}</span<</td>`;
-      else if (col === 'registerDate') {
-        let diff = dateDiff('w', user[col], Date.now());
-        usrlist += (diff < 1.5) ? `<td><span class="newmember">${user[col]}</span</td>` : `<td>${user[col]}</td>`;
-      } else usrlist += `<td>${user[col]}</td>`;
-    }
-    usrlist += '</tr>';
-    ++nb;
-  }
-  usrlist += `</table><p><em>${nb}</em> users (as of ${new Date()})</p>`;
-  return usrlist;
-}
-
-
+const DB_COLS = ['username', 'registerDate', 'lastSeen', 'type'],
+  COLS = ['Username', 'Registration date', 'Last seen', 'Type'];
 
 /**
  * @description Members list.
  * @protected
  */
 router.get('/', memberOnly, (req, res) => {
-
-  let searchBar = `
-  <form action="/users/search" method="get">
-    <div class="input-group stylish-input-group">
-      <input type="text" class="form-control" placeholder="Search" name="term">
-      <span class="input-group-addon">
-        <button type="submit">
-          <span class="fas fa-search"></span>
-        </button>  
-      </span>
-    </div>
-  </form>`;
-
   User.find({}, (err, users) => {
     if (err) _err('Error:', err);
     if (!users) return noUsers(req, res);
     res.render('page', {
-      data: `${searchBar}${userTable(users)}`,
+      data: userTable(users, {
+        cols: DB_COLS,
+        visualCols: COLS
+      }),
       user: req.user,
       page: 'users'
     });
@@ -79,20 +39,10 @@ router.get('/@:username', requireLogin, (req, res) => {
   });
 });
 
-
+/**
+ * @description User search page.
+ */
 router.get('/search', requireLogin, (req, res) => {
-  let searchBar = `
-  <form action="/users/search" method="get">
-    <div class="input-group stylish-input-group">
-      <input type="text" class="form-control" placeholder="Search" name="term" value="${req.query.term}">
-      <span class="input-group-addon">
-        <button type="submit">
-          <span class="fas fa-search"></span>
-        </button>  
-      </span>
-    </div>
-  </form>`;
-
   let set = {};
   const GRP_RE = /(type)=\w+/gi,
     USR_RE = /(username)=\w+/gi;
@@ -109,11 +59,9 @@ router.get('/search', requireLogin, (req, res) => {
       }
     }); //[ { username: '...' }, { type: '...' } ]
     set = { $and }
-  } else if (inGroup) {
-    set = { type: req.query.term.split('=')[1] }
-  } else if (inName) {
-    set = { username: req.query.term.split('=')[1] }
-  } else if (req.query.term !== '') {
+  } else if (inGroup) set = { type: req.query.term.split('=')[1] }
+  else if (inName) set = { username: req.query.term.split('=')[1] }
+  else if (req.query.term !== '') {
     set = {
       $or: [
         { type: req.query.term },
@@ -126,7 +74,11 @@ router.get('/search', requireLogin, (req, res) => {
     if (err) _err('Error:', err);
     if (!users) return noUsers(req, res);
     res.render('page', {
-      data: `${searchBar}${userTable(users)}`,
+      data: userTable(users, {
+        cols: DB_COLS,
+        visualCols: COLS,
+        term: req.query.term
+      }),
       user: req.user,
       page: 'users'
     });
