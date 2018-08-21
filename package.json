@@ -18,7 +18,9 @@
     "stylelint": "stylelint public/css/*.css --config ./config/.stylelintrc --color --report-needless-disables",
     "doc": "jsdoc -c ./config/jsdoc.json",
     "hash": "node node_modules/hashmyjs/index.js -f json -o hashes.json public/js/*.js",
-    "browser": "BROWSER=true node ./bin/w3.js"
+    "browser": "BROWSER=true node ./bin/w3.js",
+    "changelog": "conventional-changelog -p eslint -i CHANGELOG.md -s -r 0",
+    "version": "npm run changelog && git add CHANGELOG.md"
   },
   "dependencies": {
     "async": "^2.6.1",
@@ -34,7 +36,7 @@
     "express-rate-limit": "^3.0.1",
     "express-session": "^1.15.6",
     "helmet": "^3.13.0",
-    "mongoose": "^5.2.8",
+    "mongoose": "^5.2.9",
     "morgan": "^1.9.0",
     "nexmo": "^2.3.2",
     "nodemailer": "^4.6.8",

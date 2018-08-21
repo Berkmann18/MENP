@@ -91,3 +91,29 @@ span.register span#register {
 .admin {
   color: #f00;
 }
+
+.newmember {
+  color: #008080;
+}
+
+
+/* https://bootsnipp.com/snippets/featured/stylish-input-using-icon-font */
+
+.stylish-input-group {
+  margin: 5px;
+}
+
+.stylish-input-group .input-group-addon {
+  background: #fff;
+}
+
+.stylish-input-group .form-control {
+  border-right: 0;
+  box-shadow: 0 0 0;
+  border-color: #ccc;
+}
+
+.stylish-input-group button {
+  border: 0;
+  background: transparent;
+}

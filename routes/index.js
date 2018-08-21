@@ -302,6 +302,10 @@ router.post('/register', (req, res) => {
       wrongs = true;
     }
   })).then(() => {
+    if (/\s+/g.test(req.body.username)) {
+      req.flash('error', 'The username cannot contain any spaces');
+      wrongs = true;
+    }
     if (!validator.isEmail(req.body.email)) {
       $('#emailchk').html('<span style="color: red;">The email address isn\'t valid</span>');
       wrongs = true;

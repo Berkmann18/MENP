@@ -6,7 +6,7 @@
 const fs = require('fs'),
   app = require('../app'),
   Server = require('serverbuilder');
-const { setColours, _inf, _err } = require('../routes/generic');
+const { setColours } = require('../routes/generic');
 const securityOptions = {
   key: fs.readFileSync('keys/server-key.pem'),
   cert: fs.readFileSync('keys/server-cert.pem')
