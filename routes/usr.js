@@ -1,22 +1,23 @@
 const router = require('express').Router(),
-  flash = require('express-flash'),
   validator = require('validator');
 const { noSuchUser, sameUserOnly, _err } = require('./generic');
 const { User } = require('../src/model');
 
-router.use(flash());
+const noUser = (err, user) => {
+  if (err) _err('Error:', err);
+  if (!user) {
+    _err('No user with id:', req.params.id);
+    noSuchUser(req);
+    return res.redirect('/');
+  }
+};
 
 /**
  * @description User page where a user can see his/her informations.
  */
 router.get('/:id', sameUserOnly, (req, res) => {
   User.findById(req.params.id, (err, user) => {
-    if (err) _err('Error:', err);
-    if (!user) {
-      _err('No user with id:', req.params.id);
-      noSuchUser(req);
-      return res.redirect('/');
-    }
+    noUser(err, user);
     res.render('user', {
       user,
       visitedUser: user,
@@ -30,13 +31,7 @@ router.get('/:id', sameUserOnly, (req, res) => {
  */
 router.get('/:id/edit', sameUserOnly, (req, res) => {
   User.findById(req.params.id, (err, user) => {
-    if (err) _err('Error:', err);
-    if (!user) {
-      _err('No user with id', req.params.id);
-      noSuchUser(req);
-      return res.redirect('/');
-    }
-    console.log('2FA method:', user.twoFaMethod);
+    noUser(err, user);
     res.render('update', { user });
   });
 });
@@ -46,11 +41,7 @@ router.get('/:id/edit', sameUserOnly, (req, res) => {
  */
 router.post('/:id/edit', (req, res) => {
   User.findById(req.params.id, (err, user) => {
-    if (err) _err('Error:', err);
-    if (!user) {
-      noSuchUser(req);
-      return res.redirect('/');
-    }
+    noUser(err, user);
     let keepDetails = () => {
         return res.render('update', {
           user: {

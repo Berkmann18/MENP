@@ -1,0 +1,49 @@
+extends layout
+
+block content
+  div!= data
+
+  ul#pills-tab.nav.nav-pills.mb-3(role="tablist")
+    if admin
+      li.nav-item
+        a#pills-edit-tab.nav-link.active(data-toggle="pill" href="#pills-edit" role="tab" aria-controls="pills-edit" aria-selected="true") Edit
+    li.nav-item
+      a#pills-remove-tab.nav-link(data-toggle="pill" href="#pills-remove" role="tab" aria-controls="pills-remove" aria-selected="false") Remove
+  #pills-tabContent.tab-content
+    if admin
+      #pills-edit.tab-pane.fade.show.active(role="tabpanel" aria-labelledby="pills-edit-tab")
+        form(name="usrChange" method="POST" action="/admin/ch")
+          .form-group
+            label(for="id") Id:
+            input.form-control(name="id" required="")
+          .form-group
+            label(for="fname") First name:
+            input.form-control(name="fname" required="")
+          .form-group
+            label(for="lname") Last name:
+            input.form-control(name="lname" required="")
+          .form-group
+            label(for="username") Username:
+            input.form-control(name="username" required="")
+          .form-group
+            label(for="email") Email:
+            input.form-control(name="email" type="email" required="")
+          .form-group
+            label(for="type") Type:
+            input.form-control(name="type" required="" value="member")
+          input.btn.btn-success.btn-block(type="submit" value="Update")
+          input.btn.btn-default.btn-block(type="reset" value="Reset")
+      #pills-remove.tab-pane.fade(role="tabpanel" aria-labelledby="pills-remove-tab")
+        form(name="usrRemove" method="POST" action="/admin/rm")
+          .form-group
+            label(for="id") Id:
+            input.form-control(name="id" required="")
+          input.btn.btn-danger.btn-block(type="submit" value="Remove")
+    else
+      #pills-remove.tab-pane.fade(role="tabpanel" aria-labelledby="pills-remove-tab")
+          form(name="usrRemove" method="POST" action="/mod/rm")
+            .form-group
+              label(for="id") Id:
+              input.form-control(name="id" required="")
+            input.btn.btn-danger.btn-block(type="submit" value="Remove")
+

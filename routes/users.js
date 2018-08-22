@@ -1,29 +1,40 @@
 const router = require('express').Router();
 const { User } = require('../src/model');
 const { noUsers, noSuchUser, _err, _warn, httpPage, memberOnly, requireLogin } = require('./generic');
-const { dateDiff, userTable } = require('../src/utils');
+const { userTable } = require('../src/utils');
 
 const DB_COLS = ['username', 'registerDate', 'lastSeen', 'type'],
   COLS = ['Username', 'Registration date', 'Last seen', 'Type'];
 
 /**
- * @description Members list.
- * @protected
+ * @description User page.
+ * @param {Request} req HTTP(S) request
+ * @param {object} res Result
+ * @param {object} filter Filter object
+ * @param {string} term Term to input in the input field
  */
-router.get('/', memberOnly, (req, res) => {
-  User.find({}, (err, users) => {
+const userPage = (req, res, filter = {}, term = '') => {
+  User.find(filter, (err, users) => {
     if (err) _err('Error:', err);
     if (!users) return noUsers(req, res);
+
     res.render('page', {
       data: userTable(users, {
         cols: DB_COLS,
-        visualCols: COLS
+        visualCols: COLS,
+        term
       }),
       user: req.user,
       page: 'users'
     });
   });
-});
+}
+
+/**
+ * @description Members list.
+ * @protected
+ */
+router.get('/', memberOnly, (req, res) => userPage(req, res));
 
 /**
  * @description User page where a user can see a user's page.
@@ -44,11 +55,8 @@ router.get('/@:username', requireLogin, (req, res) => {
  */
 router.get('/search', requireLogin, (req, res) => {
   let set = {};
-  const GRP_RE = /(type)=\w+/gi,
-    USR_RE = /(username)=\w+/gi;
-
-  let inGroup = GRP_RE.test(req.query.term),
-    inName = USR_RE.test(req.query.term);
+  const inGroup = /(type)=\w+/gi.test(req.query.term),
+    inName = /(username)=\w+/gi.test(req.query.term);
 
   if (inGroup && inName) {
     let parts = req.query.term.split(' '); //['username=...', 'type=...']
@@ -70,19 +78,7 @@ router.get('/search', requireLogin, (req, res) => {
     }
   }
 
-  User.find(set, (err, users) => {
-    if (err) _err('Error:', err);
-    if (!users) return noUsers(req, res);
-    res.render('page', {
-      data: userTable(users, {
-        cols: DB_COLS,
-        visualCols: COLS,
-        term: req.query.term
-      }),
-      user: req.user,
-      page: 'users'
-    });
-  });
+  userPage(req, res, set, req.query.term);
 });
 
 module.exports = router;

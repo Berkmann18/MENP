@@ -8,11 +8,11 @@
  */
 
 const express = require('express'),
-  path = require('path');
-const favicon = require('serve-favicon'),
+  path = require('path'),
+  favicon = require('serve-favicon'),
   RateLimit = require('express-rate-limit'),
-  helmet = require('helmet');
-const cookieParser = require('cookie-parser'),
+  helmet = require('helmet'),
+  cookieParser = require('cookie-parser'),
   bodyParser = require('body-parser');
 const index = require('./routes/index'),
   admin = require('./routes/admin'),
@@ -20,8 +20,12 @@ const index = require('./routes/index'),
   usr = require('./routes/usr'),
   users = require('./routes/users'),
   contact = require('./routes/contact'),
-  logger = require('morgan'),
-  { httpPage, codeToMsg } = require('./routes/generic');
+  register = require('./routes/register'),
+  login = require('./routes/login'),
+  forgot = require('./routes/forgot'),
+  reset = require('./routes/reset'),
+  logger = require('morgan');
+const { httpPage, codeToMsg } = require('./routes/generic');
 const limiter = new RateLimit({
     windowMs: 15 * 6e3, //15 minutes
     max: 100, //Limit each IP to 100 requests per windowMs
@@ -99,6 +103,10 @@ app.use('/usr', usr);
 app.use('/users', users);
 app.use('/contact', contact);
 app.use('/mod', mod);
+app.use('/register', register);
+app.use('/login', login);
+app.use('/forgot', forgot);
+app.use('/reset', reset);
 
 // If CSURF is present put this route above the csurf middleware
 app.post('/report-violation', (req, res) => {
