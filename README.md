@@ -14,8 +14,9 @@
 [![GitHub top language](https://img.shields.io/github/languages/top/Berkmann18/MENP.svg)](https://github.com/Berkmann18/MENP)
 [![GitHub language count](https://img.shields.io/github/languages/count/Berkmann18/MENP.svg)](https://github.com/Berkmann18/MENP)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Berkmann18/MENP.svg)](https://github.com/Berkmann18/MENP)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
-This is a sample MENP (MongoDB, Express, Node, Pug) web app (which uses Bootstrap and jQuery).
+This is a sample MENP (MongoDB, Express, Node, Pug) web app (which uses Bootstrap and jQuery) with user accounts and user groups.
 
 <table style="background: #fff">
 <tr><td>
