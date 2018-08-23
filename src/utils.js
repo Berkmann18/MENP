@@ -1,4 +1,94 @@
+const clr = require('colors');
 const { User } = require('./model');
+const { noUsers } = require('../routes/generic');
+const clrScheme = { in: 'white',
+  out: 'cyan',
+  inf: 'green',
+  err: 'red',
+  warn: 'yellow',
+  debug: 'grey'
+};
+
+/**
+ * @description Print an error.
+ * @param {...*} data Data to print
+ */
+const error = (...data) => console.error(clr.err(data.join(' ')));
+
+/**
+ * @description Print an information.
+ * @param {...*} data Data to print
+ */
+const info = (...data) => {
+  try {
+    console.info(clr.inf(data.join(' ')));
+  } catch (err) {
+    console.log(clr.inf(data.join(' ')));
+  }
+};
+
+/**
+ * @description Print a  warning.
+ * @param {...*} data Data to print
+ */
+const warn = (...data) => {
+  try {
+    console.warn(clr.warn(data.join(' ')));
+  } catch (err) {
+    console.log(clr.warn(data.join(' ')));
+  }
+};
+
+/**
+ * @description Print a debug message.
+ * @param {...*} data Data to print
+ */
+const dbg = (...data) => {
+  try {
+    console.debug(clr.debug(data.join(' ')));
+  } catch (err) {
+    console.log(clr.debug(data.join(' ')));
+  }
+};
+
+/**
+ * @description Print an output.
+ * @param {...*} data Data to print
+ */
+const out = (...data) => console.log(clr.out(data.join(' ')));
+
+/**
+ * @description Print an input.
+ * @param {...*} data Data to print
+ */
+const inp = (...data) => console.log(clr.in(data.join(' ')));
+
+/**
+ * @description Set a colour scheme for the CLI.
+ * @protected
+ */
+const setColours = () => clr.setTheme(clrScheme);
+
+/**
+ * @description Get a message corresponding to an HTTP code.
+ * @param {(error|{status:number, message:string=})} err Error
+ * @return {string} Message
+ * @protected
+ */
+const codeToMsg = (err) => {
+  let map = {
+    400: '<h1>Ooh dear!! You asked the wrong thing mate!</h1><img src="/img/400.png" alt="400">',
+    401: '<h1>HALT!! You\'re not authorised to be here!!</h1><img src="/img/403.png" alt="401-403">',
+    404: '<h1>Whoops!!</h1>The page you requested ran away so can\'t found<br><img src="/img/404.gif" alt="404">',
+    410: '<h1>My condolences :(!</h1>The page you wanted, sadly left us!<br><img src="/img/410.jpg" alt="410">',
+    500: '<h1>Something went wrong in the server... Apologies :s</h1><img src="/img/500.png" alt="500">',
+    501: '<h1>Wow! This wasn\'t implemented, what a shame!</h1><img src="/img/501.jpg" alt="501">',
+    503: '<h1>The service in charge went for a nap, please require it later!</h1><img src="/img/503.jpg" alt="503">',
+    550: '<h1>What are you doing? You\'re not allowed here!</h1><img src="/img/550.jpg" alt="550">'
+  };
+  map[403] = map[401];
+  return (map[err.status]) ? map[err.status] : err.message;
+};
 
 /**
  * @description Difference between two dates.
@@ -74,7 +164,7 @@ const userTable = (users, { dir = 'users', cols, visualCols = cols, term = '' } 
  */
 const modminPage = (req, res, cols, { admin = false, filter = {}, term = '' } = {}) => {
   User.find(filter, (err, users) => {
-    if (err) _err('Error:', err);
+    if (err) error('Error:', err);
     if (!users) return noUsers(req, res);
 
     let page = admin ? 'admin' : 'mod';
@@ -99,4 +189,4 @@ const modminPage = (req, res, cols, { admin = false, filter = {}, term = '' } = 
  */
 const url = (req) => `${req.protocol}://${req.headers.host}`;
 
-module.exports = { dateDiff, userTable, modminPage, url };
+module.exports = { error, info, warn, dbg, out, inp, codeToMsg, setColours, dateDiff, userTable, modminPage, url };

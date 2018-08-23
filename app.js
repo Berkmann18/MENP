@@ -24,8 +24,11 @@ const index = require('./routes/index'),
   login = require('./routes/login'),
   forgot = require('./routes/forgot'),
   reset = require('./routes/reset'),
+  twofa = require('./routes/twofa'),
+  remove = require('./routes/delete'),
   logger = require('morgan');
-const { httpPage, codeToMsg } = require('./routes/generic');
+const { httpPage } = require('./routes/generic');
+const { codeToMsg } = require('./src/utils');
 const limiter = new RateLimit({
     windowMs: 15 * 6e3, //15 minutes
     max: 100, //Limit each IP to 100 requests per windowMs
@@ -66,19 +69,7 @@ app.use(helmet({
 }));
 app.use(helmet.xssFilter());
 app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ['\'self\'', 'github.com', 'Berkmann18.github.io', 'https://maxcdn.bootstrapcdn.com', 'ws://localhost:3002', ],
-    styleSrc: ['\'self\'', 'maxcdn.bootstrapcdn.com', 'gitcdn.github.io', '\'unsafe-inline\''],
-    scriptSrc: ['\'self\'', 'maxcdn.bootstrapcdn.com', 'code.jquery.com', 'cdnjs.cloudflare.com', 'gitcdn.github.io', '\'unsafe-eval\'', '\'unsafe-inline\'',
-      'sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ', 'sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh',
-      'sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN', 'sha256-C/MMeoQHEyhrrD8wEB7zDbcJTaUUbPn+oab7cS5qSiI=',
-      'sha256-GFyS9Ty2WZ6hM5H1/143GVklcV2FECoTbXLxaIGLMiE='
-    ],
-    reportUri: '/report-violation',
-    fontSrc: ['\'self\'', 'maxcdn.bootstrapcdn.com', 'https://maxcdn.bootstrapcdn.com/', 'https://fonts.gstatic.com/s/opensans/v15/', 'data:'],
-    sandbox: ['allow-forms', 'allow-scripts'],
-    imgSrc: ['\'self\'', 'data:']
-  },
+  directives: require('./src/csp.json'),
   browserSniff: false,
   reportOnly: (req, res) => req.query.cspmode === 'debug',
   loose: false
@@ -89,13 +80,12 @@ app.use(helmet.hsts({
   preload: true
 }));
 app.use(limiter);
-/*app.disable('x-powered-by')*/
-/*app.use(router.csrf()); //Cross-Site Request Forgery protection
-app.use((req, res, next) => {
-  res.locals.csrftoken = req.session._csrf;
-  next();
+
+// If CSURF is present put this route above the csurf middleware
+app.post('/report-violation', (req, res) => {
+  console.log('CSP Violation: ', (req.body || 'No data received!'));
+  res.status(204).end()
 });
-*/
 
 app.use('/', index);
 app.use('/admin', admin);
@@ -107,12 +97,8 @@ app.use('/register', register);
 app.use('/login', login);
 app.use('/forgot', forgot);
 app.use('/reset', reset);
-
-// If CSURF is present put this route above the csurf middleware
-app.post('/report-violation', (req, res) => {
-  console.log('CSP Violation: ', (req.body || 'No data received!'));
-  res.status(204).end()
-});
+app.use('/2fa', twofa);
+app.use('/delete', remove);
 
 /**
  * @description Environment
@@ -134,12 +120,10 @@ case 'development':
 case 'production':
   console.log('Production mode');
   app.use((req, res) => { //404
-    console.log('status:', req.status);
     httpPage(404, res);
   });
   app.use((err, req, res, next) => { //500
     res.status(err.status || 500);
-    console.log(`Error status: ${err.status}`);
     let msg = codeToMsg(err);
     res.render('page', {
       data: `${msg}<br><em>Error ${err.status} on ${err.path}</em>`

@@ -15,18 +15,9 @@ const session = require('express-session'),
   flash = require('express-flash'),
   router = require('express').Router();
 const config = require('../config/config');
-const {
-  incomingIp,
-  requireLogin,
-  welcomeUser,
-  httpPage,
-  setColours,
-  noSuchUser,
-  _err,
-  _warn,
-  _inf
-} = require('./generic');
+const { incomingIp } = require('./generic');
 const { User } = require('../src/model');
+const { setColours, error, info, warn } = require('../src/utils');
 
 setColours();
 
@@ -49,11 +40,11 @@ router.use(passport.session());
 passport.serializeUser((user, done) => done(null, user.id));
 passport.deserializeUser((id, done) => User.findById(id, (err, user) => done(err, user)));
 passport.use(new LocalStrategy((username, password, done) => {
-  User.findOne({ username: username }, (err, user) => {
+  User.findOne({ username }, (err, user) => {
     if (err) return done(err);
     if (!user) return done(null, false, { message: 'Incorrect username.' });
     user.comparePassword(password, (err, isMatch) => {
-      if (err) _err('LocalStrategy error:', err);
+      if (err) error('LocalStrategy error:', err);
       return isMatch ? done(null, user) : done(null, false, { message: 'Incorrect password.' });
     });
   });
@@ -63,7 +54,7 @@ passport.use(new LocalStrategy((username, password, done) => {
  * @description Universal route handler that indicates the incoming IP address.
  */
 router.all('/*', (req, res, next) => {
-  _inf(`Incoming IP: ${incomingIp(req)}`); //::1 if it's localhost (0:0:0:0:0:0:0:1)
+  info(`Incoming IP: ${incomingIp(req)}`); //::1 if it's localhost (0:0:0:0:0:0:0:1)
   res.header('Access-Control-Allow-Origin', config.urlWhiteList.toString());
   next();
 });
@@ -136,51 +127,21 @@ router.get('/logout', (req, res) => {
       if (!user) {
         let errCode = err ? ` (error ${err.code})` : '';
         req.flash('error', `The user account you tried to logout from wasn't found${errCode}`);
-        _warn('No user found pre-logout?');
+        warn('No user found pre-logout?');
         return;
       }
       user.lastSeen = new Date();
       user.save((err) => {
         if (err) {
-          _err('Last seen logout save error:', err);
+          error('Last seen logout save error:', err);
           req.flash('error', `Internal "last-seen" update issue (${err.code} ${err.responseCode})`)
         }
-        _inf(`${user.username} <${user.email}> just logged out`);
+        info(`${user.username} <${user.email}> just logged out`);
       });
     });
   } else req.flash('error', 'Error in trying to logout from an account');
   req.logout();
   res.redirect('/');
-});
-
-/**
- * @description User account deletion page.
- */
-router.get('/delete/:id', requireLogin, (req, res) => {
-  if (req.user.id === req.params.id) {
-    res.render('delete', {
-      user: req.user
-    });
-  } else httpPage(401, res);
-});
-
-/**
- * @description User account deletion handler.
- */
-router.post('/delete/:id', requireLogin, (req, res) => {
-  User.findById(req.user.id, (err, user) => {
-    if (err) _err('POST deletion error:', err);
-    if (!user) {
-      noSuchUser(req);
-      return res.redirect('/');
-    }
-    user.remove((err) => {
-      if (err) _err('User deletion error:', err);
-      req.flash('success', 'User successfully deleted!');
-      _inf(`${user.username} <${user.email}> is gone`);
-      return res.redirect('/');
-    });
-  });
 });
 
 router.get('/tac', (req, res) => {
@@ -200,45 +161,6 @@ router.get('/tac', (req, res) => {
     <a href="/register">Go back to the registration page</a>&nbsp; &nbsp;
     <a href="/">Go back to the home page</a>`
   })
-});
-
-router.get('/2fa', requireLogin, (req, res) => {
-  res.render('2fa', {
-    user: req.user,
-    page: '2fa'
-  });
-});
-
-router.post('/2fa', (req, res, next) => {
-  User.findById(req.body.id, (err, user) => {
-    if (err) _err('Error:', err);
-    if (!user) {
-      noSuchUser(req);
-      _err('No such user with id=', req.body.id);
-      return res.redirect('/login');
-    }
-    if (user.id !== req.body.id) {
-      req.flash('error', 'The request originated from a different user. Aborting!');
-      return httpPage(550, res);
-    }
-    if (!user.key) _err(`User ${user.username} doesn't have any key :(`);
-    if (req.body.token === user.key && user.keyExpires > Date.now()) {
-      req.flash('success', 'Successful Authentication!');
-      req.logIn(user, (err) => {
-        if (err) return next(err);
-        user.lastSeen = new Date();
-        user.save((err) => {
-          if (err) _err('2FA error:', err);
-          welcomeUser(req, user);
-          _inf(`${user.username} <${user.email}> just logged in`);
-          return res.redirect(`/usr/${user.id}`);
-        });
-      });
-    } else {
-      req.flash('error', 'The code you gave is the wrong one or it expired');
-      res.redirect('/login');
-    }
-  });
 });
 
 module.exports = router;

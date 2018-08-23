@@ -1,7 +1,7 @@
 const router = require('express').Router();
-const { modOnly, noSuchUser, noUsers, requireLogin, _err } = require('./generic');
+const { modOnly, noSuchUser, requireLogin } = require('./generic');
 const { User } = require('../src/model');
-const { modminPage } = require('../src/utils');
+const { error, modminPage } = require('../src/utils');
 
 /**
  * @description Global moderator page authorisation system.
@@ -22,7 +22,7 @@ router.get('/', modOnly, (req, res) => modminPage(req, res, COLS));
  */
 router.post('/rm', modOnly, (req, res, next) => {
   User.findById(req.body.id, (err, user) => {
-    if (err) _err('Error:', err);
+    if (err) error('Error:', err);
     if (!user) {
       noSuchUser(req)(req);
       return res.redirect('back');
@@ -34,7 +34,7 @@ router.post('/rm', modOnly, (req, res, next) => {
     user.remove((err) => {
       if (err) {
         req.flash('error', `Removal error: ${err.code} ${err.responseCode}`)
-        _err('Moderator authored removal error:', err);
+        error('Moderator authored removal error:', err);
       }
       req.flash('success', 'User successfully deleted!');
       _inf(`${user.username} <${user.email}> got kicked out`);

@@ -4,24 +4,9 @@ const router = require('express').Router(),
   sgTransport = require('nodemailer-sendgrid-transport'),
   async = require('async'),
   crypto = require('crypto');
-const { _err, _inf, emailError, welcomeUser, sendSms } = require('./generic');
+const { emailError, welcomeUser, sendSms } = require('./generic');
 const config = require('../config/config');
-const { url } = require('../src/utils');
-
-/* router.use(session({
-  secret: '3nj0y 1t!',
-  name: 'sessionID',
-  resave: false, //Do not automatically write to the session store
-  saveUninitialized: true, //Save new sessions
-  cookie: {
-    //secure: true,
-    httpOnly: true,
-    expires: new Date(Date.now() + 24 * config.tokenCooldown) //1 day
-  }
-})); */
-
-// router.use(passport.initialize());
-// router.use(passport.session());
+const { url, error, info } = require('../src/utils');
 
 /**
  * @description Login page.
@@ -40,14 +25,14 @@ router.post('/', (req, res, next) => {
     const login = () => {
       req.logIn(user, (err) => {
         if (err) {
-          _err('Login error:', err);
+          error('Login error:', err);
           return next(err);
         }
         user.lastSeen = new Date();
         user.save((err) => {
-          if (err) _err('Last seen login save error:', err);
+          if (err) error('Last seen login save error:', err);
           welcomeUser(req, user);
-          _inf(`${user.username} <${user.email}> just logged in`);
+          info(`${user.username} <${user.email}> just logged in`);
           return res.redirect(`/usr/${user.id}`);
         });
       });
@@ -62,7 +47,7 @@ router.post('/', (req, res, next) => {
           crypto.randomBytes(4, (err, buf) => {
             let token = buf.toString('hex');
             if (err) {
-              _err('Crypto gen error:', err);
+              error('Crypto gen error:', err);
               req.flash('error', `Error in generating the code (${err.code} ${err.responseCode})`);
             }
             done(err, token);
@@ -77,7 +62,7 @@ router.post('/', (req, res, next) => {
                 page: '2fa'
               });
               if (err) {
-                _err('2FA handling error:', err);
+                error('2FA handling error:', err);
                 req.flash('error', `Error in the Authentication process (${err.code} ${err.responseCode})`);
               }
             });
@@ -109,10 +94,9 @@ router.post('/', (req, res, next) => {
               }
             });
           }
-
         }
       ], (token, err) => {
-        if (err) _err('2FA login error', err);
+        if (err) error('2FA login error', err);
       });
     } else login();
   })(req, res, next);

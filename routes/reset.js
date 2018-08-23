@@ -2,7 +2,8 @@ const router = require('express').Router(),
   nodemailer = require('nodemailer'),
   sgTransport = require('nodemailer-sendgrid-transport'),
   async = require('async');
-const { _err, emailError } = require('./generic');
+const { emailError } = require('./generic');
+const { error } = require('../src/utils');
 const { User } = require('../src/model');
 const config = require('../config/config');
 
@@ -11,7 +12,7 @@ const config = require('../config/config');
  */
 router.get('/:token', (req, res) => {
   User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, (err, user) => {
-    if (err) _err('Error:', err);
+    if (err) error('Error:', err);
     if (!user) {
       req.flash('error', 'The password reset token is invalid or has expired.');
       return res.redirect('/forgot');
@@ -30,7 +31,7 @@ router.post('/:token', (req, res) => {
   async.waterfall([
     (done) => {
       User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, (err, user) => {
-        if (err) _err('Error:', err);
+        if (err) error('Error:', err);
         if (!user) {
           req.flash('error', 'The password reset token is invalid or has expired.');
           return res.redirect('back');
@@ -42,7 +43,7 @@ router.post('/:token', (req, res) => {
 
         user.save((err) => {
           if (err) {
-            _err('Post-registration login error', err);
+            error('Post-registration login error', err);
             req.flash('error', `Post-registration login error (error ${err.statusCode}`)
           }
           req.logIn(user, (err) => done(err, user))
@@ -65,7 +66,7 @@ router.post('/:token', (req, res) => {
     }
   ], (err) => {
     if (err) {
-      _err('Password resetting error', err);
+      error('Password resetting error', err);
       req.flash('error', `Password resetting error (${err.code} ${err.responseCode})`)
     }
     res.redirect('/')

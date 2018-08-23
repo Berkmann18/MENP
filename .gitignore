@@ -133,5 +133,4 @@ $RECYCLE.BIN/
 *.lnk
 
 ### Project
-test/
 dist/

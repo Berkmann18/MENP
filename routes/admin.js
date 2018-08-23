@@ -1,8 +1,8 @@
 const router = require('express').Router(),
   validator = require('validator');
-const { adminOnly, noSuchUser, requireLogin, _err, _inf } = require('./generic');
+const { adminOnly, noSuchUser, requireLogin } = require('./generic');
 const { User } = require('../src/model');
-const { modminPage } = require('../src/utils');
+const { error, info, modminPage } = require('../src/utils');
 
 /**
  * @description Global admin page authorisation system.
@@ -24,7 +24,7 @@ router.get('/', adminOnly, (req, res) => modminPage(req, res, COLS, { admin }));
  */
 router.post('/ch', adminOnly, (req, res, next) => {
   User.findById(req.body.id, (err, user) => {
-    if (err) _err('Error:', err);
+    if (err) error('Error:', err);
     if (!user) {
       noSuchUser(req)(req);
       return res.redirect('back');
@@ -42,7 +42,7 @@ router.post('/ch', adminOnly, (req, res, next) => {
       req.flash('success', 'Information updated');
       if (err) {
         req.flash('error', `Change error: ${err.code} ${err.responseCode}`)
-        _err('Admin authored change error:', err);
+        error('Admin authored change error:', err);
       }
     });
     res.redirect('/admin');
@@ -56,7 +56,7 @@ router.post('/ch', adminOnly, (req, res, next) => {
  */
 router.post('/rm', adminOnly, (req, res, next) => {
   User.findById(req.body.id, (err, user) => {
-    if (err) _err('Error:', err);
+    if (err) error('Error:', err);
     if (!user) {
       noSuchUser(req)(req);
       return res.redirect('back');
@@ -64,10 +64,10 @@ router.post('/rm', adminOnly, (req, res, next) => {
     user.remove((err) => {
       if (err) {
         req.flash('error', `Removal error: ${err.code} ${err.responseCode}`)
-        _err('Admin authored removal error:', err);
+        error('Admin authored removal error:', err);
       }
       req.flash('success', 'User successfully deleted!');
-      _inf(`${user.username} <${user.email}> got kicked out`);
+      info(`${user.username} <${user.email}> got kicked out`);
       return res.redirect('/admin');
     });
     next();

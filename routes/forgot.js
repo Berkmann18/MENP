@@ -3,9 +3,9 @@ const router = require('express').Router(),
   sgTransport = require('nodemailer-sendgrid-transport'),
   async = require('async'),
   crypto = require('crypto');
-const { _err, emailError } = require('./generic');
+const { emailError } = require('./generic');
 const { User } = require('../src/model');
-const { url } = require('../src/utils');
+const { error, url } = require('../src/utils');
 
 /**
  * @description Password recovery page.
@@ -36,7 +36,7 @@ router.post('/', (req, res, next) => {
       }
 
       User.findOne({ email: req.body.email }, (err, user) => {
-        if (err) _err('Error:', err);
+        if (err) error('Error:', err);
         if (!user) {
           req.flash('error', 'No account with that email address exists.');
           return res.redirect('/forgot');
