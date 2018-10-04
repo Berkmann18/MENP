@@ -53,7 +53,7 @@
     "validator": "^10.6.0"
   },
   "devDependencies": {
-    "browser-sync": "^2.24.6",
+    "browser-sync": "^2.24.7",
     "complexity-report": "^2.0.0-alpha",
     "cz-adapter-eslint": "^0.1.2",
     "eslint": "^5.4.0",
