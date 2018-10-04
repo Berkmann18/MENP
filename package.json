@@ -67,7 +67,7 @@
     "nodemon": "^1.18.4",
     "stylelint": "^9.5.0",
     "stylelint-config-standard": "^18.2.0",
-    "supertest": "^3.1.0"
+    "supertest": "^3.3.0"
   },
   "license": "MIT",
   "repository": {
