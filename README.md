@@ -48,8 +48,9 @@ git clone http://github.com/Berkmann18/MENP.git
 ```
 
 # Contributing
-Make sure you follow the stick to the coding style enforced by the linters, and that you test your code before making a pull request.
+Make sure you follow and stick to the coding style enforced by the linters, and that you test your code before making pull requests.
 Feel free to make any suggestions and report bugs.
+For more details, please read [CONTRIBUTING](./github/CONTRIBUTING.md).
 
 # License
 MIT

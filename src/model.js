@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt-nodejs');
 const config = require('../config/config');
 const Promise = require('promise');
-const { error } = require('./utils');
-
+// const { error } = require('./utils');
+console.log('config.db=', config.db);
 mongoose.connect(config.db, { useNewUrlParser: true }, (err) => {
-  if (err) error('Mongoose: Error=', err);
+  if (err) console.error('Mongoose: Error=', err);
 });
 
 let userSchema = new mongoose.Schema({

@@ -42,7 +42,7 @@ router.post('/', (req, res, next) => {
         });
       });
     } else {
-      req.flash('error', 'The code you gave is the wrong one or it expired');
+      req.flash('error', 'The code you gave is wrong or it expired');
       res.redirect('/login');
     }
   });

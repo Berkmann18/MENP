@@ -22,6 +22,7 @@ router.get('/', (req, res) => res.render('login', {
 router.post('/', (req, res, next) => {
   passport.authenticate('local', (err, user) => {
     if (err) return next(err);
+
     const login = () => {
       req.logIn(user, (err) => {
         if (err) {
@@ -37,6 +38,7 @@ router.post('/', (req, res, next) => {
         });
       });
     };
+
     if (!user) {
       req.flash('error', 'The username/password is wrong'); //Not showing up
       return res.redirect('/login')
@@ -44,7 +46,7 @@ router.post('/', (req, res, next) => {
     if (user.twoFA) {
       async.waterfall([
         (done) => {
-          crypto.randomBytes(4, (err, buf) => {
+          crypto.randomBytes(5, (err, buf) => {
             let token = buf.toString('hex');
             if (err) {
               error('Crypto gen error:', err);
@@ -81,11 +83,9 @@ router.post('/', (req, res, next) => {
                 to: user.email,
                 from: config.email.from,
                 subject: '[ACTION] 2nd Factor Authentication',
-                html: `<p>You are receiving this because you (or someone else) authenticated with your username/password and now need the code
-                            for the second factor of the authentication which is the following: <em>${token}</em></p><br>
-                            <p>If you can't get the page to enter the code, you should see one pointing to
-                            <a href="${url(req)}/2fa">${url(req)}/2fa</a></p><br>
-                            <p>If you did not request this, please ignore this email and your account won't be accessed.</p><br>${config.esig}`
+                html: `<p>You are receiving this because you (or someone else) authenticated with your username/password and now need the code for the second factor of the authentication which is the following: <em>${token}</em></p><br>
+                  <p>If you can't get the page to enter the code, you should see one pointing to <a href="${url(req)}/2fa">${url(req)}/2fa</a></p><br>
+                  <p>If you did not request this, please ignore this email and your account won't be accessed.</p><br>${config.esig}`
               };
             smtpTransport.sendMail(mailOptions, (err) => {
               if (err) emailError(req, err);
@@ -93,7 +93,9 @@ router.post('/', (req, res, next) => {
                 req.flash('info', 'Please see and enter the code you were sent.');
               }
             });
-          }
+          } else if (user.twoFaMethod === 'gauth') {
+            req.flash('warning', 'Google Authentication isn\'t implemented yet.');
+          } else req.flash('error', `${user.twoFaMethod} isn't supported (yet).`);
         }
       ], (token, err) => {
         if (err) error('2FA login error', err);
