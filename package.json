@@ -60,7 +60,7 @@
     "eslint-config-google": "^0.11.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-security": "^1.4.0",
-    "hashmyjs": "^1.1.2",
+    "hashmyjs": "^2.0.1",
     "js2flowchart": "^1.1.7",
     "jsdoc": "^3.5.5",
     "mocha": "^5.2.0",
