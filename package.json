@@ -70,7 +70,7 @@
     "supertest": "^3.3.0",
     "wdio-concise-reporter": "^0.1.2",
     "wdio-mocha-framework": "^0.6.4",
-    "wdio-testingbot-service": "^0.2.0",
+    "wdio-testingbot-service": "^0.2.1",
     "webdriverio": "^4.14.0"
   },
   "license": "MIT",
