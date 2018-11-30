@@ -35,8 +35,9 @@
     "doc": "npm run doc:lint && npm run doc:html",
     "hash": "node node_modules/hashmyjs/index.js -f json -o hashes.json public/js/*.js",
     "browser": "BROWSER=true node ./bin/w3.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect",
     "commit": "git-cz",
-    "prepare": "snyk protect",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate"
   },
@@ -67,7 +68,7 @@
     "serverbuilder": "^1.0.2",
     "trek-captcha": "^0.4.0",
     "uuid": "^3.3.2",
-    "validator": "^10.10.0"
+    "validator": "^10.9.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^3.0.2",
@@ -123,19 +124,5 @@
     "commitizen": {
       "path": "cz-adapter-eslint"
     }
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint -c ./.eslintrc.json --fix",
-      "git add"
-    ],
-    "*.md": [
-      "remark",
-      "git add"
-    ],
-    "*.css": [
-      "stylelint --config ./.stylelintrc",
-      "git add"
-    ]
   }
 }
