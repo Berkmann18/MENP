@@ -56,7 +56,7 @@
     "browser-sync": "^2.26.3",
     "complexity-report": "^2.0.0-alpha",
     "cz-adapter-eslint": "^0.1.2",
-    "eslint": "^5.10.0",
+    "eslint": "^5.11.0",
     "eslint-config-google": "^0.11.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-security": "^1.4.0",
