@@ -26,6 +26,8 @@ const index = require('./routes/index'),
   reset = require('./routes/reset'),
   twofa = require('./routes/twofa'),
   remove = require('./routes/delete'),
+  about = require('./routes/about'),
+  tac = require('./routes/tac'),
   logger = require('morgan');
 const { httpPage } = require('./routes/generic');
 const { codeToMsg } = require('./src/utils');
@@ -99,6 +101,8 @@ app.use('/forgot', forgot);
 app.use('/reset', reset);
 app.use('/2fa', twofa);
 app.use('/delete', remove);
+app.use('/about', about);
+app.use('/tac', tac);
 
 /**
  * @description Environment

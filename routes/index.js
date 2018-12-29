@@ -74,43 +74,6 @@ router.get('/', (req, res) => {
 });
 
 /**
- * @description 'About us' page containing a few bits from the README.md file
- */
-router.get('/about', (req, res) => {
-  res.render('index', {
-    data: `<h1>About us</h1>
-This is a sample MENP (MongoDB, Express, Node, Pug) web app (which uses Bootstrap and jQuery) made by Maximilian Berkmann.
-<p><img src="img/mongodb.png" alt="M" class="tools" title="MongoDB" aria-label="MongoDB">
-<img src="img/expressjs.png" alt="E" class="tools" title="Express" aria-label="Express">
-<img src="img/nodejs-512.png" alt="N" class="tools" title="NodeJS" aria-label="NodeJS">
-<img src="img/pugjs.png" alt="P" class="tools" title="Pug" aria-label="Pug"> +
-<img src="img/bootstrap4.png" alt="B" class="tools" title="Bootstrap" aria-label="Bootstrap">
-<img src="img/jquery-icon-17841.png" alt="jQ" class="tools" title="jQuery" aria-label="jQuery">
-<img src="img/cheerio.png" alt="c" class="tools" title="Cheerio" aria-label="Cheerio">
-<img src="img/nodemailer_sendgrid.png" alt="Nm+Sg" class="tools-wide" title="NodeMailer + Sendgrid" aria-label="NodeMailer + Sendgrid">
-<img src="img/passport.png" alt="p" class="tools" title="Passport" aria-label="Passport">
-<img src="img/helmet.png" alt="h" class="tools" title="Helmet" aria-label="Helmet">
-<img src="img/nexmo.png" alt="n" class="tools" title="Nexmo" aria-label="Nexmo">
-</p>
-<p>
-Basically: <ul>
-    <li>MongoDB for the database</li>
-    <li>NodeJS and Express for the server</li>
-    <li>Pug for the view rendering and templating</li>
-    <li>Boostrap for the UI</li>
-    <li>jQuery and Cheerio for a sped up DOM access on both client and server sides</li>
-    <li>NodeMailer + SendGrid for the emails</li>
-    <li>Nexmo for the SMSs</li>
-    <li>Passport for the authentication</li>
-    <li>Helmet for the security</li>
-</ul>
-</p>`,
-    user: req.user,
-    page: 'about'
-  });
-});
-
-/**
  * @description Sitemap page.
  */
 router.get('/sitemap', (req, res) => res.render('sitemap', {
@@ -142,25 +105,6 @@ router.get('/logout', (req, res) => {
   } else req.flash('error', 'Error in trying to logout from an account');
   req.logout();
   res.redirect('/');
-});
-
-router.get('/tac', (req, res) => {
-  res.render('page', {
-    data: `<h1>Terms and conditions</h1>
-    <p>
-        In order to use the services provided by this web application ('MENP'), you agree to the following:
-        <ol>
-            <li>You will not commit any forms of illegal cyber-activities such as: bullying, scamming, phishing, stealing, ...</li>
-            <li>You will keep private what needs to be kept within the boundary of this web application</li>
-            <li>You accept to have a minimum of information known about you</li>
-            <li>You acknowledge the necessity to use an up-to-date web-browser regardless of the platform(s) you use</li>
-            <li>You will keep credits where their are due while respecting the copyrights surrounding this web application</li>
-            <li>You accept that if you break any rules in this T&C you will have to accept consequences such as: being banned, taken to court, ...</li>
-        </ol>
-    </p>
-    <a href="/register">Go back to the registration page</a>&nbsp; &nbsp;
-    <a href="/">Go back to the home page</a>`
-  })
 });
 
 module.exports = router;
