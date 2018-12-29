@@ -1,4 +1,4 @@
-let request = require('supertest');
+const request = require('supertest'); // eslint-disable-line node/no-unpublished-require
 const app = require('../app');
 const { info } = require('../src/utils');
 
@@ -82,7 +82,7 @@ const post = (route, status = OK, contentType = HTML, data, maxTime = 2e3) => {
 ['logout'].forEach(route => get(`/${route}`, FOUND, PLAIN));
 ['reset', 'usr'].forEach(route => get(`/${route}`, NOT_FOUND));
 ['admin', 'admin/ch', 'users', 'usr/:id', `usr/${ID}`, 'usr/:id/edit', `usr/${ID}/edit`, 'delete/:id', `delete/${ID}`, 'users/@user', 'users/@maxie', '2fa']
-.forEach(route => get(`/${route}`, FORBIDDEN));
+  .forEach(route => get(`/${route}`, FORBIDDEN));
 
 ['contact' /* , 'register' */ ].forEach(route => {
   try {

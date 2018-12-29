@@ -10,9 +10,7 @@ const config = require('../config/config'),
   Nexmo = require('nexmo'),
   fs = require('fs'),
   captcha = require('trek-captcha'),
-  path = require('path'),
-  _async = require('asyncawait/async'),
-  _await = require('asyncawait/await');
+  path = require('path');
 const nexmo = new Nexmo(config.nexmoOptions);
 const { error, codeToMsg } = require('../src/utils');
 
@@ -179,11 +177,11 @@ const emailError = (req, err) => {
  * @return {Promise.<void>} Captcha promise
  * @protected
  */
-const execCaptcha = _async((callback, gifPath = `${path.dirname(__dirname)}/public/img/ct.gif`) => {
-  const { token, buffer } = _await(captcha());
+const execCaptcha = async(callback, gifPath = `${path.dirname(__dirname)}/public/img/ct.gif`) => {
+  const { token, buffer } = await captcha();
 
   fs.createWriteStream(gifPath).on('finish', () => callback(token)).end(buffer)
-});
+};
 
 module.exports = {
   load,

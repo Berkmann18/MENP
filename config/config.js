@@ -1,10 +1,11 @@
 /* eslint-env es6, node */
 
-let path = require('path'),
-  extend = require('util')._extend;
+let path = require('path');
 
+/* eslint-disable node/no-unpublished-require */
 let development = require('./env/development'),
   production = require('./env/production');
+/* eslint-enable node/no-unpublished-require */
 
 let defaults = {
   root: path.normalize(`${__dirname}/..`),
@@ -14,6 +15,6 @@ let defaults = {
 
 module.exports = {
   name: 'MENP',
-  development: extend(development, defaults),
-  production: extend(production, defaults)
+  development: Object.assign(development, defaults),
+  production: Object.assign(production, defaults)
 }[process.env.NODE_ENV || 'development'];
