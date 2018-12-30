@@ -1,6 +1,6 @@
 const clr = require('colors');
 const { User } = require('./model');
-const { noUsers } = require('../routes/generic');
+const { noUsers, httpPage } = require('../routes/generic');
 const clrScheme = { in: 'white',
   out: 'cyan',
   inf: 'green',
@@ -109,7 +109,7 @@ const dateDiff = (datepart, fromDate, toDate) => {
     s: 1e3
   };
 
-  return diff / divideBy[datepart] /*  | 0 */ ;
+  return diff / divideBy[datepart] /*  | 0 */
 };
 
 /**
@@ -189,4 +189,59 @@ const modminPage = (req, res, cols, { admin = false, filter = {}, term = '' } = 
  */
 const url = (req) => `${req.protocol}://${req.headers.host}`;
 
-module.exports = { error, info, warn, dbg, out, inp, codeToMsg, setColours, dateDiff, userTable, modminPage, url };
+/**
+ *
+ * @param {(Express|function(req:Object, res:Object))} app Routing application
+ * @param {Object} routes Routes
+ * @example setRoutes(app, {
+ *   '/': 'index',
+ *   '/admin': 'admin'
+ * });
+ * @private
+ * @throws {Error} Route not found so not set
+ */
+const setRoutes = (app, routes) => {
+  for (let route in routes) {
+    try {
+      app.use(route, require(`../routes/${routes[route]}`));
+    } catch (err) {
+      throw new Error(`${route} couldn't be used because "${routes[route]}" couldn't be found.`);
+    }
+  }
+};
+
+/**
+ * @description Set the Node environment.
+ * @param {string} [env=process.env.NODE_ENV || 'development'] Environment
+ */
+const setEnv = (app, env = process.env.NODE_ENV || 'development') => {
+  switch (env) {
+  case 'development':
+    console.log('Development mode');
+    app.use((err, req, res, next) => {
+      res.status(err.status || 500);
+      res.render('error', {
+        message: err.message,
+        error: err
+      });
+    });
+    break;
+  case 'production':
+    console.log('Production mode');
+    app.use((req, res) => { //404
+      httpPage(404, res);
+    });
+    app.use((err, req, res, next) => { //500
+      res.status(err.status || 500);
+      let msg = codeToMsg(err);
+      res.render('page', {
+        data: `${msg}<br><em>Error ${err.status} on ${err.path}</em>`
+      });
+    });
+    break;
+  default:
+    console.log(`Unknown mode: ${env}`);
+  }
+};
+
+module.exports = { error, info, warn, dbg, out, inp, codeToMsg, setColours, dateDiff, userTable, modminPage, url, setRoutes, setEnv };

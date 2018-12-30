@@ -1,4 +1,3 @@
-
 /* eslint-env es6, node */
 'use strict';
 
@@ -21,7 +20,8 @@ setColours();
 const serverCallback = (server, cfg) => {
   server.app.set('port', cfg.port);
   server.app.set('protocol', cfg.opts.useHttps ? 'https' : 'http');
-  if (server.app.get('browser') || process.env.BROWSER) {
+  let browserOn = server.app.get('browser') || process.env.BROWSER;
+  if (browserOn && cfg.opts.useHttps) {
     require('browser-sync')({
       proxy: `localhost:${cfg.port}`,
       files: ['public/**/*.{js,css}']
