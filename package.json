@@ -39,7 +39,8 @@
     "prepare": "npm run snyk-protect",
     "commit": "git-cz",
     "contributors:add": "all-contributors add",
-    "contributors:generate": "all-contributors generate"
+    "contributors:generate": "all-contributors generate",
+    "snyk-protect": "snyk protect"
   },
   "dependencies": {
     "async": "^2.6.1",
@@ -58,14 +59,15 @@
     "mongoose": "^5.4.1",
     "morgan": "^1.9.1",
     "nexmo": "^2.4.0",
-    "nodemailer": "^4.7.0",
+    "nodemailer": "^5.0.0",
     "nodemailer-sendgrid-transport": "^0.2.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "promise": "^8.0.2",
     "pug": "^2.0.3",
     "serve-favicon": "^2.5.0",
-    "serverbuilder": "^1.0.2",
+    "serverbuilder": "^2.1.0",
+    "snyk": "^1.119.0",
     "trek-captcha": "^0.4.0",
     "uuid": "^3.3.2",
     "validator": "^10.9.0"
@@ -93,14 +95,13 @@
     "remark-preset-lint-consistent": "^2.0.2",
     "remark-preset-lint-recommended": "^3.0.2",
     "semantic-release": "^15.13.2",
-    "snyk": "^1.119.0",
     "stylelint": "^9.9.0",
     "stylelint-config-standard": "^18.2.0",
     "supertest": "^3.3.0",
     "wdio-concise-reporter": "^0.1.2",
     "wdio-mocha-framework": "^0.6.4",
     "wdio-testingbot-service": "^0.2.1",
-    "webdriverio": "^4.14.0"
+    "webdriverio": "^5.1.1"
   },
   "license": "MIT",
   "repository": {
@@ -124,5 +125,19 @@
     "commitizen": {
       "path": "cz-adapter-eslint"
     }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint -c ./.eslintrc.json --fix",
+      "git add"
+    ],
+    "*.md": [
+      "remark",
+      "git add"
+    ],
+    "*.css": [
+      "stylelint --config ./.stylelintrc",
+      "git add"
+    ]
   }
 }
