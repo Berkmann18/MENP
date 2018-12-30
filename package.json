@@ -39,8 +39,7 @@
     "prepare": "npm run snyk-protect",
     "commit": "git-cz",
     "contributors:add": "all-contributors add",
-    "contributors:generate": "all-contributors generate",
-    "snyk-protect": "snyk protect"
+    "contributors:generate": "all-contributors generate"
   },
   "dependencies": {
     "async": "^2.6.1",
