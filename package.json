@@ -65,7 +65,7 @@
     "promise": "^8.0.2",
     "pug": "^2.0.3",
     "serve-favicon": "^2.5.0",
-    "serverbuilder": "^1.0.2",
+    "serverbuilder": "^2.2.0",
     "trek-captcha": "^0.4.0",
     "uuid": "^3.3.2",
     "validator": "^10.10.0",
