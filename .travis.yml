@@ -14,7 +14,7 @@ install:
   - npm i
   - npm i -g jest codecov eslint
 script:
-      - npm run lint
+      - npm run fmt
       - snyk auth $SNYK_TOKEN
       - npm test
       - codecov
