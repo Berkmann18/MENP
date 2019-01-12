@@ -1,6 +1,22 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
 version: v1.13.3
-ignore: {}
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  'npm:braces:20180219':
+    - browser-sync > micromatch > braces:
+        reason: None
+        expires: '2019-02-10T21:27:11.772Z'
+  'npm:mem:20180117':
+    - os-locale > mem:
+        reason: None
+        expires: '2019-02-10T21:27:11.773Z'
+    - yargs > os-locale > mem:
+        reason: None
+        expires: '2019-02-10T21:27:11.773Z'
+  'npm:ua-parser-js:20180227':
+    - browser-sync > ua-parser-js:
+        reason: None
+        expires: '2019-02-10T21:27:11.773Z'
 # patches apply the minimum changes required to fix a vulnerability
 patch:
   'npm:extend:20180424':
