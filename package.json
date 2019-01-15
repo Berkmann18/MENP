@@ -53,7 +53,7 @@
     "express-rate-limit": "^3.3.2",
     "express-session": "^1.15.6",
     "helmet": "^3.15.0",
-    "mongoose": "^5.4.3",
+    "mongoose": "^5.4.4",
     "morgan": "^1.9.1",
     "nexmo": "^2.4.0",
     "passport": "^0.4.0",
@@ -61,7 +61,7 @@
     "promise": "^8.0.2",
     "pug": "^2.0.3",
     "serve-favicon": "^2.5.0",
-    "serverbuilder": "^3.1.0",
+    "serverbuilder": "^3.2.0",
     "snyk": "^1.124.1",
     "trek-captcha": "^0.4.0",
     "uuid": "^3.3.2",
@@ -69,8 +69,8 @@
   },
   "devDependencies": {
     "@semantic-release/changelog": "^3.0.2",
-    "@semantic-release/git": "^7.0.7",
-    "all-contributors-cli": "^5.7.0",
+    "@semantic-release/git": "^7.0.8",
+    "all-contributors-cli": "^5.9.1",
     "complexity-report": "^2.0.0-alpha",
     "cz-adapter-eslint": "^0.1.2",
     "documentation": "^9.1.1",
@@ -96,7 +96,7 @@
     "wdio-concise-reporter": "^0.1.2",
     "wdio-mocha-framework": "^0.6.4",
     "wdio-testingbot-service": "^0.2.1",
-    "webdriverio": "^5.3.0"
+    "webdriverio": "^5.3.2"
   },
   "license": "MIT",
   "repository": {
