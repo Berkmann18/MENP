@@ -1,7 +1,6 @@
 const router = require('express').Router(),
   validator = require('validator'),
-  nodemailer = require('nodemailer'),
-  sgTransport = require('nodemailer-sendgrid-transport'),
+  sgMail = require('@sendgrid/mail'),
   cheerio = require('cheerio'),
   $ = cheerio.load('<body>...</body>'),
   cors = require('cors');
@@ -9,6 +8,9 @@ const { execCaptcha, emailError } = require('./generic');
 const { User } = require('../src/model');
 const config = require('../config/config');
 const { error, info } = require('../src/utils');
+
+if (process.env.SENDGRID_API_KEY === undefined) throw new Error('You need to set the process.env.SENDGRID_API_KEY in order to use this module');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const corsOptionsDelegate = (req, callback) => {
   let corsOptions = { origin: (config.urlWhiteList.indexOf(req.header('Origin')) !== -1) };
@@ -132,16 +134,15 @@ router.post('/', (req, res) => {
         res.redirect(`/usr/${user.id}`)
       });
 
-      let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)),
-        mailOptions = {
-          to: user.email,
-          from: config.email.from,
-          subject: '[INFO] Welcome to MENP',
-          html: `Hello <em>${user.title} ${user.fname} "${user.username}" ${user.lname}</em>,<br><br>Welcome to MENP! I hope you'll enjoy using our application.<br><br>Best regards,<br>MENP Team`
-        };
-      smtpTransport.sendMail(mailOptions, (err) => {
-        if (err) emailError(req, err);
-      });
+      let msg = {
+        to: user.email,
+        from: config.email.from,
+        subject: '[INFO] Welcome to MENP',
+        html: `Hello <em>${user.title} ${user.fname} "${user.username}" ${user.lname}</em>,<br><br>Welcome to MENP! I hope you'll enjoy using our application.<br><br>Best regards,<br>MENP Team`
+      };
+      sgMail
+        .send(msg)
+        .then(() => {}, err => emailError(req, err));
     });
   }).catch(err => error(err));
 });

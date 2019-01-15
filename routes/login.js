@@ -1,12 +1,14 @@
 const router = require('express').Router(),
   passport = require('passport'),
-  nodemailer = require('nodemailer'),
-  sgTransport = require('nodemailer-sendgrid-transport'),
+  sgMail = require('@sendgrid/mail'),
   async = require('async'),
   crypto = require('crypto');
 const { emailError, welcomeUser, sendSms } = require('./generic');
 const config = require('../config/config');
 const { url, error, info } = require('../src/utils');
+
+if (process.env.SENDGRID_API_KEY === undefined) throw new Error('You need to set the process.env.SENDGRID_API_KEY in order to use this module');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 /**
  * @description Login page.
@@ -78,21 +80,18 @@ router.post('/', (req, res, next) => {
             });
           } else if (user.twoFaMethod === 'email') {
             twoFaHandler(token);
-            let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)),
-              mailOptions = {
-                to: user.email,
-                from: config.email.from,
-                subject: '[ACTION] 2nd Factor Authentication',
-                html: `<p>You are receiving this because you (or someone else) authenticated with your username/password and now need the code for the second factor of the authentication which is the following: <em>${token}</em></p><br>
+            let msg = {
+              to: user.email,
+              from: config.email.from,
+              subject: '[ACTION] 2nd Factor Authentication',
+              html: `<p>You are receiving this because you (or someone else) authenticated with your username/password and now need the code for the second factor of the authentication which is the following: <em>${token}</em></p><br>
                   <p>If you can't get the page to enter the code, you should see one pointing to <a href="${url(req)}/2fa">${url(req)}/2fa</a></p><br>
                   <p>If you did not request this, please ignore this email and your account won't be accessed.</p><br>${config.esig}`
-              };
-            smtpTransport.sendMail(mailOptions, (err) => {
-              if (err) emailError(req, err);
-              else {
-                req.flash('info', 'Please see and enter the code you were sent.');
-              }
-            });
+            };
+            sgMail
+              .send(msg)
+              .then(() => req.flash('info', 'Please see and enter the code you were sent.'),
+                err => emailError(req, err));
           } else if (user.twoFaMethod === 'gauth') {
             req.flash('warning', 'Google Authentication isn\'t implemented yet.');
           } else req.flash('error', `${user.twoFaMethod} isn't supported (yet).`);

@@ -1,11 +1,12 @@
 const router = require('express').Router(),
   flash = require('express-flash'),
   validator = require('validator'),
-  nodemailer = require('nodemailer'),
-  sgTransport = require('nodemailer-sendgrid-transport');
+  sgMail = require('@sendgrid/mail');
 const config = require('../config/config');
 const { emailError } = require('./generic');
 
+if (process.env.SENDGRID_API_KEY === undefined) throw new Error('You need to set the process.env.SENDGRID_API_KEY in order to use this module');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 router.use(flash());
 
 let lastTicket = 0;
@@ -37,24 +38,24 @@ router.post('/', (req, res) => {
     return keepDetails();
   }
 
-  const smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)),
-    mailOptions = {
-      to: config.email.to,
-      from: req.body.email,
-      subject: `[MENP:Contact] ${req.body.subject}` || '[?] No subject',
-      text: `Contact email from "${req.body.name}":\n\n${req.body.message}\n\nTicket number: ${genTicket()}`
-    };
-  smtpTransport.sendMail(mailOptions, (err) => {
-    if (err) {
-      emailError(req, err);
-      res.redirect('/contact');
-    } else {
+  const msg = {
+    to: config.email.to,
+    from: req.body.email,
+    subject: `[MENP:Contact] ${req.body.subject}` || '[?] No subject',
+    text: `Contact email from "${req.body.name}":\n\n${req.body.message}\n\nTicket number: ${genTicket()}`
+  };
+
+  sgMail
+    .send(msg)
+    .then(() => {
       console.log('Email sent');
       req.flash('success', 'The email was sent!');
       req.flash('info', 'Thank you for your interest!\nWe will get back to you as soon as possible.')
       res.redirect('/');
-    }
-  });
+    }, err => {
+      emailError(req, err);
+      res.redirect('/contact');
+    });
 });
 
 module.exports = router;

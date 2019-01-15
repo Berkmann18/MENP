@@ -1,11 +1,13 @@
 const router = require('express').Router(),
-  nodemailer = require('nodemailer'),
-  sgTransport = require('nodemailer-sendgrid-transport'),
+  sgMail = require('@sendgrid/mail'),
   async = require('async');
 const { emailError } = require('./generic');
 const { error } = require('../src/utils');
 const { User } = require('../src/model');
 const config = require('../config/config');
+
+if (process.env.SENDGRID_API_KEY === undefined) throw new Error('You need to set the process.env.SENDGRID_API_KEY in order to use this module');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 /**
  * @description Token-based reset page.
@@ -51,14 +53,13 @@ router.post('/:token', (req, res) => {
       });
     },
     (user, done) => {
-      let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)),
-        mailOptions = {
-          to: user.email,
-          from: config.email.from,
-          subject: '[INFO] Your password has been changed',
-          text: `Hello,\n\nThis is a confirmation that the password for your account ${user.email} has just been changed.\n${config.esig}`
-        };
-      smtpTransport.sendMail(mailOptions, (err) => {
+      let msg = {
+        to: user.email,
+        from: config.email.from,
+        subject: '[INFO] Your password has been changed',
+        text: `Hello,\n\nThis is a confirmation that the password for your account ${user.email} has just been changed.\n${config.esig}`
+      };
+      sgMail.send(msg, (err) => {
         if (err) emailError(req, err);
         else req.flash('success', 'Success! Your password has been changed.');
         done(err);
