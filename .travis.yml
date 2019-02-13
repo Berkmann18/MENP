@@ -5,11 +5,8 @@ cache:
 notifications:
   email: false
 node_js:
-  - 'node'
-  - '10'
-  - '9'
-  - '8'
-  - '6'
+  - 'stable'
+  - 'lts/*'
 install:
   - npm i
   - npm i -g jest codecov eslint
@@ -33,6 +30,6 @@ branches:
   except:
     - /^v\d+\.\d+\.\d+$/
 stages:
-  # - test
+  - name: test
   - name: release
     if: branch = master
