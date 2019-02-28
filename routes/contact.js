@@ -5,8 +5,8 @@ const router = require('express').Router(),
 const config = require('../config/config');
 const { emailError } = require('./generic');
 
-if (process.env.SENDGRID_API_KEY === undefined) throw new Error('You need to set the process.env.SENDGRID_API_KEY in order to use this module');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+if (process.env.SG_KEY === undefined) throw new Error('You need to set the process.env.SG_KEY in order to use this module');
+sgMail.setApiKey(process.env.SG_KEY);
 router.use(flash());
 
 let lastTicket = 0;

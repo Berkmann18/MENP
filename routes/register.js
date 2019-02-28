@@ -9,8 +9,8 @@ const { User } = require('../src/model');
 const config = require('../config/config');
 const { error, info } = require('../src/utils');
 
-if (process.env.SENDGRID_API_KEY === undefined) throw new Error('You need to set the process.env.SENDGRID_API_KEY in order to use this module');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+if (process.env.SG_KEY === undefined) throw new Error('You need to set the process.env.SG_KEY in order to use this module');
+sgMail.setApiKey(process.env.SG_KEY);
 
 const corsOptionsDelegate = (req, callback) => {
   let corsOptions = { origin: (config.urlWhiteList.indexOf(req.header('Origin')) !== -1) };

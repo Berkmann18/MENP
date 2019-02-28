@@ -1,4 +1,4 @@
-const request = require('supertest'); // eslint-disable-line node/no-unpublished-require
+let request = require('supertest'); // eslint-disable-line node/no-unpublished-require
 const app = require('../app');
 const { info } = require('../src/utils');
 

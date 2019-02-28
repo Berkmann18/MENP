@@ -19,6 +19,7 @@
   "scripts": {
     "start": "node ./bin/w3.js",
     "test": "snyk test && mocha --exit",
+    "t": "mocha --exit",
     "e2e": "wdio wdio.conf.js",
     "debug": "DEBUG=true node ./bin/w3.js",
     "dev": "NODE_ENV=development node ./bin/w3.js",
@@ -47,8 +48,10 @@
     "body-parser": "^1.18.3",
     "cheerio": "^1.0.0-rc.2",
     "colors": "^1.3.3",
+    "convict": "^4.4.1",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.5",
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "express-flash": "0.0.2",
     "express-rate-limit": "^3.3.2",

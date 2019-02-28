@@ -1,20 +1,27 @@
 /* eslint-env es6, node */
 
-let path = require('path');
-
-/* eslint-disable node/no-unpublished-require */
-let development = require('./env/development'),
-  production = require('./env/production');
-/* eslint-enable node/no-unpublished-require */
+// const path = require('path');
+const name = process.env.SERVICE || 'MENP';
 
 let defaults = {
-  root: path.normalize(`${__dirname}/..`),
+  // root: path.normalize(`${__dirname}/..`),
+  name,
   tokenCooldown: 36e5, //1h in ms
-  esig: 'Best regards,\nMENP team\n'
+  esig: 'Best regards,\nMENP team\n',
+  urlWhiteList: ['https://localhost', 'http://localhost'],
+  sgOptions: {
+    auth: {
+      api_key: process.env.SG_KEY
+    }
+  },
+  nexmoOptions: {
+    apiKey: process.env.NEXMO_KEY,
+    apiSecret: process.env.NEXMO_SECRET,
+    from: name
+  },
+  db: process.env.DB
 };
 
-module.exports = {
-  name: 'MENP',
-  development: Object.assign(development, defaults),
-  production: Object.assign(production, defaults)
-}[process.env.NODE_ENV || 'development'];
+  if (process.env.NODE_ENV === 'production') defaults.db += '_prod'
+
+module.exports = defaults;

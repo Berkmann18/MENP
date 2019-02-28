@@ -6,8 +6,8 @@ const { error } = require('../src/utils');
 const { User } = require('../src/model');
 const config = require('../config/config');
 
-if (process.env.SENDGRID_API_KEY === undefined) throw new Error('You need to set the process.env.SENDGRID_API_KEY in order to use this module');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+if (process.env.SG_KEY === undefined) throw new Error('You need to set the process.env.SG_KEY in order to use this module');
+sgMail.setApiKey(process.env.SG_KEY);
 
 /**
  * @description Token-based reset page.
