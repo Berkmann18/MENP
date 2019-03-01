@@ -2,12 +2,13 @@ const router = require('express').Router(),
   validator = require('validator');
 const { adminOnly, noSuchUser, requireLogin } = require('./generic');
 const { User } = require('../src/model');
-const { error, info, modminPage } = require('../src/utils');
+const { error, modminPage } = require('../src/utils');
 
 /**
  * @description Global admin page authorisation system.
  */
 router.all('/*', adminOnly, (req, res, next) => next());
+//@todo Perhaps remove the redundant (?) adminOnly calls in subsequent routes
 
 const COLS = ['title', 'fname', 'lname', 'username', 'email', 'password', 'registerDate', 'lastSeen', 'id', 'type'];
 const admin = true;
@@ -50,29 +51,7 @@ router.post('/ch', adminOnly, (req, res, next) => {
   });
 });
 
-/**
- * @description Admin User removal page.
- * @protected
- */
-router.post('/rm', adminOnly, (req, res, next) => {
-  User.findById(req.body.id, (err, user) => {
-    if (err) error('Error:', err);
-    if (!user) {
-      noSuchUser(req)(req);
-      return res.redirect('back');
-    }
-    user.remove((err) => {
-      if (err) {
-        req.flash('error', `Removal error: ${err.code} ${err.responseCode}`)
-        error('Admin authored removal error:', err);
-      }
-      req.flash('success', 'User successfully deleted!');
-      info(`${user.username} <${user.email}> got kicked out`);
-      return res.redirect('/admin');
-    });
-    next();
-  });
-});
+require('./super').removeUsr('admin', router);
 
 /**
  * @description User search page.
