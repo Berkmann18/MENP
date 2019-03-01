@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt-nodejs');
 const config = require('../config/config');
 const Promise = require('promise');
-// console.log('config.db=', config.db);
+console.log('config.db=', config.db);
 mongoose.connect(config.db, { useNewUrlParser: true }, (err) => {
   if (err) console.error('Mongoose: Error=', err);
 });
