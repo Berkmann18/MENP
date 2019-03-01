@@ -7,9 +7,14 @@ notifications:
 node_js:
   - 'stable'
   - 'lts/*'
+services:
+  - mongodb
 install:
   - npm i
   - npm i -g jest codecov eslint
+before_script:
+  - sleep 15
+  - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
 script:
   - npm run lint
   - snyk auth $SNYK_TOKEN
