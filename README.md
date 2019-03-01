@@ -35,13 +35,14 @@ This is a sample MENP (MongoDB, Express, Node, Pug) web app (which uses Bootstra
 
 Basically:
 
-- MongoDB for the database
-- [NodeJS] and Express for the server
-- Pug for the view rendering and templating
-- Boostrap for the UI
-- jQuery and Cheerio for a sped up DOM access on both client and server sides
-- NodeMailer + SendGrid for the emails
-- Passport for the authentication
+-   MongoDB for the database
+-   [NodeJS](http://nodejs.org) and Express for the server
+-   Pug for the view rendering and templating
+-   Boostrap for the UI
+-   jQuery and Cheerio for a sped up DOM access on both client and server sides
+-   NodeMailer + SendGrid for the emails
+-   Passport for the authentication
+-   [NPM](http://www.npmjs.com) for the build
 
 # Install
 ```cli
@@ -55,6 +56,3 @@ For more details, please read [CONTRIBUTING](./github/CONTRIBUTING.md).
 
 # License
 MIT
-
-[NodeJS]: http://nodejs.org
-[NPM]: http://www.npmjs.com
