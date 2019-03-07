@@ -65,7 +65,7 @@
     "pug": "^2.0.3",
     "serve-favicon": "^2.5.0",
     "serverbuilder": "^1.0.2",
-    "snyk": "^1.124.1",
+    "snyk": "^1.136.0",
     "trek-captcha": "^0.4.0",
     "uuid": "^3.3.2",
     "validator": "^10.10.0"
