@@ -41,7 +41,7 @@
     "contributors:generate": "all-contributors generate"
   },
   "dependencies": {
-    "async": "^2.6.1",
+    "async": "^2.6.2",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
     "browser-sync": "^2.26.3",
