@@ -10,7 +10,7 @@ node_js:
 services:
   - mongodb
 install:
-  - npm i
+  - npm ci
   - npm i -g jest codecov eslint
 before_script:
   - sleep 15
