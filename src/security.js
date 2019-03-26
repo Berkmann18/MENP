@@ -5,11 +5,11 @@ const RateLimit = require('express-rate-limit'),
   uuid = require('uuid');
 
 const limiter = new RateLimit({
-    windowMs: 15 * 6e3, //15 minutes
+    windowMs: 90000, //15 minutes
     max: 100, //Limit each IP to 100 requests per windowMs
     delayMs: 0 //Disable delaying - full speed until the max limit is reached
   }),
-  OneYear = 31536e3;;
+  OneYear = 31536000;
 
 /**
  * @description Set the security of the application.

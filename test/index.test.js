@@ -7,7 +7,7 @@ request = request(app);
 const PLAIN = 'text/plain; charset=utf-8',
   HTML = 'text/html; charset=utf-8',
   ID = '5a46cc8dc8d2f93ee0016c11',
-  TIMEOUT = 9e3;
+  TIMEOUT = 9000;
 const OK = 200,
   FOUND = 302,
   FORBIDDEN = 403,
