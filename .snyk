@@ -1,5 +1,5 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.13.3
+version: v1.13.5
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
   'npm:braces:20180219':
@@ -43,3 +43,30 @@ patch:
   'npm:lodash:20180130':
     - nodemailer-sendgrid-transport > sendgrid > lodash:
         patched: '2019-02-05T11:03:51.765Z'
+  SNYK-JS-LODASH-450202:
+    - mongoose > async > lodash:
+        patched: '2019-07-04T02:05:42.758Z'
+    - async > lodash:
+        patched: '2019-07-04T02:05:42.758Z'
+    - snyk > inquirer > lodash:
+        patched: '2019-07-04T02:05:42.758Z'
+    - browser-sync > easy-extender > lodash:
+        patched: '2019-07-04T02:05:42.758Z'
+    - snyk > snyk-php-plugin > lodash:
+        patched: '2019-07-04T02:05:42.758Z'
+    - snyk > snyk-nuget-plugin > lodash:
+        patched: '2019-07-04T02:05:42.758Z'
+    - snyk > lodash:
+        patched: '2019-07-04T02:05:42.758Z'
+    - snyk > snyk-nodejs-lockfile-parser > lodash:
+        patched: '2019-07-04T02:05:42.758Z'
+    - snyk > snyk-config > lodash:
+        patched: '2019-07-04T02:05:42.758Z'
+    - snyk > @snyk/dep-graph > lodash:
+        patched: '2019-07-04T02:05:42.758Z'
+    - snyk > @snyk/dep-graph > graphlib > lodash:
+        patched: '2019-07-04T02:05:42.758Z'
+    - snyk > snyk-nodejs-lockfile-parser > graphlib > lodash:
+        patched: '2019-07-04T02:05:42.758Z'
+    - snyk > snyk-go-plugin > graphlib > lodash:
+        patched: '2019-07-04T02:05:42.758Z'

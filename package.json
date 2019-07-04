@@ -36,9 +36,10 @@
     "hash": "node node_modules/hashmyjs/index.js -f json -o hashes.json public/js/*.js",
     "browser": "BROWSER=true node ./bin/w3.js",
     "commit": "git-cz",
-    "prepare": "snyk protect",
+    "prepare": "npm run snyk-protect; snyk protect",
     "contributors:add": "all-contributors add",
-    "contributors:generate": "all-contributors generate"
+    "contributors:generate": "all-contributors generate",
+    "snyk-protect": "snyk protect"
   },
   "dependencies": {
     "async": "^2.6.1",
@@ -65,7 +66,7 @@
     "pug": "^2.0.3",
     "serve-favicon": "^2.5.0",
     "serverbuilder": "^1.0.2",
-    "snyk": "^1.124.1",
+    "snyk": "^1.189.0",
     "trek-captcha": "^0.4.0",
     "uuid": "^3.3.2",
     "validator": "^10.10.0"
