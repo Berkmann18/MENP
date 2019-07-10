@@ -73,7 +73,7 @@
   },
   "devDependencies": {
     "@semantic-release/changelog": "^3.0.2",
-    "@semantic-release/git": "^7.0.7",
+    "@semantic-release/git": "^7.0.16",
     "all-contributors-cli": "^6.1.2",
     "complexity-report": "^2.0.0-alpha",
     "cz-adapter-eslint": "^0.1.2",
