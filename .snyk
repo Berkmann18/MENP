@@ -70,3 +70,7 @@ patch:
         patched: '2019-07-04T02:05:42.758Z'
     - snyk > snyk-go-plugin > graphlib > lodash:
         patched: '2019-07-04T02:05:42.758Z'
+    - snyk > snyk-mvn-plugin > lodash:
+        patched: '2019-07-10T10:54:20.326Z'
+    - snyk > snyk-php-plugin > @snyk/composer-lockfile-parser > lodash:
+        patched: '2019-07-10T10:54:20.326Z'
