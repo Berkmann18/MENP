@@ -136,3 +136,4 @@ $RECYCLE.BIN/
 dist/
 sendgrid.env
 .env
+.vscode
