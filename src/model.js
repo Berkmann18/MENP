@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt-nodejs');
 const config = require('../config/config');
 const Promise = require('promise');
-
+console.log('config.db=', config.db);
 mongoose.connect(config.db, { useNewUrlParser: true }, (err) => {
-  if (err) _err('Mongoose: Error=', err);
+  if (err) console.error('Mongoose: Error=', err);
 });
 
 let userSchema = new mongoose.Schema({
@@ -46,7 +46,7 @@ userSchema.pre('save', function(next) {
 userSchema.methods.comparePassword = function(candidatePassword, cb) {
   bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
     if (err) {
-      _err('Password compare error', err);
+      error('Password compare error', err);
       return cb(err);
     }
     cb(null, isMatch);

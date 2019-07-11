@@ -1,14 +1,23 @@
 const router = require('express').Router(),
   validator = require('validator');
-const { noSuchUser, sameUserOnly, _err } = require('./generic');
+const { noSuchUser, sameUserOnly, httpPage } = require('./generic');
 const { User } = require('../src/model');
+const { error } = require('../src/utils');
 
-const noUser = (err, user) => {
-  if (err) _err('Error:', err);
+const noUser = (req, res, err, user) => {
+  if (err) {
+    let msg = `Error:  ${err}`;
+    error(msg);
+    httpPage(401, res);
+    throw new Error(msg);
+  }
   if (!user) {
-    _err('No user with id:', req.params.id);
+    let msg = `No user with id: ${req.params.id}`;
+    error(msg);
     noSuchUser(req);
-    return res.redirect('/');
+    httpPage(403, res);
+    throw new Error(msg);
+    // return res.redirect('/');
   }
 };
 
@@ -17,7 +26,7 @@ const noUser = (err, user) => {
  */
 router.get('/:id', sameUserOnly, (req, res) => {
   User.findById(req.params.id, (err, user) => {
-    noUser(err, user);
+    noUser(req, res, err, user);
     res.render('user', {
       user,
       visitedUser: user,
@@ -31,8 +40,12 @@ router.get('/:id', sameUserOnly, (req, res) => {
  */
 router.get('/:id/edit', sameUserOnly, (req, res) => {
   User.findById(req.params.id, (err, user) => {
-    noUser(err, user);
-    res.render('update', { user });
+    try {
+      noUser(req, res, err, user);
+      res.render('update', { user });
+    } catch (err) {
+      return err;
+    }
   });
 });
 
@@ -41,7 +54,12 @@ router.get('/:id/edit', sameUserOnly, (req, res) => {
  */
 router.post('/:id/edit', (req, res) => {
   User.findById(req.params.id, (err, user) => {
-    noUser(err, user);
+    try {
+      noUser(req, res, err, user);
+      res.render('update', { user });
+    } catch (err) {
+      return err;
+    }
     let keepDetails = () => {
         return res.render('update', {
           user: {
@@ -80,7 +98,7 @@ router.post('/:id/edit', (req, res) => {
 
     user.save((err) => {
       if (err) {
-        _err('Update error:', err);
+        error('Update error:', err);
         req.flash('error', `There was an error in the information update (error ${err.statusCode})`);
       } else {
         res.render('update', { user });

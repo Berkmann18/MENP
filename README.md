@@ -1,4 +1,5 @@
 # MENP
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b6c66b0883eb4e55af9365be0e771a73)](https://app.codacy.com/app/maxieberkmann/MENP?utm_source=github.com&utm_medium=referral&utm_content=Berkmann18/MENP&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://travis-ci.org/Berkmann18/MENP.svg?branch=master)](https://travis-ci.org/Berkmann18/MENP)
 [![GitHub package version](https://img.shields.io/github/package-json/v/Berkmann18/MENP.svg)](https://github.com/Berkmann18/MENP)
 [![GitHub commit activity the past year](https://img.shields.io/github/commit-activity/y/Berkmann18/MENP.svg)](https://github.com/Berkmann18/MENP/graphs/commit-activity)
@@ -14,8 +15,9 @@
 [![GitHub top language](https://img.shields.io/github/languages/top/Berkmann18/MENP.svg)](https://github.com/Berkmann18/MENP)
 [![GitHub language count](https://img.shields.io/github/languages/count/Berkmann18/MENP.svg)](https://github.com/Berkmann18/MENP)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Berkmann18/MENP.svg)](https://github.com/Berkmann18/MENP)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
-This is a sample MENP (MongoDB, Express, Node, Pug) web app (which uses Bootstrap and jQuery).
+This is a sample MENP (MongoDB, Express, Node, Pug) web app (which uses Bootstrap and jQuery) with user accounts and user groups.
 
 <table style="background: #fff">
 <tr><td>
@@ -33,13 +35,14 @@ This is a sample MENP (MongoDB, Express, Node, Pug) web app (which uses Bootstra
 
 Basically:
 
-- MongoDB for the database
-- [NodeJS] and Express for the server
-- Pug for the view rendering and templating
-- Boostrap for the UI
-- jQuery and Cheerio for a sped up DOM access on both client and server sides
-- NodeMailer + SendGrid for the emails
-- Passport for the authentication
+-   MongoDB for the database
+-   [NodeJS](http://nodejs.org) and Express for the server
+-   Pug for the view rendering and templating
+-   Boostrap for the UI
+-   jQuery and Cheerio for a sped up DOM access on both client and server sides
+-   NodeMailer + SendGrid for the emails
+-   Passport for the authentication
+-   [NPM](http://www.npmjs.com) for the build
 
 # Install
 ```cli
@@ -47,11 +50,9 @@ git clone http://github.com/Berkmann18/MENP.git
 ```
 
 # Contributing
-Make sure you follow the stick to the coding style enforced by the linters, and that you test your code before making a pull request.
+Make sure you follow and stick to the coding style enforced by the linters, and that you test your code before making pull requests.
 Feel free to make any suggestions and report bugs.
+For more details, please read [CONTRIBUTING](./github/CONTRIBUTING.md).
 
 # License
 MIT
-
-[NodeJS]: http://nodejs.org
-[NPM]: http://www.npmjs.com

@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { User } = require('../src/model');
-const { noUsers, noSuchUser, _err, _warn, httpPage, memberOnly, requireLogin } = require('./generic');
-const { userTable } = require('../src/utils');
+const { noUsers, noSuchUser, httpPage, memberOnly, requireLogin } = require('./generic');
+const { error, warn, userTable } = require('../src/utils');
 
 const DB_COLS = ['username', 'registerDate', 'lastSeen', 'type'],
   COLS = ['Username', 'Registration date', 'Last seen', 'Type'];
@@ -15,7 +15,7 @@ const DB_COLS = ['username', 'registerDate', 'lastSeen', 'type'],
  */
 const userPage = (req, res, filter = {}, term = '') => {
   User.find(filter, (err, users) => {
-    if (err) _err('Error:', err);
+    if (err) error('Error:', err);
     if (!users) return noUsers(req, res);
 
     res.render('page', {
@@ -41,9 +41,9 @@ router.get('/', memberOnly, (req, res) => userPage(req, res));
  */
 router.get('/@:username', requireLogin, (req, res) => {
   User.findOne({ username: req.params.username }, (err, visitedUser) => {
-    if (err) _err('User page error:', err);
+    if (err) error('User page error:', err);
     if (!visitedUser) {
-      _warn('No user with username:', req.params.username);
+      warn('No user with username:', req.params.username);
       noSuchUser(req);
       httpPage(404, res);
     } else res.render('user', { visitedUser, user: req.user });

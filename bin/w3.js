@@ -1,17 +1,16 @@
-#!/usr/bin/env node
-
 /* eslint-env es6, node */
 'use strict';
 
 const fs = require('fs'),
-  app = require('../app'),
-  Server = require('serverbuilder');
-const { setColours } = require('../routes/generic');
+  Server = require('serverbuilder'),
+  path = require('path');
+const app = require('../app'),
+  { setColours } = require('../src/utils');
 const securityOptions = {
   key: fs.readFileSync('keys/server-key.pem'),
   cert: fs.readFileSync('keys/server-cert.pem')
 };
-
+require('dotenv').config(path.resolve(process.cwd(), '../.env'));
 setColours();
 
 /**
@@ -22,17 +21,11 @@ setColours();
 const serverCallback = (server, cfg) => {
   server.app.set('port', cfg.port);
   server.app.set('protocol', cfg.opts.useHttps ? 'https' : 'http');
-  if (server.app.get('browser') || process.env.BROWSER) {
-    require('browser-sync')({
-      proxy: `localhost:${cfg.port}`,
-      files: ['public/**/*.{js,css}']
-    });
-  }
-}
+};
 
 let config = {
   secure: {
-    port: process.env.PORT || 3e3,
+    port: process.env.PORT || 3e3, //@todo add to .env
     opts: {
       name: 'Secure Server',
       useHttps: true,
@@ -43,7 +36,7 @@ let config = {
     },
   },
   normal: {
-    port: process.env.UNSECURE_PORT || 3001,
+    port: process.env.UNSECURE_PORT || 3001, //@todo add to .env
     opts: {
       name: 'Unsecure Server',
       callback(server) {

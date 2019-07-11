@@ -1,13 +1,16 @@
 const router = require('express').Router(),
   validator = require('validator'),
-  nodemailer = require('nodemailer'),
-  sgTransport = require('nodemailer-sendgrid-transport'),
+  sgMail = require('@sendgrid/mail'),
   cheerio = require('cheerio'),
   $ = cheerio.load('<body>...</body>'),
   cors = require('cors');
-const { _err, _inf, execCaptcha, emailError } = require('./generic');
+const { execCaptcha, emailError } = require('./generic');
 const { User } = require('../src/model');
 const config = require('../config/config');
+const { error, info } = require('../src/utils');
+
+if (process.env.SG_KEY === undefined) throw new Error('You need to set the process.env.SG_KEY in order to use this module');
+sgMail.setApiKey(process.env.SG_KEY);
 
 const corsOptionsDelegate = (req, callback) => {
   let corsOptions = { origin: (config.urlWhiteList.indexOf(req.header('Origin')) !== -1) };
@@ -54,13 +57,13 @@ router.post('/', (req, res) => {
     twoFA = switch2bool(req.body.twoFA);
 
   User.findOne({ email: req.body.email }, (err, user) => {
-    if (err) _err('Error:', err);
+    if (err) error('Error:', err);
     if (user) {
       req.flash('error', 'The email address is already used by an existing account');
       wrongs = true;
     }
   }).then(User.findOne({ username: req.body.username }, (err, user) => {
-    if (err) _err('Error:', err);
+    if (err) error('Error:', err);
     if (user) {
       req.flash('error', 'The username is already used by an existing account');
       wrongs = true;
@@ -118,31 +121,30 @@ router.post('/', (req, res) => {
     user.save((err) => {
       if (err) {
         req.flash('error', `Something went wrong in the registration (${err.code} ${err.responseCode})`);
-        _err('Failed registration:', err);
+        error('Failed registration:', err);
       }
       req.flash('success', 'Registration successful!');
-      _inf(`${user.username} <${user.email}> just registered`);
+      info(`${user.username} <${user.email}> just registered`);
       req.logIn(user, (err) => {
         if (err) {
           let msg = 'Post-registration login error';
-          _err(msg, err);
+          error(msg, err);
           req.flash('error', `${msg} (error ${err.statusCode}`)
         }
         res.redirect(`/usr/${user.id}`)
       });
 
-      let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)),
-        mailOptions = {
-          to: user.email,
-          from: config.email.from,
-          subject: '[INFO] Welcome to MENP',
-          html: `Hello <em>${user.title} ${user.fname} "${user.username}" ${user.lname}</em>,<br><br>Welcome to MENP! I hope you'll enjoy using our application.<br><br>Best regards,<br>MENP Team`
-        };
-      smtpTransport.sendMail(mailOptions, (err) => {
-        if (err) emailError(req, err);
-      });
+      let msg = {
+        to: user.email,
+        from: config.email.from,
+        subject: '[INFO] Welcome to MENP',
+        html: `Hello <em>${user.title} ${user.fname} "${user.username}" ${user.lname}</em>,<br><br>Welcome to MENP! I hope you'll enjoy using our application.<br><br>Best regards,<br>MENP Team`
+      };
+      sgMail
+        .send(msg)
+        .then(() => {}, err => emailError(req, err));
     });
-  }).catch(err => _err(err));
+  }).catch(err => error(err));
 });
 
 module.exports = router;

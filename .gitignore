@@ -133,5 +133,7 @@ $RECYCLE.BIN/
 *.lnk
 
 ### Project
-test/
 dist/
+sendgrid.env
+.env
+.vscode

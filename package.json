@@ -3,69 +3,104 @@
   "description": "This is a sample MENP web app",
   "version": "1.1.0",
   "main": "./bin/w3.js",
+  "author": {
+    "name": "Maximilian Berkmann",
+    "email": "maxieberkmann@gmail.com"
+  },
+  "keywords": [
+    "MongoDB",
+    "Express",
+    "Node",
+    "Pug",
+    "ExpressJS",
+    "NodeJS",
+    "MENP"
+  ],
   "scripts": {
     "start": "node ./bin/w3.js",
-    "test": "mocha --exit",
+    "test": "snyk test && mocha --exit",
+    "t": "mocha --exit",
+    "e2e": "wdio wdio.conf.js",
     "debug": "DEBUG=true node ./bin/w3.js",
     "dev": "NODE_ENV=development node ./bin/w3.js",
     "prod": "NODE_ENV=production node ./bin/w3.js",
     "live": "nodemon -e js,pug --delay 2",
     "real": "NODE_ENV=production nodemon -e js,pug --delay 2",
     "flowchart": "js2flowchart",
-    "cc": "cr -c ./config/.complexrc",
-    "lint": "eslint -c ./config/.eslintrc.js",
-    "fmt": "eslint -c ./config/.eslintrc.js *.js routes/*.js public/js/*.js test/*.js config/*.js src/*.js bin/*.js --fix",
-    "stylelint": "stylelint public/css/*.css --config ./config/.stylelintrc --color --report-needless-disables",
-    "doc": "jsdoc -c ./config/jsdoc.json",
+    "cc": "cr -c ./.complexrc",
+    "lint:md": "remark . .github -i ./.remarkignore",
+    "lint:js": "eslint -c ./.eslintrc.json *.js routes/*.js public/js/*.js test/*.js config/*.js src/*.js bin/*.js --fix",
+    "lint": "npm run lint:js && npm run lint:md",
+    "stylelint": "stylelint public/css/*.css --config ./.stylelintrc.json --color --report-needless-disables",
+    "doc:lint": "documentation lint index.js",
+    "doc:html": "documentation build *.js -f html -o doc/ -a public",
+    "doc": "npm run doc:lint && npm run doc:html",
     "hash": "node node_modules/hashmyjs/index.js -f json -o hashes.json public/js/*.js",
-    "browser": "BROWSER=true node ./bin/w3.js",
-    "changelog": "conventional-changelog -p eslint -i CHANGELOG.md -s -r 0",
-    "version": "npm run changelog && git add CHANGELOG.md"
+    "commit": "git-cz",
+    "prepare": "snyk protect",
+    "contributors:add": "all-contributors add",
+    "contributors:generate": "all-contributors generate"
   },
   "dependencies": {
-    "async": "^2.6.1",
-    "asyncawait": "^1.0.7",
+    "@sendgrid/mail": "^6.4.0",
+    "async": "^3.1.0",
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.18.3",
+    "body-parser": "^1.19.0",
     "cheerio": "^1.0.0-rc.2",
-    "colors": "^1.3.1",
-    "cookie-parser": "^1.4.3",
-    "cors": "^2.8.4",
-    "express": "^4.16.3",
+    "colors": "^1.3.3",
+    "convict": "^5.0.0",
+    "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
     "express-flash": "0.0.2",
-    "express-rate-limit": "^3.0.2",
-    "express-session": "^1.15.6",
-    "helmet": "^3.13.0",
-    "mongoose": "^5.2.9",
-    "morgan": "^1.9.0",
-    "nexmo": "^2.3.2",
-    "nodemailer": "^4.6.8",
-    "nodemailer-sendgrid-transport": "^0.2.0",
+    "express-rate-limit": "^5.0.0",
+    "express-session": "^1.16.2",
+    "helmet": "^3.18.0",
+    "mongoose": "^5.6.4",
+    "morgan": "^1.9.1",
+    "nexmo": "^2.4.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "promise": "^8.0.1",
-    "pug": "^2.0.3",
+    "promise": "^8.0.3",
+    "pug": "^2.0.4",
     "serve-favicon": "^2.5.0",
-    "serverbuilder": "^1.0.2",
+    "serverbuilder": "^3.3.2",
+    "snyk": "^1.192.4",
     "trek-captcha": "^0.4.0",
     "uuid": "^3.3.2",
-    "validator": "^10.6.0"
+    "validator": "^11.1.0"
   },
   "devDependencies": {
-    "browser-sync": "^2.24.6",
+    "@semantic-release/changelog": "^3.0.4",
+    "@semantic-release/git": "^7.0.16",
+    "all-contributors-cli": "^6.7.0",
     "complexity-report": "^2.0.0-alpha",
-    "eslint": "^5.4.0",
-    "eslint-config-google": "^0.9.1",
-    "eslint-plugin-import": "^2.14.0",
+    "cz-adapter-eslint": "^0.3.0",
+    "documentation": "^12.0.0",
+    "eslint": "^6.0.1",
+    "eslint-config-google": "^0.13.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-security": "^1.4.0",
-    "hashmyjs": "^1.1.2",
-    "js2flowchart": "^1.1.3",
-    "jsdoc": "^3.5.5",
-    "mocha": "^5.2.0",
-    "nodemon": "^1.18.3",
-    "stylelint": "^9.5.0",
-    "stylelint-config-standard": "^18.2.0",
-    "supertest": "^3.1.0"
+    "eslint-plugin-you-dont-need-lodash-underscore": "^6.5.0",
+    "hashmyjs": "^2.0.1",
+    "husky": "^3.0.0",
+    "js2flowchart": "^1.1.7",
+    "lint-staged": "^9.1.0",
+    "mocha": "^6.1.4",
+    "nodemon": "^1.19.1",
+    "remark-cli": "^6.0.1",
+    "remark-preset-lint-consistent": "^2.0.3",
+    "remark-preset-lint-recommended": "^3.0.3",
+    "semantic-release": "^15.13.18",
+    "stylelint": "^10.1.0",
+    "stylelint-config-standard": "^18.3.0",
+    "supertest": "^4.0.2",
+    "wdio-concise-reporter": "^0.1.2",
+    "wdio-mocha-framework": "^0.6.4",
+    "wdio-testingbot-service": "^0.2.3",
+    "webdriverio": "^5.11.0"
   },
   "license": "MIT",
   "repository": {
@@ -75,5 +110,34 @@
   "bugs": {
     "url": "https://github.com/Berkmann18/MENP/issues"
   },
-  "homepage": "https://github.com/Berkmann18/MENP#readme"
+  "homepage": "https://github.com/Berkmann18/MENP#readme",
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 9"
+  ],
+  "engines": {
+    "node": ">= 8.0.0",
+    "npm": ">= 4.0.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-adapter-eslint"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint -c ./.eslintrc.json --fix",
+      "git add"
+    ],
+    "*.md": [
+      "remark",
+      "git add"
+    ],
+    "*.css": [
+      "stylelint --config ./.stylelintrc",
+      "git add"
+    ]
+  },
+  "snyk": true
 }

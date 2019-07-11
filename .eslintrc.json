@@ -1,11 +1,14 @@
-module.exports = {
+{
   "env": {
     "browser": true,
     "es6": true,
     "node": true
   },
-  "plugins": ["security"],
-  "extends": "plugin:security/recommended",
+  "extends": [
+    "plugin:security/recommended",
+    "plugin:you-dont-need-lodash-underscore/compatible",
+    "plugin:node/recommended"
+  ],
   "rules": {
     "indent": [
       "error",
@@ -31,4 +34,4 @@ module.exports = {
   "parserOptions": {
     "sourceType": "module"
   }
-};
+}

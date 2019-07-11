@@ -1,12 +1,12 @@
 const router = require('express').Router();
-const { modOnly, noSuchUser, noUsers, requireLogin, _err } = require('./generic');
-const { User } = require('../src/model');
+const { modOnly, requireLogin } = require('./generic');
 const { modminPage } = require('../src/utils');
 
 /**
  * @description Global moderator page authorisation system.
  */
 router.all('/*', modOnly, (req, res, next) => next());
+//@todo Perhaps remove the redundant (?) modOnly calls in subsequent routes
 
 const COLS = ['title', 'fname', 'lname', 'username', 'email', 'password', 'registerDate', 'lastSeen', 'id', 'type']
 
@@ -16,33 +16,7 @@ const COLS = ['title', 'fname', 'lname', 'username', 'email', 'password', 'regis
  */
 router.get('/', modOnly, (req, res) => modminPage(req, res, COLS));
 
-/**
- * @description Moderator User removal page.
- * @protected
- */
-router.post('/rm', modOnly, (req, res, next) => {
-  User.findById(req.body.id, (err, user) => {
-    if (err) _err('Error:', err);
-    if (!user) {
-      noSuchUser(req)(req);
-      return res.redirect('back');
-    }
-    if (user.type === 'admin') {
-      req.flash('error', 'You cannot remove admins');
-      return res.redirect('/mod');
-    }
-    user.remove((err) => {
-      if (err) {
-        req.flash('error', `Removal error: ${err.code} ${err.responseCode}`)
-        _err('Moderator authored removal error:', err);
-      }
-      req.flash('success', 'User successfully deleted!');
-      _inf(`${user.username} <${user.email}> got kicked out`);
-      return res.redirect('/mod');
-    });
-    next();
-  });
-});
+require('./super').removeUsr('mod', router);
 
 /**
  * @description User search page.

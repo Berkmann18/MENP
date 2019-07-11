@@ -1,11 +1,13 @@
 const router = require('express').Router(),
-  nodemailer = require('nodemailer'),
-  sgTransport = require('nodemailer-sendgrid-transport'),
+  sgMail = require('@sendgrid/mail'),
   async = require('async'),
   crypto = require('crypto');
-const { _err, emailError } = require('./generic');
+const { emailError } = require('./generic');
 const { User } = require('../src/model');
-const { url } = require('../src/utils');
+const { error, url } = require('../src/utils');
+
+if (process.env.SG_KEY === undefined) throw new Error('You need to set the process.env.SG_KEY in order to use this module');
+sgMail.setApiKey(process.env.SG_KEY);
 
 /**
  * @description Password recovery page.
@@ -36,7 +38,7 @@ router.post('/', (req, res, next) => {
       }
 
       User.findOne({ email: req.body.email }, (err, user) => {
-        if (err) _err('Error:', err);
+        if (err) error('Error:', err);
         if (!user) {
           req.flash('error', 'No account with that email address exists.');
           return res.redirect('/forgot');
@@ -48,14 +50,14 @@ router.post('/', (req, res, next) => {
         user.save((err) => done(err, token, user));
       });
     }, (token, user, done) => {
-      let smtpTransport = nodemailer.createTransport(sgTransport(config.sgOptions)),
-        mailOptions = {
-          to: user.email,
-          from: config.email.from,
-          subject: '[ACTION] Password Reset',
-          text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\nPlease click on the following link, or paste this into your browser to complete the process:\n\n${url(req)}/reset/${token}\n\nIf you did not request this, please ignore this email and your password will remain unchanged.\n${config.esig}`
-        };
-      smtpTransport.sendMail(mailOptions, (err) => {
+      const msg = {
+        to: user.email,
+        from: config.email.from,
+        subject: '[ACTION] Password Reset',
+        text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\nPlease click on the following link, or paste this into your browser to complete the process:\n\n${url(req)}/reset/${token}\n\nIf you did not request this, please ignore this email and your password will remain unchanged.\n${config.esig}`
+      };
+
+      sgMail.send(msg, (err) => {
         if (err) emailError(req, err);
         else req.flash('info', `An e-mail has been sent to ${user.email} with further instructions.`);
         done(err, 'done');

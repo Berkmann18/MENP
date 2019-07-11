@@ -1,0 +1,45 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.13.3
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  'npm:braces:20180219':
+    - browser-sync > micromatch > braces:
+        reason: None
+        expires: '2019-02-10T21:27:11.772Z'
+  'npm:mem:20180117':
+    - os-locale > mem:
+        reason: None
+        expires: '2019-02-10T21:27:11.773Z'
+    - yargs > os-locale > mem:
+        reason: None
+        expires: '2019-02-10T21:27:11.773Z'
+  'npm:ua-parser-js:20180227':
+    - browser-sync > ua-parser-js:
+        reason: None
+        expires: '2019-02-10T21:27:11.773Z'
+  SNYK-JS-LODASH-73638:
+    - cheerio > lodash:
+        reason: Nothing to do for now
+        expires: '2019-03-07T09:30:21.499Z'
+    - nodemailer-sendgrid-transport > sendgrid > lodash:
+        reason: Same reason
+        expires: '2019-03-07T09:30:21.500Z'
+  SNYK-JS-LODASH-73639:
+    - cheerio > lodash:
+        reason: Nothing to do for now
+        expires: '2019-03-07T09:30:21.500Z'
+    - nodemailer-sendgrid-transport > sendgrid > lodash:
+        reason: Dame reason
+        expires: '2019-03-07T09:30:21.500Z'
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:extend:20180424':
+    - webdriver > request > extend:
+        patched: '2019-01-04T10:55:28.907Z'
+    - '@sendgrid/client > request > extend':
+        patched: '2019-02-05T09:11:47.155Z'
+    - '@sendgrid/mail > @sendgrid/client > request > extend':
+        patched: '2019-02-05T09:11:47.155Z'
+  'npm:lodash:20180130':
+    - nodemailer-sendgrid-transport > sendgrid > lodash:
+        patched: '2019-02-05T11:03:51.765Z'
