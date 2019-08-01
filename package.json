@@ -56,7 +56,7 @@
     "express-flash": "0.0.2",
     "express-rate-limit": "^5.0.0",
     "express-session": "^1.16.2",
-    "helmet": "^3.18.0",
+    "helmet": "^3.20.0",
     "mongoose": "^5.6.4",
     "morgan": "^1.9.1",
     "nexmo": "^2.4.1",
