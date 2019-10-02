@@ -37,9 +37,10 @@
     "doc": "npm run doc:lint && npm run doc:html",
     "hash": "node node_modules/hashmyjs/index.js -f json -o hashes.json public/js/*.js",
     "commit": "git-cz",
-    "prepare": "snyk protect",
+    "prepare": "npm run snyk-protect && snyk protect",
     "contributors:add": "all-contributors add",
-    "contributors:generate": "all-contributors generate"
+    "contributors:generate": "all-contributors generate",
+    "snyk-protect": "snyk protect"
   },
   "dependencies": {
     "@sendgrid/mail": "^6.4.0",
@@ -66,7 +67,7 @@
     "pug": "^2.0.4",
     "serve-favicon": "^2.5.0",
     "serverbuilder": "^3.3.2",
-    "snyk": "^1.192.6",
+    "snyk": "^1.230.3",
     "trek-captcha": "^0.4.0",
     "uuid": "^3.3.2",
     "validator": "^11.1.0"
