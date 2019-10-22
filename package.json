@@ -80,7 +80,7 @@
     "documentation": "^12.1.2",
     "eslint": "^6.0.1",
     "eslint-config-google": "^0.13.0",
-    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-you-dont-need-lodash-underscore": "^6.5.0",
