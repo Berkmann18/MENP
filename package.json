@@ -73,7 +73,7 @@
     "validator": "^11.1.0"
   },
   "devDependencies": {
-    "@semantic-release/changelog": "^3.0.4",
+    "@semantic-release/changelog": "^3.0.6",
     "@semantic-release/git": "^7.0.16",
     "all-contributors-cli": "^6.11.1",
     "complexity-report": "^2.0.0-alpha",
