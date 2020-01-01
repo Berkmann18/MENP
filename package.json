@@ -70,7 +70,7 @@
     "snyk": "^1.271.0",
     "trek-captcha": "^0.4.0",
     "uuid": "^3.3.3",
-    "validator": "^11.1.0"
+    "validator": "^12.1.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^3.0.6",
