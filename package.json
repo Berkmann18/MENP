@@ -101,7 +101,7 @@
     "wdio-concise-reporter": "^0.1.2",
     "wdio-mocha-framework": "^0.6.4",
     "wdio-testingbot-service": "^0.2.3",
-    "webdriverio": "^5.18.2"
+    "webdriverio": "^5.18.6"
   },
   "license": "MIT",
   "repository": {
