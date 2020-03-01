@@ -69,7 +69,7 @@
     "serverbuilder": "^3.4.1",
     "snyk": "^1.290.1",
     "trek-captcha": "^0.4.0",
-    "uuid": "^3.4.0",
+    "uuid": "^7.0.1",
     "validator": "^11.1.0"
   },
   "devDependencies": {
