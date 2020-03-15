@@ -1,4 +1,7 @@
 # MENP
+
+**Please note: this repo was meant to be finished then remade but I haven't had the time to do that, any help will be appreciated.**
+
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b6c66b0883eb4e55af9365be0e771a73)](https://app.codacy.com/app/maxieberkmann/MENP?utm_source=github.com&utm_medium=referral&utm_content=Berkmann18/MENP&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://travis-ci.org/Berkmann18/MENP.svg?branch=master)](https://travis-ci.org/Berkmann18/MENP)
 [![GitHub package version](https://img.shields.io/github/package-json/v/Berkmann18/MENP.svg)](https://github.com/Berkmann18/MENP)
